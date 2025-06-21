@@ -4,3 +4,12 @@
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('/assets/font/quicksand.ttf') format('truetype');
+}
+
+.font-quicksand {
+  font-family: 'Quicksand', serif;
+}

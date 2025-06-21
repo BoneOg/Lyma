@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+
+class SystemSetting extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'setting_key',
+        'setting_value',
+        'description',
+    ];
+
+    // Helper methods
+    public static function get(string $key, mixed $default = null): mixed
+    {
+        return Cache::remember("system_setting_{$key}", 3600, function () use ($key, $default) {
+            $setting = self::where('setting_key', $key)->first();
+            return $setting ? $setting->setting_value : $default;
+        });
+    }
+
+    public static function set(string $key, mixed $value, string $description = null): void
+    {
+        self::updateOrCreate(
+            ['setting_key' => $key],
+            [
+                'setting_value' => $value,
+                'description' => $description,
+            ]
+        );
+
+        Cache::forget("system_setting_{$key}");
+    }
+
+    public static function getReservationFee(): float
+    {
+        return (float) self::get('reservation_fee', 200.00);
+    }
+
+    public static function getMaxAdvanceBookingDays(): int
+    {
+        return (int) self::get('max_advance_booking_days', 30);
+    }
+
+    public static function getMinAdvanceBookingHours(): int
+    {
+        return (int) self::get('min_advance_booking_hours', 24);
+    }
+
+    public static function getRestaurantName(): string
+    {
+        return self::get('restaurant_name', 'Fine Dining Restaurant');
+    }
+
+    public static function getRestaurantEmail(): string
+    {
+        return self::get('restaurant_email', 'info@restaurant.com');
+    }
+
+    public static function getRestaurantPhone(): string
+    {
+        return self::get('restaurant_phone', '+639123456789');
+    }
+}
