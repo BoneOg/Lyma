@@ -1,14 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\CheckoutController;
+
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
-Route::get('/reservation', fn () => Inertia::render('reservation'))->name('reservation');
 
+// Reservation routes
+Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
+Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+
+// API routes for checking availability
+Route::get('/api/reservations/check-availability', [ReservationController::class, 'checkAvailability'])->name('api.reservations.check-availability');
+Route::get('/api/reservations/available-time-slots', [ReservationController::class, 'getAvailableTimeSlots'])->name('api.reservations.available-time-slots');
+
+// Your checkout route (you'll need to create this)
+Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])->name('checkout');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

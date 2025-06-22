@@ -14,7 +14,6 @@ class Reservation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'guest_first_name',
         'guest_last_name',
         'guest_email',
@@ -37,11 +36,6 @@ class Reservation extends Model
     }
 
     // Relationships
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function table(): BelongsTo
     {
         return $this->belongsTo(RestaurantTable::class, 'table_id');
@@ -99,23 +93,6 @@ class Reservation extends Model
     }
 
     // Accessors
-    public function getCustomerNameAttribute(): string
-    {
-        if ($this->user) {
-            return $this->user->full_name;
-        }
-        return "{$this->guest_first_name} {$this->guest_last_name}";
-    }
-
-    public function getCustomerEmailAttribute(): string
-    {
-        return $this->user ? $this->user->email : $this->guest_email;
-    }
-
-    public function getCustomerPhoneAttribute(): string
-    {
-        return $this->user ? $this->user->phone_number : $this->guest_phone;
-    }
 
     public function getFormattedDateAttribute(): string
     {
@@ -188,13 +165,4 @@ class Reservation extends Model
         return SystemSetting::getReservationFee();
     }
 
-    public function isGuestReservation(): bool
-    {
-        return $this->user_id === null;
-    }
-
-    public function isUserReservation(): bool
-    {
-        return $this->user_id !== null;
-    }
 }

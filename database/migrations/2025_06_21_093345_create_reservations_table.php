@@ -10,9 +10,6 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            
-            // Customer information (for both registered users and guests)
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('guest_first_name', 50)->nullable();
             $table->string('guest_last_name', 50)->nullable();
             $table->string('guest_email', 100)->nullable();
@@ -32,7 +29,6 @@ return new class extends Migration
             // Indexes
             $table->index('reservation_date');
             $table->index('status');
-            $table->index('user_id');
             $table->index('guest_email');
             
             // Unique constraint to prevent double booking
