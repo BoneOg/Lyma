@@ -12,7 +12,7 @@ class SystemSettingSeeder extends Seeder
         $settings = [
             [
                 'setting_key' => 'reservation_fee',
-                'setting_value' => '200.00',
+                'setting_value' => '1000.00',
                 'description' => 'Non-refundable reservation fee amount in PHP'
             ],
             [

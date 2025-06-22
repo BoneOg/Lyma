@@ -40,6 +40,25 @@ class ReservationController extends Controller
         ]);
     }
 
+    public function getOccupiedTimeSlots(Request $request)
+    {
+        $request->validate([
+            'date' => 'required|date|after:today',
+        ]);
+
+        $date = $request->date;
+        $totalTables = RestaurantTable::where('status', 'available')->count();
+        
+        $occupiedTimeSlots = Reservation::where('reservation_date', $date)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->groupBy('time_slot_id')
+            ->havingRaw('COUNT(*) >= ?', [$totalTables])
+            ->pluck('time_slot_id')
+            ->toArray();
+
+        return response()->json(['occupied_time_slots' => $occupiedTimeSlots]);
+    }
+
     public function store(StoreReservationRequest $request)
     {
         $validated = $request->validated();

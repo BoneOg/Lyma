@@ -80,7 +80,6 @@ class StoreReservationRequest extends FormRequest
      */
     public function messages(): array
     {
-        $minAdvanceHours = SystemSetting::getMinAdvanceBookingHours();
         $maxAdvanceDays = SystemSetting::getMaxAdvanceBookingDays();
 
         return [
@@ -93,7 +92,7 @@ class StoreReservationRequest extends FormRequest
             'guest_phone.required' => 'Phone number is required.',
             'guest_phone.regex' => 'Phone number may only contain numbers, spaces, hyphens, and plus signs.',
             'reservation_date.required' => 'Reservation date is required.',
-            'reservation_date.after_or_equal' => "Reservations must be made at least {$minAdvanceHours} hours in advance.",
+            'reservation_date.after_or_equal' => "Reservations must be made for future dates.",
             'reservation_date.before_or_equal' => "Reservations can only be made up to {$maxAdvanceDays} days in advance.",
             'time_slot_id.required' => 'Time slot is required.',
             'time_slot_id.exists' => 'Selected time slot is invalid.',
@@ -108,8 +107,7 @@ class StoreReservationRequest extends FormRequest
      */
     private function getMinBookingDate(): string
     {
-        $minAdvanceHours = SystemSetting::getMinAdvanceBookingHours();
-        return Carbon::now()->addHours($minAdvanceHours)->format('Y-m-d H:i:s');
+        return Carbon::now()->format('Y-m-d H:i:s');
     }
 
     /**

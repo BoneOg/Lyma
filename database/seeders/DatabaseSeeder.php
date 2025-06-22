@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             TimeSlotSeeder::class,
             PaymentMethodSeeder::class,
             SystemSettingSeeder::class,
+            ReservationSeeder::class,
         ]);
     }
 }

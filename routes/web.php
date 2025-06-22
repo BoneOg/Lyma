@@ -15,6 +15,7 @@ Route::get('/', fn () => Inertia::render('home'))->name('home');
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+Route::get('/reservations/occupied-time-slots', [ReservationController::class, 'getOccupiedTimeSlots'])->name('reservations.occupied-time-slots');
 
 // Your checkout route (you'll need to create this)
 Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])->name('checkout');

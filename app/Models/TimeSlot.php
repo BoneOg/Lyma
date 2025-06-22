@@ -26,6 +26,12 @@ class TimeSlot extends Model
         ];
     }
 
+    protected $appends = [
+        'formatted_time',
+        'start_time_formatted',
+        'end_time_formatted',
+    ];
+
     // Relationships
     public function reservations(): HasMany
     {

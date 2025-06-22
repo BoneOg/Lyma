@@ -1,6 +1,6 @@
 import Layout from '@/components/layout'
 import { router, usePage } from '@inertiajs/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface TimeSlot {
   id: number
@@ -35,6 +35,8 @@ export default function Reservation() {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [occupiedTimeSlots, setOccupiedTimeSlots] = useState<number[]>([])
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   // Date calculations
   const today = new Date()
@@ -65,6 +67,31 @@ export default function Reservation() {
 
     return dateToCheck <= todayMidnight || dateToCheck > maxDate
   }
+
+  const fetchOccupiedTimeSlots = async (date: string) => {
+    try {
+      const response = await fetch(`/reservations/occupied-time-slots?date=${date}`)
+      const data = await response.json()
+      setOccupiedTimeSlots(data.occupied_time_slots || [])
+    } catch (error) {
+      console.error('Error fetching occupied time slots:', error)
+      setOccupiedTimeSlots([])
+    }
+  }
+
+  const handleDateSelect = (day: number) => {
+    setSelectedDate(day)
+    const formattedDate = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+    fetchOccupiedTimeSlots(formattedDate)
+  }
+
+  // Reset time slot if it becomes occupied
+  useEffect(() => {
+    if (selectedTimeSlot && occupiedTimeSlots.includes(selectedTimeSlot)) {
+      const firstAvailableSlot = timeSlots.find(slot => !occupiedTimeSlots.includes(slot.id))
+      setSelectedTimeSlot(firstAvailableSlot?.id || null)
+    }
+  }, [occupiedTimeSlots, selectedTimeSlot, timeSlots])
 
   const formatSelectedDateTime = () => {
     const parts = []
@@ -119,6 +146,7 @@ export default function Reservation() {
   const isFormValid = () => {
     return selectedDate && 
            selectedTimeSlot && 
+           !occupiedTimeSlots.includes(selectedTimeSlot) &&
            firstName.trim() && 
            lastName.trim() && 
            email.trim() && 
@@ -129,7 +157,10 @@ export default function Reservation() {
 
   const handleBookTable = () => {
     if (!isFormValid()) return
+    setShowConfirmationModal(true)
+  }
 
+  const handleConfirmBooking = () => {
     const reservationData = {
       guest_first_name: firstName.trim(),
       guest_last_name: lastName.trim(),
@@ -141,6 +172,11 @@ export default function Reservation() {
     }
 
     router.post('/reservations', reservationData)
+    setShowConfirmationModal(false)
+  }
+
+  const handleCancelBooking = () => {
+    setShowConfirmationModal(false)
   }
 
   const renderCalendar = () => {
@@ -161,7 +197,7 @@ export default function Reservation() {
       days.push(
         <div
           key={day}
-          onClick={() => !isDisabled && setSelectedDate(day)}
+          onClick={() => !isDisabled && handleDateSelect(day)}
           className={`cursor-pointer transition-colors ${
             isDisabled
               ? 'text-gray-500 cursor-not-allowed'
@@ -222,11 +258,19 @@ export default function Reservation() {
                       onChange={(e) => setSelectedTimeSlot(parseInt(e.target.value))}
                       className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-1"
                     >
-                      {timeSlots.map((slot) => (
-                        <option key={slot.id} value={slot.id} className="bg-[#3f411a]">
-                          {slot.start_time_formatted}
-                        </option>
-                      ))}
+                      {timeSlots.map((slot) => {
+                        const isOccupied = occupiedTimeSlots.includes(slot.id)
+                        return (
+                          <option 
+                            key={slot.id} 
+                            value={slot.id} 
+                            className={`bg-[#3f411a] ${isOccupied ? 'text-gray-500' : ''}`}
+                            disabled={isOccupied}
+                          >
+                            {slot.start_time_formatted} {isOccupied ? '(Fully Booked)' : ''}
+                          </option>
+                        )
+                      })}
                     </select>
                     <img
                       src="/assets/ui/drop.webp"
@@ -350,6 +394,47 @@ export default function Reservation() {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-[#3f411a] border-2 border-white p-8 max-w-md w-full mx-4">
+            <h3 className="text-2xl font-serif text-white mb-4">Confirm Reservation</h3>
+            <p className="text-white mb-6">Ready to book your table? Please confirm your details before proceeding.</p>
+            
+            <div className="space-y-4 mb-6">
+              <div className="border-b border-white pb-2">
+                <span className="text-[#f6f5c6] text-sm">Date & Time:</span>
+                <p className="text-white">{formatSelectedDateTime()}</p>
+              </div>
+              <div className="border-b border-white pb-2">
+                <span className="text-[#f6f5c6] text-sm">Guest:</span>
+                <p className="text-white">{firstName} {lastName}</p>
+              </div>
+              <div className="border-b border-white pb-2">
+                <span className="text-[#f6f5c6] text-sm">Contact:</span>
+                <p className="text-white">{email}</p>
+                <p className="text-white">{phone}</p>
+              </div>
+            </div>
+
+            <div className="flex space-x-4">
+              <button
+                onClick={handleConfirmBooking}
+                className="flex-1 bg-white text-[#3f411a] py-3 font-medium hover:bg-[#f6f5c6] transition duration-200"
+              >
+                Yes, Book Now
+              </button>
+              <button
+                onClick={handleCancelBooking}
+                className="flex-1 bg-transparent border border-white text-white py-3 font-medium hover:bg-white hover:text-[#3f411a] transition duration-200"
+              >
+                No, Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   )
 }
