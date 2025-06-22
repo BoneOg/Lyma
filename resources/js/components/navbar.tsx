@@ -16,12 +16,6 @@ const Navbar: React.FC = () => {
           {/* Navigation Links - Center */}
           <div className="flex items-center space-x-8">
             <Link 
-              href="/" 
-              className="text-gray-900 hover:text-gray-700 px-3 py-2 text-sm font-medium transition-colors"
-            >
-              Home
-            </Link>
-            <Link 
               href="/menu" 
               className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
             >
@@ -40,18 +34,12 @@ const Navbar: React.FC = () => {
               Contact
             </Link>
 
-            <Link 
-              href="/account" 
-              className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
-            >
-              Account
-            </Link>
           </div>
 
           {/* Make a Reservation Button - Right Side */}
           <div>
             <Link 
-              href="/reservations/create"
+              href="/reservation"
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
             >
               Make a Reservation

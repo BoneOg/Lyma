@@ -14,7 +14,17 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
+        $user = auth()->user();
         Inertia::clearHistory();
+
+        if ($user) {
+            if ($user->isAdmin()) {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->isStaff()) {
+                return redirect()->route('staff.dashboard');
+            }
+        }
+
         return Inertia::render('auth/login');
     }
 
@@ -36,10 +46,6 @@ class AuthController extends Controller
                 return Inertia::location(route('staff.dashboard'));
             }
 
-            if (Gate::allows('user')) {
-                return Inertia::location(route('user.dashboard'));
-            }
-
             Auth::logout();
             return Inertia::location(route('login'))->withErrors(['email' => 'Unauthorized role']);
         }
@@ -54,38 +60,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         Inertia::encryptHistory();
 
-        return Inertia::location('/');
+        return Inertia::location('/login');
     }
 
-    public function showRegister()
-    {
-        Inertia::clearHistory();
-        return Inertia::render('auth/register');
-    }
-
-    public function register(Request $request)
-    {
-        $validated = $request->validate([
-            'first_name' => ['required', 'string', 'max:50'],
-            'last_name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'email', 'max:100', 'unique:users,email'],
-            'phone_number' => ['required', 'string', 'max:20'],
-            'password' => ['required', 'confirmed', 'min:8'],
-        ]);
-
-        $user = User::create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'user', // default role
-            'email_verified_at' => now(),
-        ]);
-
-        auth()->login($user);
-        Inertia::clearHistory();
-
-        return Inertia::location(route('user.dashboard'));
-    }
 }

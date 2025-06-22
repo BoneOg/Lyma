@@ -7,13 +7,12 @@ use Inertia\Inertia;
 
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
+Route::get('/reservation', fn () => Inertia::render('reservation'))->name('reservation');
 
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-});
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -25,8 +24,6 @@ Route::middleware('auth')->group(function () {
             return redirect()->route('admin.dashboard');
         } elseif ($user->isStaff()) {
             return redirect()->route('staff.dashboard');
-        } else {
-            return redirect()->route('user.dashboard');
         }
     })->name('account');
 
@@ -36,6 +33,4 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:staff')->get('/staff/dashboard', fn () => Inertia::render('staff/dashboard'))
         ->name('staff.dashboard');
 
-    Route::middleware('can:user')->get('/user/dashboard', fn () => Inertia::render('user/dashboard'))
-        ->name('user.dashboard');
 });

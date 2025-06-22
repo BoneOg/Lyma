@@ -26,7 +26,6 @@ return new class extends Migration
             
             // Status and notes
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
-            $table->text('special_requests')->nullable();
             
             $table->timestamps();
             

@@ -15,8 +15,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'first_name',
         'last_name',
-        'email',
-        'phone_number',
         'password',
         'role',
     ];
@@ -29,7 +27,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => 'string',
         ];
@@ -58,11 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->where('role', 'staff');
     }
 
-    public function scopeCustomers($query)
-    {
-        return $query->where('role', 'user');
-    }
-
     // Helper methods
     public function isAdmin(): bool
     {
@@ -72,11 +64,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isStaff(): bool
     {
         return $this->role === 'staff';
-    }
-
-    public function isCustomer(): bool
-    {
-        return $this->role === 'user';
     }
 
     public function canManageReservations(): bool
