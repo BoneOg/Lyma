@@ -8,16 +8,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
 
+
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
 
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
-
-// API routes for checking availability
-Route::get('/api/reservations/check-availability', [ReservationController::class, 'checkAvailability'])->name('api.reservations.check-availability');
-Route::get('/api/reservations/available-time-slots', [ReservationController::class, 'getAvailableTimeSlots'])->name('api.reservations.available-time-slots');
 
 // Your checkout route (you'll need to create this)
 Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])->name('checkout');

@@ -32,7 +32,6 @@ class ReservationController extends Controller
 
         $systemSettings = [
             'max_advance_booking_days' => SystemSetting::getMaxAdvanceBookingDays(),
-            'min_advance_booking_hours' => SystemSetting::getMinAdvanceBookingHours(),
         ];
 
         return Inertia::render('reservation', [
@@ -103,62 +102,5 @@ class ReservationController extends Controller
 
         // Return the first (smallest) available table
         return $availableTables->first();
-    }
-
-    // API endpoints for checking availability
-    public function checkAvailability(Request $request)
-    {
-        $request->validate([
-            'date' => 'required|date',
-            'time_slot_id' => 'required|exists:time_slots,id',
-            'guest_count' => 'required|integer|min:1|max:8',
-        ]);
-
-        $table = $this->findBestAvailableTable(
-            $request->guest_count,
-            $request->date,
-            $request->time_slot_id
-        );
-
-        return response()->json([
-            'available' => (bool) $table,
-            'table' => $table ? [
-                'id' => $table->id,
-                'table_number' => $table->table_number,
-                'capacity' => $table->capacity,
-                'location_description' => $table->location_description,
-            ] : null,
-        ]);
-    }
-
-    public function getAvailableTimeSlots(Request $request)
-    {
-        $request->validate([
-            'date' => 'required|date',
-            'guest_count' => 'required|integer|min:1|max:8',
-        ]);
-
-        $timeSlots = TimeSlot::active()->get();
-        $availableTimeSlots = [];
-
-        foreach ($timeSlots as $timeSlot) {
-            $table = $this->findBestAvailableTable(
-                $request->guest_count,
-                $request->date,
-                $timeSlot->id
-            );
-
-            if ($table) {
-                $availableTimeSlots[] = [
-                    'id' => $timeSlot->id,
-                    'formatted_time' => $timeSlot->formatted_time,
-                    'start_time_formatted' => $timeSlot->start_time_formatted,
-                ];
-            }
-        }
-
-        return response()->json([
-            'available_time_slots' => $availableTimeSlots,
-        ]);
     }
 }

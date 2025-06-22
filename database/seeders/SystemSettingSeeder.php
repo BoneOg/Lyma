@@ -21,11 +21,6 @@ class SystemSettingSeeder extends Seeder
                 'description' => 'Maximum days in advance for booking'
             ],
             [
-                'setting_key' => 'min_advance_booking_hours',
-                'setting_value' => '24',
-                'description' => 'Minimum 24 hours in advance for booking (tomorrow and future only)'
-            ],
-            [
                 'setting_key' => 'restaurant_name',
                 'setting_value' => 'Fine Dining Restaurant',
                 'description' => 'Restaurant name displayed on website'

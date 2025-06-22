@@ -12,7 +12,6 @@ interface TimeSlot {
 
 interface SystemSettings {
   max_advance_booking_days: number
-  min_advance_booking_hours: number
 }
 
 interface Props {
@@ -39,7 +38,6 @@ export default function Reservation() {
 
   // Date calculations
   const today = new Date()
-  const minDate = new Date(today.getTime() + (systemSettings.min_advance_booking_hours * 60 * 60 * 1000))
   const maxDate = new Date(today.getTime() + (systemSettings.max_advance_booking_days * 24 * 60 * 60 * 1000))
 
   const months = [
@@ -58,7 +56,14 @@ export default function Reservation() {
 
   const isDateDisabled = (day: number) => {
     const dateToCheck = new Date(selectedYear, selectedMonth, day)
-    return dateToCheck < minDate || dateToCheck > maxDate
+
+    // Reset time to midnight for accurate date-only comparison
+    dateToCheck.setHours(0, 0, 0, 0)
+
+    const todayMidnight = new Date()
+    todayMidnight.setHours(0, 0, 0, 0)
+
+    return dateToCheck <= todayMidnight || dateToCheck > maxDate
   }
 
   const formatSelectedDateTime = () => {
