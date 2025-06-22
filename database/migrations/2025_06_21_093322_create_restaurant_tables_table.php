@@ -15,6 +15,10 @@ return new class extends Migration
             $table->enum('status', ['available', 'under_maintenance'])->default('available');
             $table->string('location_description', 100)->nullable();
             $table->timestamps();
+            
+            // Indexes for better performance
+            $table->index('status');
+            $table->index('table_number');
         });
     }
 

@@ -52,4 +52,17 @@ return [
 
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | History Encryption
+    |--------------------------------------------------------------------------
+    |
+    | This option allows you to enable encrypted Inertia history state.
+    | When enabled, calling Inertia::encryptHistory() will encrypt and
+    | protect the back/forward navigation state in the browser.
+    |
+    */
+
+    'encrypt_history' => true,
+
 ];
