@@ -21,36 +21,8 @@ class PaymentController extends Controller
     {
         $this->mayaPublicKey = env('MAYA_CHECKOUT_PUBLIC_KEY');
         $this->mayaSecretKey = env('MAYA_CHECKOUT_SECRET_KEY');
-        // From config/maya.php, points to https://pg-sandbox.paymaya.com/checkout/v1/checkouts
         $this->mayaCheckoutUrl = config('maya.checkout_url');
-        // This is often for fetching payment details via API after redirect/webhook
         $this->mayaPaymentsUrl = 'https://pg-sandbox.paymaya.com/payments/v1/payments';
-    }
-
-    public function showCheckoutPage()
-    {
-        $reservation = [
-            'id' => 12345,
-            'guest_first_name' => 'John',
-            'guest_last_name' => 'Doe',
-            'guest_email' => 'john.doe@example.com',
-            'guest_phone' => '+639123456789',
-            'reservation_date' => '2025-07-20',
-            'guest_count' => 2,
-            'status' => 'pending',
-            'time_slot' => [
-                'id' => 1,
-                'start_time' => '18:00:00',
-                'end_time' => '19:00:00',
-                'start_time_formatted' => '6:00 PM',
-            ],
-        ];
-        $reservationFee = 500.00;
-
-        return Inertia::render('Checkout', [
-            'reservation' => $reservation,
-            'reservationFee' => $reservationFee,
-        ]);
     }
 
     public function createMayaCheckout(Request $request)
@@ -63,7 +35,7 @@ class PaymentController extends Controller
         $reservationId = $request->input('reservation_id');
         $amount = $request->input('amount');
 
-        $mayaAmount = (int) ($amount * 100);
+        $mayaAmount = (int) ($amount);
 
         $requestReferenceNumber = "RES_" . $reservationId . "_" . Str::random(8);
 
@@ -97,11 +69,11 @@ class PaymentController extends Controller
                         ]
                     ],
                     'buyer' => [
-                        'firstName' => 'John',
-                        'lastName' => 'Doe',
+                        'firstName' => '',
+                        'lastName' => '',
                         'contact' => [
-                            'phone' => '+639123456789',
-                            'email' => 'john.doe@example.com',
+                            'phone' => '',
+                            'email' => '',
                         ],
                     ],
                     'redirectUrl' => [

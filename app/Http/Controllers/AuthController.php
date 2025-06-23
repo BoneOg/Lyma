@@ -30,7 +30,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -47,10 +47,10 @@ class AuthController extends Controller
             }
 
             Auth::logout();
-            return Inertia::location(route('login'))->withErrors(['email' => 'Unauthorized role']);
+            return Inertia::location(route('login'))->withErrors(['username' => 'Unauthorized role']);
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
+        return back()->withErrors(['username' => 'Invalid credentials'])->onlyInput('username');
     }
 
     public function logout(Request $request)

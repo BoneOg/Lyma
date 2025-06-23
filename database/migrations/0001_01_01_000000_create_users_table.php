@@ -11,12 +11,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->enum('role', ['admin', 'staff']);
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
+            $table->string('username', 50)->unique();
+            $table->string('name', 100);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
             $table->index('role');
+            $table->index('username');
         });
 
         // 🔐 KEEP - Essential for password resets

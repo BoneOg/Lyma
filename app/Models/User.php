@@ -13,8 +13,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'username',
+        'name',
         'password',
         'role',
     ];
@@ -32,6 +32,14 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /**
+     * Get the login username to be used by the controller.
+     */
+    public function username()
+    {
+        return 'username';
+    }
+
     // Relationships
     public function reservations(): HasMany
     {
@@ -41,7 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
     // Accessors
     public function getFullNameAttribute(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        return $this->name;
     }
 
     // Scopes

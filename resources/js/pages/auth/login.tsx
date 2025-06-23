@@ -2,7 +2,7 @@ import { useForm, Link } from '@inertiajs/react'
 
 export default function Login() {
   const { data, setData, post, processing, errors } = useForm({
-    email: '',
+    username: '',
     password: '',
   })
 
@@ -18,14 +18,14 @@ export default function Login() {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label>Email</label>
+            <label>Username</label>
             <input
-              type="email"
+              type="text"
               className="w-full border px-3 py-2 rounded"
-              value={data.email}
-              onChange={e => setData('email', e.target.value)}
+              value={data.username}
+              onChange={e => setData('username', e.target.value)}
             />
-            {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
+            {errors.username && <div className="text-red-500 text-sm">{errors.username}</div>}
           </div>
 
           <div className="mb-4">

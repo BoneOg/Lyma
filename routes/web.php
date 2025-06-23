@@ -24,8 +24,10 @@ Route::get('/checkout/success', [PaymentController::class, 'checkoutSuccess'])->
 Route::get('/checkout/failure', [PaymentController::class, 'checkoutFailure'])->name('checkout.failure');
 Route::get('/checkout/cancel', [PaymentController::class, 'checkoutCancel'])->name('checkout.cancel');
 
-// Your checkout route (must come after the specific routes)
-Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])->name('checkout');
+// Checkout route with pending reservation check
+Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])
+    ->name('checkout')
+    ->middleware('check.pending.reservation');
 
 Route::post('/maya-webhook', [PaymentController::class, 'handleWebhook'])->name('maya.webhook');
 
@@ -46,12 +48,23 @@ Route::middleware('auth')->group(function () {
         }
     })->name('account');
 
-    Route::middleware('can:admin')->get('/admin/dashboard', fn () => Inertia::render('admin/dashboard'))
-        ->name('admin.dashboard');
+    Route::middleware('can:admin')->group(function () {
+        Route::get('/admin/dashboard', fn () => Inertia::render('admin/dashboard'))
+            ->name('admin.dashboard');
+        Route::get('/admin/users', fn () => Inertia::render('admin/users'))
+            ->name('admin.users');
+        Route::get('/admin/booking', fn () => Inertia::render('admin/booking'))
+            ->name('admin.booking');
+    });
 
     Route::middleware('can:staff')->get('/staff/dashboard', fn () => Inertia::render('staff/dashboard'))
         ->name('staff.dashboard');
 
+});
+
+// 404 Fallback Route - Must be the last route
+Route::fallback(function () {
+    return Inertia::render('404');
 });
 
 
