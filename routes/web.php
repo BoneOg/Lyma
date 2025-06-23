@@ -7,7 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
-
+use App\Http\Controllers\PaymentController;
 
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
@@ -17,8 +17,17 @@ Route::get('/reservation', [ReservationController::class, 'index'])->name('reser
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
 Route::get('/reservations/occupied-time-slots', [ReservationController::class, 'getOccupiedTimeSlots'])->name('reservations.occupied-time-slots');
 
-// Your checkout route (you'll need to create this)
+Route::post('/create-maya-checkout', [PaymentController::class, 'createMayaCheckout'])->name('maya.checkout.create');
+
+// Payment callback routes (must come before the parameterized checkout route)
+Route::get('/checkout/success', [PaymentController::class, 'checkoutSuccess'])->name('checkout.success');
+Route::get('/checkout/failure', [PaymentController::class, 'checkoutFailure'])->name('checkout.failure');
+Route::get('/checkout/cancel', [PaymentController::class, 'checkoutCancel'])->name('checkout.cancel');
+
+// Your checkout route (must come after the specific routes)
 Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])->name('checkout');
+
+Route::post('/maya-webhook', [PaymentController::class, 'handleWebhook'])->name('maya.webhook');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -44,3 +53,7 @@ Route::middleware('auth')->group(function () {
         ->name('staff.dashboard');
 
 });
+
+
+
+
