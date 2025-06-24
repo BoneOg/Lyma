@@ -37,6 +37,29 @@ export default function Reservation() {
   const [phone, setPhone] = useState('')
   const [occupiedTimeSlots, setOccupiedTimeSlots] = useState<number[]>([])
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  
+  // State to track admin-disabled dates and time slots
+  const [adminDisabledDates, setAdminDisabledDates] = useState<Set<string>>(new Set())
+  const [adminDisabledTimeSlots, setAdminDisabledTimeSlots] = useState<Map<string, Set<string>>>(new Map())
+
+  // Load admin disabled dates from localStorage
+  useEffect(() => {
+    const savedDisabledDates = localStorage.getItem('disabledDates')
+    const savedDisabledTimeSlots = localStorage.getItem('disabledTimeSlots')
+    
+    if (savedDisabledDates) {
+      setAdminDisabledDates(new Set(JSON.parse(savedDisabledDates)))
+    }
+    
+    if (savedDisabledTimeSlots) {
+      const parsed = JSON.parse(savedDisabledTimeSlots)
+      const newMap = new Map()
+      Object.keys(parsed).forEach(key => {
+        newMap.set(key, new Set(parsed[key]))
+      })
+      setAdminDisabledTimeSlots(newMap)
+    }
+  }, [])
 
   // Date calculations
   const today = new Date()
@@ -65,7 +88,38 @@ export default function Reservation() {
     const todayMidnight = new Date()
     todayMidnight.setHours(0, 0, 0, 0)
 
-    return dateToCheck <= todayMidnight || dateToCheck > maxDate
+    // Check if date is in the past or beyond max booking days
+    if (dateToCheck <= todayMidnight || dateToCheck > maxDate) {
+      return true
+    }
+
+    // Check if date is admin-disabled
+    const monthName = months[selectedMonth]
+    const dateKey = `${monthName}-${day}`
+    if (adminDisabledDates.has(dateKey)) {
+      return true
+    }
+
+    return false
+  }
+
+  // Helper function to check if a time slot is admin-disabled for the selected date
+  const isTimeSlotAdminDisabled = (timeSlotId: number) => {
+    if (!selectedDate) return false
+    
+    const monthName = months[selectedMonth]
+    const dateKey = `${monthName}-${selectedDate}`
+    const disabledSlots = adminDisabledTimeSlots.get(dateKey)
+    
+    if (disabledSlots) {
+      // Check if this specific time slot is disabled
+      const timeSlot = timeSlots.find(slot => slot.id === timeSlotId)
+      if (timeSlot) {
+        return disabledSlots.has(timeSlot.start_time_formatted)
+      }
+    }
+    
+    return false
   }
 
   const fetchOccupiedTimeSlots = async (date: string) => {
@@ -260,14 +314,20 @@ export default function Reservation() {
                     >
                       {timeSlots.map((slot) => {
                         const isOccupied = occupiedTimeSlots.includes(slot.id)
+                        const isAdminDisabled = isTimeSlotAdminDisabled(slot.id)
+                        const isDisabled = isOccupied || isAdminDisabled
+                        
                         return (
                           <option 
                             key={slot.id} 
                             value={slot.id} 
-                            className={`bg-[#3f411a] ${isOccupied ? 'text-gray-500' : ''}`}
-                            disabled={isOccupied}
+                            className={`bg-[#3f411a] ${isDisabled ? 'text-gray-500' : ''}`}
+                            disabled={isDisabled}
                           >
-                            {slot.start_time_formatted} {isOccupied ? '(Fully Booked)' : ''}
+                            {slot.start_time_formatted} {
+                              isOccupied ? '(Fully Booked)' : 
+                              isAdminDisabled ? '(Unavailable)' : ''
+                            }
                           </option>
                         )
                       })}

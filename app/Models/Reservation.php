@@ -18,7 +18,6 @@ class Reservation extends Model
         'guest_last_name',
         'guest_email',
         'guest_phone',
-        'table_id',
         'reservation_date',
         'time_slot_id',
         'guest_count',
@@ -36,11 +35,6 @@ class Reservation extends Model
     }
 
     // Relationships
-    public function table(): BelongsTo
-    {
-        return $this->belongsTo(RestaurantTable::class, 'table_id');
-    }
-
     public function timeSlot(): BelongsTo
     {
         return $this->belongsTo(TimeSlot::class);

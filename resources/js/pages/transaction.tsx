@@ -18,7 +18,6 @@ interface Reservation {
     guest_last_name: string;
     guest_email: string;
     guest_phone: string;
-    table_id: number;
     reservation_date: string;
     time_slot_id: number;
     guest_count: number;

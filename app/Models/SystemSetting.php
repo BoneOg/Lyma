@@ -57,4 +57,9 @@ class SystemSetting extends Model
     {
         return self::get('restaurant_phone', '+639123456789');
     }
+
+    public static function getCapacity(): int
+    {
+        return (int) self::get('capacity', 5);
+    }
 }

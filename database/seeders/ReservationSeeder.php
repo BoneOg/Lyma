@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Reservation;
 use App\Models\TimeSlot;
-use App\Models\RestaurantTable;
 
 class ReservationSeeder extends Seeder
 {
@@ -19,55 +18,32 @@ class ReservationSeeder extends Seeder
             return;
         }
 
-        // Get all available tables
-        $tables = RestaurantTable::where('status', 'available')->get();
-        
-        if ($tables->isEmpty()) {
-            $this->command->error('No available tables found. Please run RestaurantTableSeeder first.');
-            return;
-        }
-
-        // Sample guest data for June 30, 2025 at 11:00 AM
-        $reservations = [
-            [
-                'guest_first_name' => 'John',
-                'guest_last_name' => 'Smith',
-                'guest_email' => 'john.smith@example.com',
-                'guest_phone' => '+1-555-0101',
-                'guest_count' => 2,
-                'reservation_date' => '2025-06-30',
-                'time_slot_id' => $timeSlot->id,
-                'table_id' => $tables->first()->id,
-                'status' => 'confirmed'
-            ],
-            [
-                'guest_first_name' => 'Sarah',
-                'guest_last_name' => 'Johnson',
-                'guest_email' => 'sarah.j@example.com',
-                'guest_phone' => '+1-555-0102',
-                'guest_count' => 4,
-                'reservation_date' => '2025-06-30',
-                'time_slot_id' => $timeSlot->id,
-                'table_id' => $tables->skip(1)->first()->id,
-                'status' => 'confirmed'
-            ],
-            [
-                'guest_first_name' => 'Michael',
-                'guest_last_name' => 'Brown',
-                'guest_email' => 'mike.brown@example.com',
-                'guest_phone' => '+1-555-0103',
-                'guest_count' => 2,
-                'reservation_date' => '2025-06-30',
-                'time_slot_id' => $timeSlot->id,
-                'table_id' => $tables->skip(2)->first()->id,
-                'status' => 'confirmed'
-            ]
+        $names = [
+            ['John', 'Smith'],
+            ['Sarah', 'Johnson'],
+            ['Michael', 'Brown'],
+            ['Emily', 'Davis'],
+            ['David', 'Wilson'],
         ];
+        $domains = ['example.com', 'mail.com', 'test.com', 'demo.com', 'sample.com'];
 
-        foreach ($reservations as $reservationData) {
-            Reservation::create($reservationData);
+        for ($i = 0; $i < 5; $i++) {
+            $firstName = $names[$i][0];
+            $lastName = $names[$i][1];
+            $email = strtolower($firstName) . '.' . strtolower($lastName) . rand(1,99) . '@' . $domains[$i];
+            $phone = '+639' . rand(100000000, 999999999);
+            $guestCount = rand(1, 8);
+
+            Reservation::create([
+                'guest_first_name' => $firstName,
+                'guest_last_name' => $lastName,
+                'guest_email' => $email,
+                'guest_phone' => $phone,
+                'reservation_date' => '2025-07-08',
+                'time_slot_id' => $timeSlot->id,
+                'guest_count' => $guestCount,
+                'status' => 'confirmed',
+            ]);
         }
-
-        $this->command->info('Created ' . count($reservations) . ' test reservations for June 30, 2025 at 11:00 AM');
     }
 } 

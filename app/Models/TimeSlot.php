@@ -78,16 +78,4 @@ class TimeSlot extends Model
         $end = Carbon::parse($this->end_time);
         return $end->diffInMinutes($start);
     }
-
-    public function getAvailableTablesForDate(Carbon $date, int $guestCount = 1)
-    {
-        return RestaurantTable::available()
-            ->byCapacity($guestCount)
-            ->whereDoesntHave('reservations', function ($query) use ($date) {
-                $query->where('reservation_date', $date->format('Y-m-d'))
-                      ->where('time_slot_id', $this->id)
-                      ->whereIn('status', ['pending', 'confirmed']);
-            })
-            ->get();
-    }
 }

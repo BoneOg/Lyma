@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('guest_phone', 20)->nullable();
             
             // Reservation details
-            $table->foreignId('table_id')->constrained('restaurant_tables')->onDelete('cascade');
             $table->date('reservation_date');
             $table->foreignId('time_slot_id')->constrained('time_slots')->onDelete('cascade');
             $table->integer('guest_count');
@@ -30,9 +29,6 @@ return new class extends Migration
             $table->index('reservation_date');
             $table->index('status');
             $table->index('guest_email');
-            
-            // Unique constraint to prevent double booking
-            $table->unique(['table_id', 'reservation_date', 'time_slot_id'], 'unique_table_datetime');
         });
     }
 

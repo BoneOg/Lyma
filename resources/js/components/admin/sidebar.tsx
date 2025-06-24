@@ -21,7 +21,7 @@ const AdminSidebar: React.FC = () => {
     { id: 'dashboard', label: 'Dashboard', href: '/admin/dashboard' },
     { id: 'transactions', label: 'Transactions', href: '/admin/transactions' },
     { id: 'booking', label: 'Booking', href: '/admin/booking' },
-    { id: 'setting', label: 'Setting', href: '/admin/setting' },
+    { id: 'setting', label: 'Settings', href: '/admin/setting' },
   ];
 
   const getCurrentPage = () => {
