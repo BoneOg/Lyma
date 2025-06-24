@@ -5,11 +5,110 @@
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
-@font-face {
-    font-family: 'Quicksand';
-    src: url('/assets/font/quicksand.ttf') format('truetype');
+/* Custom CSS Variables for Colors */
+:root {
+  --color-olive: #3c4119;
+  --color-olive-light: #525a1f;
+  --color-olive-dark: #2a2d12;
+  --color-beige: #f5f5c3;
+  --color-beige-light: #fcfcef;
+  --color-beige-dark: #e2e2a8;
 }
 
-.font-quicksand {
-  font-family: 'Quicksand', serif;
+@font-face {
+  font-family: 'LexendGiga';
+  src: url('/assets/font/lexendgiga.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-lexend {
+  font-family: 'LexendGiga', sans-serif;
+}
+/* Custom Color Classes */
+.bg-olive {
+  background-color: var(--color-olive);
+}
+
+.bg-olive-light {
+  background-color: var(--color-olive-light);
+}
+
+.bg-olive-dark {
+  background-color: var(--color-olive-dark);
+}
+
+.bg-beige {
+  background-color: var(--color-beige);
+}
+
+.bg-beige-light {
+  background-color: var(--color-beige-light);
+}
+
+.bg-beige-dark {
+  background-color: var(--color-beige-dark);
+}
+
+.text-olive {
+  color: var(--color-olive);
+}
+
+.text-olive-light {
+  color: var(--color-olive-light);
+}
+
+.text-olive-dark {
+  color: var(--color-olive-dark);
+}
+
+.text-beige {
+  color: var(--color-beige);
+}
+
+.text-beige-light {
+  color: var(--color-beige-light);
+}
+
+.text-beige-dark {
+  color: var(--color-beige-dark);
+}
+
+.border-olive {
+  border-color: var(--color-olive);
+}
+
+.border-olive-light {
+  border-color: var(--color-olive-light);
+}
+
+.border-olive-dark {
+  border-color: var(--color-olive-dark);
+}
+
+.border-beige {
+  border-color: var(--color-beige);
+}
+
+.border-beige-light {
+  border-color: var(--color-beige-light);
+}
+
+.border-beige-dark {
+  border-color: var(--color-beige-dark);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
 }

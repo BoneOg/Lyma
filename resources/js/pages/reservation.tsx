@@ -186,7 +186,7 @@ export default function Reservation() {
 
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className=""></div>)
+      days.push(<div key={`empty-${i}`} className="h-10"></div>)
     }
 
     // Add days of the month
@@ -198,11 +198,11 @@ export default function Reservation() {
         <div
           key={day}
           onClick={() => !isDisabled && handleDateSelect(day)}
-          className={`cursor-pointer transition-colors ${
+          className={`cursor-pointer transition-colors h-10 flex items-center justify-center text-lg ${
             isDisabled
               ? 'text-gray-500 cursor-not-allowed'
               : isSelected
-              ? 'bg-[#f6f5c6] text-[#3f411a] rounded-full px-3 py-1'
+              ? 'bg-[#f6f5c6] text-[#3f411a] rounded-lg px-3'
               : 'text-white hover:text-[#f6f5c6]'
           }`}
         >
@@ -217,25 +217,25 @@ export default function Reservation() {
   return (
     <Layout>
       <div className="min-h-screen bg-[#3f411a] flex justify-center text-white px-4 pt-10">
-        <div className="max-w-4xl w-full py-12">
-          <h1 className="text-5xl font-serif mb-10">RESERVATION</h1>
+        <div className="max-w-5xl w-full py-12">
+          <h1 className="text-6xl font-serif mb-12">RESERVATION</h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             {/* Left Content Container */}
             <div className="flex flex-col justify-start h-full">
               {/* Dropdowns + Calendar */}
               <div className="flex flex-col justify-start h-full">
-                <div className="flex space-x-6 mb-8">
+                <div className="flex space-x-8 mb-10">
                   {/* Month */}
-                  <div className="relative w-40">
-                    <label className="block text-sm mb-1">Month</label>
+                  <div className="relative w-48">
+                    <label className="block text-base mb-2">Month</label>
                     <select 
                       value={selectedMonth}
                       onChange={(e) => {
                         setSelectedMonth(parseInt(e.target.value))
                         setSelectedDate(null) // Reset selected date when month changes
                       }}
-                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-1"
+                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base"
                     >
                       {months.map((month, index) => (
                         <option key={month} value={index} className="bg-[#3f411a]">
@@ -246,17 +246,17 @@ export default function Reservation() {
                     <img
                       src="/assets/ui/drop.webp"
                       alt="Dropdown"
-                      className="w-4 h-4 absolute right-0 top-[34px] pointer-events-none"
+                      className="w-5 h-5 absolute right-0 top-[42px] pointer-events-none"
                     />
                   </div>
 
                   {/* Time */}
-                  <div className="relative w-40">
-                    <label className="block text-sm mb-1">Time</label>
+                  <div className="relative w-48">
+                    <label className="block text-base mb-2">Time</label>
                     <select 
                       value={selectedTimeSlot || ''}
                       onChange={(e) => setSelectedTimeSlot(parseInt(e.target.value))}
-                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-1"
+                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base"
                     >
                       {timeSlots.map((slot) => {
                         const isOccupied = occupiedTimeSlots.includes(slot.id)
@@ -275,17 +275,17 @@ export default function Reservation() {
                     <img
                       src="/assets/ui/drop.webp"
                       alt="Dropdown"
-                      className="w-4 h-4 absolute right-0 top-[34px] pointer-events-none"
+                      className="w-5 h-5 absolute right-0 top-[42px] pointer-events-none"
                     />
                   </div>
 
                   {/* Guests */}
-                  <div className="relative w-40">
-                    <label className="block text-sm mb-1">Guests</label>
+                  <div className="relative w-48">
+                    <label className="block text-base mb-2">Guests</label>
                     <select 
                       value={guestCount}
                       onChange={(e) => setGuestCount(parseInt(e.target.value))}
-                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-1"
+                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base"
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                         <option key={num} value={num} className="bg-[#3f411a]">
@@ -296,13 +296,13 @@ export default function Reservation() {
                     <img
                       src="/assets/ui/drop.webp"
                       alt="Dropdown"
-                      className="w-4 h-4 absolute right-0 top-[34px] pointer-events-none"
+                      className="w-5 h-5 absolute right-0 top-[42px] pointer-events-none"
                     />
                   </div>
                 </div>
 
                 {/* Calendar */}
-                <div className="grid grid-cols-7 text-center gap-y-6 text-[#f6f5c6]">
+                <div className="grid grid-cols-7 text-center gap-y-8 text-[#f6f5c6] text-lg">
                   {['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'].map((day) => (
                     <div key={day}>{day}</div>
                   ))}
@@ -312,35 +312,35 @@ export default function Reservation() {
             </div>
 
             {/* Right Form */}
-            <div className="flex flex-col justify-between h-full self-stretch w-full max-w-sm ml-auto">
-              <div className="space-y-6">
+            <div className="flex flex-col justify-between h-full self-stretch w-full max-w-md ml-auto">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm mb-2">When</label>
-                  <div className="border-b border-white pb-1">
+                  <label className="block text-base mb-3">When</label>
+                  <div className="border-b border-white pb-2 text-lg">
                     {formatSelectedDateTime()}
                   </div>
                 </div>
                 
                 {/* First Name and Last Name */}
-                <div className="flex space-x-4">
+                <div className="flex space-x-6">
                   <div className="flex-1">
-                    <label className="block text-sm mb-1">First Name</label>
+                    <label className="block text-base mb-2">First Name</label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={(e) => handleNameInput(e.target.value, setFirstName)}
-                      className="w-full bg-transparent border-b border-white text-white pb-1 outline-none"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
                       placeholder="First name"
                       required
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-sm mb-1">Last Name</label>
+                    <label className="block text-base mb-2">Last Name</label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={(e) => handleNameInput(e.target.value, setLastName)}
-                      className="w-full bg-transparent border-b border-white text-white pb-1 outline-none"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
                       placeholder="Last name"
                       required
                     />
@@ -348,24 +348,24 @@ export default function Reservation() {
                 </div>
 
                 <div>
-                  <label className="block text-sm mb-1">Email</label>
+                  <label className="block text-base mb-2">Email</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => handleEmailInput(e.target.value)}
-                    className="w-full bg-transparent border-b border-white text-white pb-1 outline-none"
+                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
                     placeholder="Enter your email"
                     required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm mb-1">Phone Number</label>
+                  <label className="block text-base mb-2">Phone Number</label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => handlePhoneInput(e.target.value)}
-                    className="w-full bg-transparent border-b border-white text-white pb-1 outline-none"
+                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
                     placeholder="Enter your phone number"
                     required
                   />
@@ -375,7 +375,7 @@ export default function Reservation() {
               <button
                 onClick={handleBookTable}
                 disabled={!isFormValid()}
-                className={`block w-full text-center font-medium py-3 mt-6 transition duration-200 ${
+                className={`block w-full text-center font-medium py-4 mt-8 text-lg transition duration-200 ${
                   isFormValid()
                     ? 'bg-white text-[#3f411a] hover:bg-[#f6f5c6] cursor-pointer'
                     : 'bg-gray-400 text-gray-600 cursor-not-allowed'
@@ -386,7 +386,7 @@ export default function Reservation() {
               
               {/* Display errors if any */}
               {errors?.general && (
-                <div className="mt-4 p-3 bg-red-500 text-white rounded">
+                <div className="mt-6 p-4 bg-red-500 text-white rounded text-base">
                   {errors.general}
                 </div>
               )}

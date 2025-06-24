@@ -1,27 +1,21 @@
-import { router, Link } from '@inertiajs/react'
+import React from 'react';
+import StaffLayout from '@/components/staff/layout';
 
-export default function StaffDashboard() {
+const StaffDashboard: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 text-center">
-      <h1 className="text-2xl font-bold text-green-700 mb-6">
-        Welcome to the Staff Dashboard
-      </h1>
-
-      <div className="space-x-4">
-        <button
-          onClick={() => router.post('/logout')}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-        >
-          Logout
-        </button>
-
-        <Link
-          href="/"
-          className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition"
-        >
-          Back to Home
-        </Link>
+    <StaffLayout>
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Staff Dashboard</h1>
+        
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Welcome to Staff Dashboard</h2>
+          <p className="text-gray-600">
+            This is the main dashboard page for staff members. Here you can manage bookings and view reservation details.
+          </p>
+        </div>
       </div>
-    </div>
-  )
-}
+    </StaffLayout>
+  );
+};
+
+export default StaffDashboard;

@@ -21,13 +21,8 @@ class SystemSettingSeeder extends Seeder
                 'description' => 'Maximum days in advance for booking'
             ],
             [
-                'setting_key' => 'restaurant_name',
-                'setting_value' => 'Fine Dining Restaurant',
-                'description' => 'Restaurant name displayed on website'
-            ],
-            [
                 'setting_key' => 'restaurant_email',
-                'setting_value' => 'info@restaurant.com',
+                'setting_value' => 'lyma@gmail.com',
                 'description' => 'Restaurant contact email'
             ],
             [

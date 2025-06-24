@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminController;
 
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
@@ -49,16 +50,24 @@ Route::middleware('auth')->group(function () {
     })->name('account');
 
     Route::middleware('can:admin')->group(function () {
-        Route::get('/admin/dashboard', fn () => Inertia::render('admin/dashboard'))
+        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
             ->name('admin.dashboard');
-        Route::get('/admin/users', fn () => Inertia::render('admin/users'))
-            ->name('admin.users');
-        Route::get('/admin/booking', fn () => Inertia::render('admin/booking'))
+        Route::get('/admin/transactions', [AdminController::class, 'transactions'])
+            ->name('admin.transactions');
+        Route::get('/admin/booking', [AdminController::class, 'booking'])
             ->name('admin.booking');
+        Route::get('/admin/setting', [AdminController::class, 'setting'])
+            ->name('admin.setting');
+        Route::post('/admin/settings/update', [AdminController::class, 'updateSettings'])
+            ->name('admin.settings.update');
     });
 
-    Route::middleware('can:staff')->get('/staff/dashboard', fn () => Inertia::render('staff/dashboard'))
-        ->name('staff.dashboard');
+    Route::middleware('can:staff')->group(function () {
+        Route::get('/staff/dashboard', fn () => Inertia::render('staff/dashboard'))
+            ->name('staff.dashboard');
+        Route::get('/staff/booking', fn () => Inertia::render('staff/booking'))
+            ->name('staff.booking');
+    });
 
 });
 

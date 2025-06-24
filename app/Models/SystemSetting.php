@@ -47,11 +47,6 @@ class SystemSetting extends Model
     {
         return (int) self::get('max_advance_booking_days', 30);
     }
-    
-    public static function getRestaurantName(): string
-    {
-        return self::get('restaurant_name', 'Fine Dining Restaurant');
-    }
 
     public static function getRestaurantEmail(): string
     {
