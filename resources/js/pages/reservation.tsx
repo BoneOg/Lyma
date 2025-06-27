@@ -252,7 +252,7 @@ export default function Reservation() {
         <div
           key={day}
           onClick={() => !isDisabled && handleDateSelect(day)}
-          className={`cursor-pointer transition-colors h-10 flex items-center justify-center text-lg ${
+          className={`cursor-pointer transition-colors h-10 flex items-center justify-center text-lg font-lexend font-extralight ${
             isDisabled
               ? 'text-gray-500 cursor-not-allowed'
               : isSelected
@@ -272,7 +272,7 @@ export default function Reservation() {
     <Layout>
       <div className="min-h-screen bg-[#3f411a] flex justify-center text-white px-4 pt-10">
         <div className="max-w-5xl w-full py-12">
-          <h1 className="text-6xl font-serif mb-12">RESERVATION</h1>
+          <h1 className="text-6xl font-extralight font-lexend text-beige mb-12">RESERVATION</h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             {/* Left Content Container */}
@@ -282,17 +282,17 @@ export default function Reservation() {
                 <div className="flex space-x-8 mb-10">
                   {/* Month */}
                   <div className="relative w-48">
-                    <label className="block text-base mb-2">Month</label>
+                    <label className="block text-base font-extralight font-lexend mb-2">Month</label>
                     <select 
                       value={selectedMonth}
                       onChange={(e) => {
                         setSelectedMonth(parseInt(e.target.value))
                         setSelectedDate(null) // Reset selected date when month changes
                       }}
-                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base"
+                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base font-extralight font-lexend"
                     >
                       {months.map((month, index) => (
-                        <option key={month} value={index} className="bg-[#3f411a]">
+                        <option key={month} value={index} className="bg-[#3f411a] font-extralight font-lexend">
                           {month}
                         </option>
                       ))}
@@ -306,11 +306,11 @@ export default function Reservation() {
 
                   {/* Time */}
                   <div className="relative w-48">
-                    <label className="block text-base mb-2">Time</label>
+                    <label className="block text-base font-extralight font-lexend mb-2">Time</label>
                     <select 
                       value={selectedTimeSlot || ''}
                       onChange={(e) => setSelectedTimeSlot(parseInt(e.target.value))}
-                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base"
+                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base font-extralight font-lexend"
                     >
                       {timeSlots.map((slot) => {
                         const isOccupied = occupiedTimeSlots.includes(slot.id)
@@ -321,7 +321,7 @@ export default function Reservation() {
                           <option 
                             key={slot.id} 
                             value={slot.id} 
-                            className={`bg-[#3f411a] ${isDisabled ? 'text-gray-500' : ''}`}
+                            className={`bg-[#3f411a] font-extralight font-lexend ${isDisabled ? 'text-gray-500' : ''}`}
                             disabled={isDisabled}
                           >
                             {slot.start_time_formatted} {
@@ -341,14 +341,14 @@ export default function Reservation() {
 
                   {/* Guests */}
                   <div className="relative w-48">
-                    <label className="block text-base mb-2">Guests</label>
+                    <label className="block text-base font-extralight font-lexend mb-2">Guests</label>
                     <select 
                       value={guestCount}
                       onChange={(e) => setGuestCount(parseInt(e.target.value))}
-                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base"
+                      className="bg-transparent border-b border-white text-white appearance-none w-full pr-8 py-2 text-base font-extralight font-lexend"
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                        <option key={num} value={num} className="bg-[#3f411a]">
+                        <option key={num} value={num} className="bg-[#3f411a] font-extralight font-lexend">
                           {num}
                         </option>
                       ))}
@@ -364,7 +364,7 @@ export default function Reservation() {
                 {/* Calendar */}
                 <div className="grid grid-cols-7 text-center gap-y-8 text-[#f6f5c6] text-lg">
                   {['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'].map((day) => (
-                    <div key={day}>{day}</div>
+                    <div key={day} className="font-lexend font-extralight">{day}</div>
                   ))}
                   {renderCalendar()}
                 </div>
@@ -375,8 +375,8 @@ export default function Reservation() {
             <div className="flex flex-col justify-between h-full self-stretch w-full max-w-md ml-auto">
               <div className="space-y-8">
                 <div>
-                  <label className="block text-base mb-3">When</label>
-                  <div className="border-b border-white pb-2 text-lg">
+                  <label className="block text-base font-extralight font-lexend mb-3">When</label>
+                  <div className="border-b border-white pb-2 text-lg font-extralight font-lexend">
                     {formatSelectedDateTime()}
                   </div>
                 </div>
@@ -384,23 +384,23 @@ export default function Reservation() {
                 {/* First Name and Last Name */}
                 <div className="flex space-x-6">
                   <div className="flex-1">
-                    <label className="block text-base mb-2">First Name</label>
+                    <label className="block text-base font-extralight font-lexend mb-2">First Name</label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={(e) => handleNameInput(e.target.value, setFirstName)}
-                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
                       placeholder="First name"
                       required
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-base mb-2">Last Name</label>
+                    <label className="block text-base font-extralight font-lexend mb-2">Last Name</label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={(e) => handleNameInput(e.target.value, setLastName)}
-                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
                       placeholder="Last name"
                       required
                     />
@@ -408,24 +408,24 @@ export default function Reservation() {
                 </div>
 
                 <div>
-                  <label className="block text-base mb-2">Email</label>
+                  <label className="block text-base font-extralight font-lexend mb-2">Email</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => handleEmailInput(e.target.value)}
-                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
+                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
                     placeholder="Enter your email"
                     required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-base mb-2">Phone Number</label>
+                  <label className="block text-base font-extralight font-lexend mb-2">Phone Number</label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => handlePhoneInput(e.target.value)}
-                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base"
+                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
                     placeholder="Enter your phone number"
                     required
                   />
@@ -435,7 +435,7 @@ export default function Reservation() {
               <button
                 onClick={handleBookTable}
                 disabled={!isFormValid()}
-                className={`block w-full text-center font-medium py-4 mt-8 text-lg transition duration-200 ${
+                  className={`block w-full text-center font-extralight font-lexend py-4 mt-8 text-lg transition duration-200 ${
                   isFormValid()
                     ? 'bg-white text-[#3f411a] hover:bg-[#f6f5c6] cursor-pointer'
                     : 'bg-gray-400 text-gray-600 cursor-not-allowed'
@@ -446,7 +446,7 @@ export default function Reservation() {
               
               {/* Display errors if any */}
               {errors?.general && (
-                <div className="mt-6 p-4 bg-red-500 text-white rounded text-base">
+                <div className="mt-6 p-4 bg-red-500 text-white rounded text-base font-extralight font-lexend">
                   {errors.general}
                 </div>
               )}
@@ -459,35 +459,35 @@ export default function Reservation() {
       {showConfirmationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-[#3f411a] border-2 border-white p-8 max-w-md w-full mx-4">
-            <h3 className="text-2xl font-serif text-white mb-4">Confirm Reservation</h3>
-            <p className="text-white mb-6">Ready to book your table? Please confirm your details before proceeding.</p>
+            <h3 className="text-2xl font-extralight font-lexend text-white mb-4">Confirm Reservation</h3>
+            <p className="text-white mb-6 font-extralight font-lexend">Ready to book your table? Please confirm your details before proceeding.</p>
             
             <div className="space-y-4 mb-6">
               <div className="border-b border-white pb-2">
-                <span className="text-[#f6f5c6] text-sm">Date & Time:</span>
-                <p className="text-white">{formatSelectedDateTime()}</p>
+                <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Date & Time:</span>
+                <p className="text-white font-extralight font-lexend">{formatSelectedDateTime()}</p>
               </div>
               <div className="border-b border-white pb-2">
-                <span className="text-[#f6f5c6] text-sm">Guest:</span>
-                <p className="text-white">{firstName} {lastName}</p>
+                <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Guest:</span>
+                <p className="text-white font-extralight font-lexend">{firstName} {lastName}</p>
               </div>
               <div className="border-b border-white pb-2">
-                <span className="text-[#f6f5c6] text-sm">Contact:</span>
-                <p className="text-white">{email}</p>
-                <p className="text-white">{phone}</p>
+                <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Contact:</span>
+                <p className="text-white font-extralight font-lexend">{email}</p>
+                <p className="text-white font-extralight font-lexend">{phone}</p>
               </div>
             </div>
 
             <div className="flex space-x-4">
               <button
                 onClick={handleConfirmBooking}
-                className="flex-1 bg-white text-[#3f411a] py-3 font-medium hover:bg-[#f6f5c6] transition duration-200"
+                className="flex-1 bg-white text-[#3f411a] py-3 font-extralight font-lexend hover:bg-[#f6f5c6] transition duration-200"
               >
                 Yes, Book Now
               </button>
               <button
                 onClick={handleCancelBooking}
-                className="flex-1 bg-transparent border border-white text-white py-3 font-medium hover:bg-white hover:text-[#3f411a] transition duration-200"
+                className="flex-1 bg-transparent border border-white text-white py-3 font-extralight font-lexend hover:bg-white hover:text-[#3f411a] transition duration-200"
               >
                 No, Cancel
               </button>

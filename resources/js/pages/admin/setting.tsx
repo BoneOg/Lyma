@@ -9,6 +9,7 @@ interface Settings {
   restaurant_name: string;
   restaurant_email: string;
   restaurant_phone: string;
+  capacity: number;
 }
 
 interface Props {

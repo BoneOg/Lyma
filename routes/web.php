@@ -13,6 +13,11 @@ use App\Http\Controllers\AdminController;
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
 
+// Menu, About, Contact pages
+Route::get('/menu', fn () => Inertia::render('menu'))->name('menu');
+Route::get('/about', fn () => Inertia::render('about'))->name('about');
+Route::get('/contact', fn () => Inertia::render('contact'))->name('contact');
+
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');

@@ -4,7 +4,7 @@ import Underline from '@/animation/underline';
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="sticky top-0 z-50 bg-[#3f411a] shadow-sm border-b border-gray-200">
+    <nav className="sticky top-0 z-50 bg-olive py-2 font-lexend shadow-sm border-b border-gray-200">
       <div className="mx-[100px]">
         <div className="flex justify-between items-center h-16 relative">
           {/* Logo - Left Side */}
@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
               <Underline>
                 <Link 
                   href="/menu" 
-                  className="text-white hover:text-[#f6f5c6]/80 text-sm font-medium transition-colors"
+                  className="text-white hover:text-[#f6f5c6]/80 text-sm font-extralight transition-colors"
                 >
                   Menu
                 </Link>
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
               <Underline>
                 <Link 
                   href="/about" 
-                  className="text-white hover:text-[#f6f5c6]/80 text-sm font-medium transition-colors"
+                  className="text-white hover:text-[#f6f5c6]/80 text-sm font-extralight transition-colors"
                 >
                   About
                 </Link>
@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
               <Underline>
                 <Link 
                   href="/contact" 
-                  className="text-white hover:text-[#f6f5c6]/80 text-sm font-medium transition-colors"
+                  className="text-white hover:text-[#f6f5c6]/80 text-sm font-extralight transition-colors"
                 >
                   Contact
                 </Link>
@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
           <div className="flex-shrink-0 z-10">
             <Link 
               href="/reservation"
-              className="bg-transparent text-white hover:text-white/60 px-4 rounded-lg py-2 border border-[#f6f5c6] text-sm font-medium transition-colors"
+              className="bg-transparent text-white hover:text-[var(--color-olive)] hover:bg-[var(--color-beige)] px-6 py-4 border border-[#f6f5c6] text-sm font-extralight transition-colors"
             >
               MAKE A RESERVATION
             </Link>

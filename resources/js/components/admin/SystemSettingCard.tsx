@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
 import Notification from '@/components/Notification';
 
 interface Settings {
   reservation_fee: number;
   max_advance_booking_days: number;
+  capacity: number;
   restaurant_email: string;
   restaurant_phone: string;
 }
@@ -22,6 +22,7 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
   const [formData, setFormData] = useState({
     reservation_fee: settings.reservation_fee,
     max_advance_booking_days: settings.max_advance_booking_days,
+    capacity: settings.capacity || 5,
     restaurant_email: settings.restaurant_email,
     restaurant_phone: settings.restaurant_phone,
   });
@@ -32,6 +33,7 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
       setFormData({
         reservation_fee: settings.reservation_fee,
         max_advance_booking_days: settings.max_advance_booking_days,
+        capacity: settings.capacity || 5,
         restaurant_email: settings.restaurant_email,
         restaurant_phone: settings.restaurant_phone,
       });
@@ -41,7 +43,7 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     // For number fields, only allow numbers
-    if (field === 'reservation_fee' || field === 'max_advance_booking_days') {
+    if (field === 'reservation_fee' || field === 'max_advance_booking_days' || field === 'capacity') {
       const numericValue = value.replace(/[^0-9]/g, '');
       setFormData(prev => ({ ...prev, [field]: field === 'reservation_fee' ? parseFloat(numericValue) || 0 : parseInt(numericValue) || 0 }));
     } else if (field === 'restaurant_phone') {
@@ -118,9 +120,9 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
 
   return (
     <>
-      <div className="bg-white rounded shadow-lg p-8 h-full">
+      <div className="bg-white rounded-4xl shadow-lg p-8 h-full">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-semibold text-[#3f411a] font-lexend">System</h2>
+          <h2 className="text-2xl text-[#3f411a] font-lexend font-extralight">System</h2>
           <button
             onClick={handleEditToggle}
             className={`p-2 rounded-lg transition-all duration-200 ${
@@ -141,11 +143,11 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
         <div className="space-y-8">
           {/* First Row */}
           <div className="space-y-8">
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-[#3f411a] font-lexend">
+            <div className="space-y-3 ">
+              <label className="text-sm font-extralight text-[#3f411a] font-lexend">
                 Reservation Fee
               </label>
-              <div className="relative">
+              <div className="relative ">
                 <input
                   type="text"
                   value={formData.reservation_fee}
@@ -160,7 +162,7 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
             </div>
 
             <div className="space-y-3">
-              <label className="text-sm font-medium text-[#3f411a] font-lexend">
+              <label className="text-sm font-extralight text-[#3f411a] font-lexend">
                 Max Booking Days
               </label>
               <div className="relative">
@@ -178,7 +180,25 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
             </div>
 
             <div className="space-y-3">
-              <label className="text-sm font-medium text-[#3f411a] font-lexend">
+              <label className="text-sm font-extralight text-[#3f411a] font-lexend">
+                Available Tables
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={formData.capacity}
+                  onChange={(e) => handleInputChange('capacity', e.target.value)}
+                  className={`w-full px-3 py-2 border border-[#3f411a]/20 rounded-lg focus:outline-none focus:border-[#3f411a] bg-[#fdfcf0]/30 font-lexend ${
+                    !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                  }`}
+                  disabled={!isEditing}
+                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <label className="text-sm font-extralight text-[#3f411a] font-lexend">
                 Restaurant Email
               </label>
               <div className="relative">
@@ -195,7 +215,7 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
             </div>
 
             <div className="space-y-3">
-              <label className="text-sm font-medium text-[#3f411a] font-lexend">
+              <label className="text-sm font-extralight text-[#3f411a] font-lexend">
                 Restaurant Phone
               </label>
               <div className="relative">
@@ -217,7 +237,7 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
           <div className="flex justify-end pt-4">
             <button
               onClick={handleSaveClick}
-              className="bg-[#f6f5c6] hover:bg-[#e8e6b3] text-[#3f411a] font-medium px-8 py-2 rounded-lg transition-colors font-lexend cursor-pointer"
+              className="bg-[#f6f5c6] hover:bg-[#e8e6b3] text-[#3f411a] px-8 py-2 rounded-lg transition-colors font-lexend cursor-pointer"
             >
               Save Changes
             </button>
@@ -229,19 +249,19 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
       {showConfirmationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-[#3f411a] text-white rounded-2xl p-6 shadow-lg max-w-md w-full mx-4">
-            <h3 className="text-xl mb-4 font-lexend">Confirm Changes</h3>
-            <p className="text-[#f6f5c6] mb-6 font-lexend">Are you sure you want to save these changes?</p>
+            <h3 className="text-xl mb-4 font-lexend font-extralight">Confirm Changes</h3>
+            <p className="text-[#f6f5c6] mb-6 font-lexend font-extralight">Are you sure you want to save these changes?</p>
             
             <div className="flex gap-3">
               <button
                 onClick={handleCancelSave}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
+                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
               >
                 No
               </button>
               <button
                 onClick={handleConfirmSave}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
+                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
               >
                 Yes
               </button>

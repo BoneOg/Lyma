@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../ui/select';
+import Notification from '@/components/Notification';
 
 interface Settings {
   reservation_fee: number;
@@ -24,6 +25,9 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [showEnableModal, setShowEnableModal] = useState(false);
   const [showDisableModal, setShowDisableModal] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState<'success' | 'error'>('success');
   
   // State to track disabled dates and time slots
   const [disabledDates, setDisabledDates] = useState<Set<string>>(new Set());
@@ -179,6 +183,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
           return newMap;
         });
       }
+      
+      // Show success notification
+      setNotificationMessage(`${selectedTime === 'All Time' ? 'Date' : 'Time slot'} enabled successfully!`);
+      setNotificationType('success');
+      setShowNotification(true);
     }
     setShowEnableModal(false);
   };
@@ -206,6 +215,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
           return newMap;
         });
       }
+      
+      // Show success notification
+      setNotificationMessage(`${selectedTime === 'All Time' ? 'Date' : 'Time slot'} disabled successfully!`);
+      setNotificationType('success');
+      setShowNotification(true);
     }
     setShowDisableModal(false);
   };
@@ -213,6 +227,10 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
   const handleCancelModal = () => {
     setShowEnableModal(false);
     setShowDisableModal(false);
+  };
+
+  const handleNotificationClose = () => {
+    setShowNotification(false);
   };
 
   const today = new Date();
@@ -256,139 +274,144 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
   };
 
   return (
-    <div className="bg-[#3f411a] text-white rounded p-6 shadow-lg h-full">
-      <h3 className="text-xl font-semibold mb-6 font-lexend">Calendar</h3>
-      
-      {/* Month and Time Selectors */}
-      <div className="grid grid-cols-16 gap-4 mb-6">
-        <div className="col-span-4">
-          <label className="block text-sm text-beige-dark mb-2 font-lexend">Month</label>
-          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="bg-olive-light border-olive-light text-blue font-lexend">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-olive-dark border-olive-light text-white max-h-none">
-              {months.map((month) => (
-                <SelectItem key={month} value={month} className="text-white hover:bg-[#f6f5c6] hover:text-[#3f411a] transition-colors duration-200 cursor-pointer font-lexend font-thin">
-                  {month}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="col-span-3">
-          <label className="block text-sm text-beige-dark mb-2 font-lexend">Time</label>
-          <Select value={selectedTime} onValueChange={setSelectedTime}>
-            <SelectTrigger className="bg-olive-light border-olive-light text-white font-lexend">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-olive-dark border-olive-light text-white max-h-none">
-              {timeSlots.map((slot) => {
-                const isDisabled = selectedDate ? isTimeSlotDisabled(selectedDate, slot.formatted) : false;
-                return (
-                  <SelectItem 
-                    key={slot.id} 
-                    value={slot.formatted} 
-                    className={`transition-colors duration-200 cursor-pointer font-lexend font-thin ${
-                      isDisabled 
-                        ? 'text-red-500 line-through' 
-                        : 'text-white hover:bg-[#f6f5c6] hover:text-[#3f411a]'
-                    }`}
-                  >
-                    {slot.formatted}
+    <div className="bg-[#3f411a] text-white rounded-4xl p-6 shadow-lg h-full flex flex-col justify-start">
+      <h3 className="text-2xl font-extralight mt-1 font-lexend mb-3">Calendar</h3>
+      <div className="mt-7">
+        {/* Month and Time Selectors */}
+        <div className="grid grid-cols-16 gap-4 mb-4 mt-0">
+          <div className="col-span-4">
+            <label className="block text-sm text-beige-dark font-extralight  font-lexend">Month</label>
+            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+              <SelectTrigger className="bg-olive-light border-olive-light font-extralight font-lexend">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-olive-dark border-olive-light text-white max-h-none">
+                {months.map((month) => (
+                  <SelectItem key={month} value={month} className="text-white hover:bg-[#f6f5c6] hover:text-[#3f411a] transition-colors duration-200 cursor-pointer font-lexend font-extralight">
+                    {month}
                   </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="col-span-9">
-          <label className="block text-sm text-beige-dark mb-2 font-lexend">When</label>
-          <div className="text-white p-3 bg-olive-light border border-olive-light rounded-md h-10 flex items-center font-lexend text-sm">
-            {formatSelectedDateTime()}
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-      </div>
-
-      {/* Calendar Grid */}
-      <div className="grid grid-cols-7 text-center gap-y-6 text-[#f6f5c6] mb-6">
-        {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => (
-          <div key={day}>{day}</div>
-        ))}
-        {renderCalendar()}
-      </div>
-
-      {/* Enable and Disable Buttons */}
-      <div className="flex gap-3">
-        <button
-          type="button"
-          className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
-          onClick={handleEnableClick}
-        >
-          Enable
-        </button>
-        <button
-          type="button"
-          className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
-          onClick={handleDisableClick}
-        >
-          Disable
-        </button>
-      </div>
-
-      {/* Enable Confirmation Modal */}
-      {showEnableModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#3f411a] text-white rounded-2xl p-6 shadow-lg max-w-md w-full mx-4">
-            <h3 className="text-xl mb-4 font-lexend">Confirm Enable</h3>
-            <p className="text-[#f6f5c6] mb-6 font-lexend">Are you sure you want to enable this time slot?</p>
-            <p className="text-white mb-6 font-lexend">{formatSelectedDateTime()}</p>
-            
-            <div className="flex gap-3">
-              <button
-                onClick={handleCancelModal}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
-              >
-                No
-              </button>
-              <button
-                onClick={handleConfirmEnable}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
-              >
-                Yes
-              </button>
+          
+          <div className="col-span-3">
+            <label className="block text-sm text-beige-dark font-extralight font-lexend">Time</label>
+            <Select value={selectedTime} onValueChange={setSelectedTime}>
+              <SelectTrigger className="bg-olive-light border-olive-light text-white font-extralight font-lexend">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-olive-dark border-olive-light text-white max-h-none">
+                {timeSlots.map((slot) => {
+                  const isDisabled = selectedDate ? isTimeSlotDisabled(selectedDate, slot.formatted) : false;
+                  return (
+                    <SelectItem 
+                      key={slot.id} 
+                      value={slot.formatted} 
+                      className={`transition-colors duration-200 cursor-pointer font-lexend font-extralight ${
+                        isDisabled 
+                          ? 'text-red-500 line-through' 
+                          : 'text-white hover:bg-[#f6f5c6] hover:text-[#3f411a]'
+                      }`}
+                    >
+                      {slot.formatted}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="col-span-9">
+            <label className="block text-sm text-beige-dark font-extralight font-lexend">When</label>
+            <div className="text-white p-3 bg-olive-light border border-olive-light rounded-md h-10 flex items-center font-lexend font-extralight text-sm">
+              {formatSelectedDateTime()}
             </div>
           </div>
         </div>
-      )}
-
-      {/* Disable Confirmation Modal */}
-      {showDisableModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#3f411a] text-white rounded-2xl p-6 shadow-lg max-w-md w-full mx-4">
-            <h3 className="text-xl mb-4 font-lexend">Confirm Disable</h3>
-            <p className="text-[#f6f5c6] mb-6 font-lexend">Are you sure you want to disable this time slot?</p>
-            <p className="text-white mb-6 font-lexend">{formatSelectedDateTime()}</p>
-            
-            <div className="flex gap-3">
-              <button
-                onClick={handleCancelModal}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
-              >
-                No
-              </button>
-              <button
-                onClick={handleConfirmDisable}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
-              >
-                Yes
-              </button>
+        {/* Calendar Grid */}
+        <div className="grid grid-cols-7 text-center gap-y-6 text-[#f6f5c6] mb-6 flex-grow">
+          {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => (
+            <div key={day}>{day}</div>
+          ))}
+          {renderCalendar()}
+        </div>
+        {/* Enable and Disable Buttons */}
+        <div className="flex gap-3 mt-auto">
+          <button
+            type="button"
+            className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md transition-colors font-lexend"
+            onClick={handleEnableClick}
+          >
+            Enable
+          </button>
+          <button
+            type="button"
+            className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md transition-colors font-lexend"
+            onClick={handleDisableClick}
+          >
+            Disable
+          </button>
+        </div>
+        {/* Enable Confirmation Modal */}
+        {showEnableModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-[#3f411a] text-white rounded-2xl p-6 shadow-lg max-w-md w-full mx-4">
+              <h3 className="text-xl mb-4 font-extralight font-lexend">Confirm Enable</h3>
+              <p className="text-[#f6f5c6] mb-6 font-extralight font-lexend">Are you sure you want to enable this time slot?</p>
+              <p className="text-white mb-6 font-extralight font-lexend">{formatSelectedDateTime()}</p>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCancelModal}
+                  className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
+                >
+                  No
+                </button>
+                <button
+                  onClick={handleConfirmEnable}
+                  className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
+                >
+                  Yes
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+        {/* Disable Confirmation Modal */}
+        {showDisableModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-[#3f411a] text-white rounded-2xl p-6 shadow-lg max-w-md w-full mx-4">
+              <h3 className="text-xl mb-4 font-extralight font-lexend">Confirm Disable</h3>
+              <p className="text-[#f6f5c6] mb-6 font-extralight font-lexend">Are you sure you want to disable this time slot?</p>
+              <p className="text-white mb-6 font-extralight font-lexend">{formatSelectedDateTime()}</p>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCancelModal}
+                  className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
+                >
+                  No
+                </button>
+                <button
+                  onClick={handleConfirmDisable}
+                  className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
+                >
+                  Yes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Notification */}
+      <Notification
+        message={notificationMessage}
+        type={notificationType}
+        isVisible={showNotification}
+        onClose={handleNotificationClose}
+      />
     </div>
   );
 };

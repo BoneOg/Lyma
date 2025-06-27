@@ -7,6 +7,7 @@ interface Props {
     error?: string;
     success?: string;
   };
+  [key: string]: any;
 }
 
 const Home: React.FC = () => {

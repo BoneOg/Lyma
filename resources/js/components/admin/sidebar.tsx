@@ -38,19 +38,28 @@ const AdminSidebar: React.FC = () => {
     <div className="w-64 bg-olive text-white flex flex-col">
       {/* Logo */}
       <div className="p-6 border-b border-olive-light">
-        <Link href="/admin/dashboard" className="font-script text-4xl text-beige font-medium">
-          lyma
+        <Link href="/admin/dashboard" className="block overflow-hidden">
+          <img 
+            src="/assets/images/lyma.png" 
+            alt="Lyma by Chef Mar" 
+            className="w-full h-16 object-cover object-center"
+            style={{
+              objectPosition: 'center',
+              objectFit: 'cover',
+              transform: 'scale(3)',
+              transformOrigin: 'center'
+            }}
+          />
         </Link>
-        <p className="text-beige-dark text-sm mt-1 font-lexend tracking-wide">BY CHEF MARC</p>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 py-6">
+      <nav className="flex-1 pb-6">
         {menuItems.map((item) => (
           <Link
             key={item.id}
             href={item.href}
-            className={`w-full flex items-center px-6 py-3 text-left font-lexend  transition-all duration-200 ease-in-out ${
+            className={`w-full flex items-center px-6 py-5 text-left font-lexend font-extralight transition-all duration-200 ease-in-out ${
               currentPage === item.id
                 ? "bg-[#5a5d2a] text-[#f6f5c6]"
                 : "text-[#e8e6b3] hover:bg-[#5a5d2a] hover:text-[#f6f5c6]"
@@ -110,7 +119,7 @@ const AdminSidebar: React.FC = () => {
               <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.496 21H6.5c-1.105 0-2-1.151-2-2.571V5.57c0-1.419.895-2.57 2-2.57h7M16 15.5l3.5-3.5L16 8.5m-6.5 3.496h10" />
             </svg>
           </span>
-          <span className="transition-all duration-200 ease-in-out font-lexend">Logout</span>
+          <span className="transition-all duration-200 ease-in-out font-lexend font-extralight">Logout</span>
         </button>
       </div>
 
@@ -118,19 +127,19 @@ const AdminSidebar: React.FC = () => {
       {showLogoutModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-[#3f411a] text-white rounded-2xl p-6 shadow-lg max-w-md w-full mx-4">
-            <h3 className="text-xl  mb-4 font-lexend">Confirm Logout</h3>
-            <p className="text-beige-dark mb-6 font-lexend">Are you sure you want to logout?</p>
+            <h3 className="text-xl  mb-4 font-extralight font-lexend">Confirm Logout</h3>
+            <p className="text-beige-dark mb-6 font-extralight font-lexend">Are you sure you want to logout?</p>
             
             <div className="flex gap-3">
               <button
                 onClick={handleLogoutCancel}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
+                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
               >
                 No
               </button>
               <button
                 onClick={handleLogoutConfirm}
-                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-medium transition-colors font-lexend"
+                className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3]/80 text-[#3f411a] py-3 px-4 rounded-md font-extralight transition-colors font-lexend"
               >
                 Yes
               </button>

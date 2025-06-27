@@ -12,7 +12,7 @@ interface UnderlineProps {
 const Underline: React.FC<UnderlineProps> = ({
   children,
   className = "",
-  lineColor = "#f6f5c6",
+  lineColor = "beige",
   lineHeight = "h-0.5",
   duration = 0.3
 }) => {
@@ -20,10 +20,34 @@ const Underline: React.FC<UnderlineProps> = ({
   const [textWidth, setTextWidth] = useState(0);
 
   useEffect(() => {
-    if (textRef.current) {
-      setTextWidth(textRef.current.offsetWidth);
+    const updateWidth = () => {
+      if (textRef.current) {
+        setTextWidth(textRef.current.offsetWidth);
+      }
+    };
+
+    // Initial measurement
+    updateWidth();
+
+    // Wait for fonts to load
+    if (document.fonts) {
+      document.fonts.ready.then(updateWidth);
     }
-  }, []);
+
+    // Use ResizeObserver for dynamic updates
+    const resizeObserver = new ResizeObserver(updateWidth);
+    if (textRef.current) {
+      resizeObserver.observe(textRef.current);
+    }
+
+    // Fallback timeout for font loading
+    const timeout = setTimeout(updateWidth, 100);
+
+    return () => {
+      resizeObserver.disconnect();
+      clearTimeout(timeout);
+    };
+  }, [children]);
 
   return (
     <motion.div
