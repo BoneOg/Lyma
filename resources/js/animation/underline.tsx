@@ -59,7 +59,7 @@ const Underline: React.FC<UnderlineProps> = ({
         {children}
       </span>
       <motion.div
-        className={`absolute bottom-0 ${lineHeight}`}
+        className={`absolute bottom-[-4px] ${lineHeight}`}
         style={{ 
           backgroundColor: lineColor,
           left: 0,

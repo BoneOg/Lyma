@@ -35,7 +35,7 @@ const AdminSidebar: React.FC = () => {
   const currentPage = getCurrentPage();
 
   return (
-    <div className="w-64 bg-olive text-white flex flex-col">
+    <div className="fixed top-0 left-0 h-screen w-64 bg-olive text-white flex flex-col shadow-xl z-20 border-r border-olive-light">
       {/* Logo */}
       <div className="p-6 border-b border-olive-light">
         <Link href="/admin/dashboard" className="block overflow-hidden">
@@ -125,7 +125,7 @@ const AdminSidebar: React.FC = () => {
 
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
           <div className="bg-[#3f411a] text-white rounded-2xl p-6 shadow-lg max-w-md w-full mx-4">
             <h3 className="text-xl  mb-4 font-extralight font-lexend">Confirm Logout</h3>
             <p className="text-beige-dark mb-6 font-extralight font-lexend">Are you sure you want to logout?</p>

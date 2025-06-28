@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             SystemSettingSeeder::class,
             ReservationSeeder::class,
+            July9ReservationSeeder::class,
         ]);
     }
 }

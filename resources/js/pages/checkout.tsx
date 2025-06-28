@@ -95,89 +95,137 @@ export default function Checkout() {
   return (
     <Layout>
       <div className="min-h-screen bg-[#3f411a] text-white flex items-center justify-center py-12 px-4">
-        <div className="max-w-2xl w-full">
-          {/* Summary Section */}
-          <div className="space-y-8">
-            <h1 className="text-4xl font-serif mb-8 text-center">Checkout Summary</h1>
-
-            {/* Personal Information Section */}
-            <div className="border-2 border-white p-6">
-              <h2 className="text-2xl font-serif mb-4 border-b-2 border-white pb-2">Personal Information</h2>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-[#f6f5c6] font-medium">Name:</span>
-                  <span className="text-white">{reservation.guest_first_name} {reservation.guest_last_name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#f6f5c6] font-medium">Email:</span>
-                  <span className="text-white">{reservation.guest_email}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#f6f5c6] font-medium">Phone:</span>
-                  <span className="text-white">{reservation.guest_phone}</span>
-                </div>
+        <div className="max-w-4xl w-full">
+          {/* Main Container */}
+          <div className="bg-white shadow-lg p-8">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl text-[#3f411a] font-lexend font-extralight">Checkout Summary</h1>
+              <div className="w-8 h-8 bg-[#f6f5c6] flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24" className="text-[#3f411a]">
+                  <g fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.536 1.464C22 4.93 22 7.286 22 12s0 7.071-1.464 8.536C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.464C2 19.072 2 16.714 2 12" />
+                    <path stroke-linecap="round" d="M12 6v6l4 2" />
+                  </g>
+                </svg>
               </div>
             </div>
 
-            {/* Booking Information Section */}
-            <div className="border-2 border-white p-6">
-              <h2 className="text-2xl font-serif mb-4 border-b-2 border-white pb-2">Booking Information</h2>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-[#f6f5c6] font-medium">Date:</span>
-                  <span className="text-white">{formatDate(reservation.reservation_date)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#f6f5c6] font-medium">Time:</span>
-                  <span className="text-white">
-                    {reservation.time_slot?.start_time_formatted || 'Time not available'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#f6f5c6] font-medium">Guests:</span>
-                  <span className="text-white">{reservation.guest_count} {reservation.guest_count === 1 ? 'Guest' : 'Guests'}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Payment Summary Section */}
-            <div className="border-2 border-white p-6">
-              <h2 className="text-2xl font-serif mb-4 border-b-2 border-white pb-2">Payment Summary</h2>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-[#f6f5c6] font-medium">Reservation Fee:</span>
-                  <span className="text-white">₱{reservationFee.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between border-t-2 border-white pt-3">
-                  <span className="text-[#f6f5c6] font-bold text-lg">Total Amount:</span>
-                  <span className="text-white font-bold text-lg">₱{reservationFee.toFixed(2)}</span>
+            <div className="space-y-8">
+              {/* Personal Information Section */}
+              <div className="border border-[#3f411a]/20 p-6">
+                <h2 className="text-xl text-[#3f411a] font-lexend font-extralight mb-6 border-b border-[#3f411a]/20 pb-3">
+                  Personal Information
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-extralight text-[#3f411a]/60 font-lexend">Name</label>
+                    <div className="text-[#3f411a] font-lexend font-medium">
+                      {reservation.guest_first_name} {reservation.guest_last_name}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-extralight text-[#3f411a]/60 font-lexend">Email</label>
+                    <div className="text-[#3f411a] font-lexend font-medium">
+                      {reservation.guest_email}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-extralight text-[#3f411a]/60 font-lexend">Phone</label>
+                    <div className="text-[#3f411a] font-lexend font-medium">
+                      {reservation.guest_phone}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* --- New: Error Message Display --- */}
-            {error && (
-              <div
-                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                role="alert"
+              {/* Booking Information Section */}
+              <div className="border border-[#3f411a]/20 p-6">
+                <h2 className="text-xl text-[#3f411a] font-lexend font-extralight mb-6 border-b border-[#3f411a]/20 pb-3">
+                  Booking Information
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-extralight text-[#3f411a]/60 font-lexend">Date</label>
+                    <div className="text-[#3f411a] font-lexend font-medium">
+                      {formatDate(reservation.reservation_date)}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-extralight text-[#3f411a]/60 font-lexend">Time</label>
+                    <div className="text-[#3f411a] font-lexend font-medium">
+                      {reservation.time_slot?.start_time_formatted || 'Time not available'}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-extralight text-[#3f411a]/60 font-lexend">Guests</label>
+                    <div className="text-[#3f411a] font-lexend font-medium">
+                      {reservation.guest_count} {reservation.guest_count === 1 ? 'Guest' : 'Guests'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Summary Section */}
+              <div className="border border-[#3f411a]/20 p-6">
+                <h2 className="text-xl text-[#3f411a] font-lexend font-extralight mb-6 border-b border-[#3f411a]/20 pb-3">
+                  Payment Summary
+                </h2>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#3f411a]/80 font-lexend font-extralight">Reservation Fee</span>
+                    <span className="text-[#3f411a] font-lexend font-medium">₱{reservationFee.toFixed(2)}</span>
+                  </div>
+                  <div className="border-t border-[#3f411a]/20 pt-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[#3f411a] font-lexend font-medium text-lg">Total Amount</span>
+                      <span className="text-[#3f411a] font-lexend font-medium text-lg">₱{reservationFee.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Error Message Display */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 p-4">
+                  <div className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24" className="text-red-500 mr-3">
+                      <g fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10" />
+                        <path stroke-linecap="round" d="m15 9l-6 6m0-6l6 6" />
+                      </g>
+                    </svg>
+                    <div>
+                      <strong className="font-medium text-red-800 font-lexend">Error!</strong>
+                      <span className="block text-red-700 font-lexend font-extralight ml-2">{error}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Confirm & Pay Button */}
+              <button
+                onClick={handlePayment}
+                disabled={loading}
+                className={`w-full py-4 font-lexend font-medium text-lg transition-all duration-200 ${
+                  loading 
+                    ? 'bg-[#3f411a]/30 text-[#3f411a]/50 cursor-not-allowed' 
+                    : 'bg-[#3f411a] text-white hover:bg-[#2a2d12] active:scale-[0.98]'
+                }`}
               >
-                <strong className="font-bold">Error!</strong>
-                <span className="block sm:inline ml-2">{error}</span>
-              </div>
-            )}
-            {/* --- End New: Error Message Display --- */}
-
-            {/* --- Modified: Confirm & Pay Button --- */}
-            <button
-              onClick={handlePayment} // Add the onClick handler
-              disabled={loading} // Disable button when loading
-              className={`w-full py-4 font-medium text-lg bg-white text-[#3f411a] hover:bg-[#f6f5c6] transition-all duration-200 ${
-                loading ? 'opacity-50 cursor-not-allowed' : '' // Add Tailwind classes for disabled state
-              }`}
-            >
-              {loading ? 'Processing Payment...' : `Confirm & Pay ₱${reservationFee.toFixed(2)}`}
-            </button>
-            {/* --- End Modified: Confirm & Pay Button --- */}
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing Payment...
+                  </div>
+                ) : (
+                  `Confirm & Pay ₱${reservationFee.toFixed(2)}`
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

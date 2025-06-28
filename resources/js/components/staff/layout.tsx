@@ -7,15 +7,15 @@ interface StaffLayoutProps {
 
 const StaffLayout: React.FC<StaffLayoutProps> = ({ children }) => {
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
-      <StaffSidebar />
+    <div className="min-h-screen bg-beige-light relative">
+      {/* Fixed/Floating Sidebar */}
+      <div className="fixed top-0 left-0 h-full z-10">
+        <StaffSidebar />
+      </div>
       
-      {/* Main Content */}
-      <div className="flex-1">
-        <main className="p-8">
-          {children}
-        </main>
+      {/* Main Content with left margin to account for sidebar */}
+      <div className="ml-64">
+        {children}
       </div>
     </div>
   );

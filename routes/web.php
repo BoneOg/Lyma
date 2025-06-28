@@ -9,6 +9,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StaffController;
 
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
@@ -22,6 +23,7 @@ Route::get('/contact', fn () => Inertia::render('contact'))->name('contact');
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
 Route::get('/reservations/occupied-time-slots', [ReservationController::class, 'getOccupiedTimeSlots'])->name('reservations.occupied-time-slots');
+Route::get('/reservations/fully-booked-dates', [ReservationController::class, 'getFullyBookedDates'])->name('reservations.fully-booked-dates');
 
 Route::post('/create-maya-checkout', [PaymentController::class, 'createMayaCheckout'])->name('maya.checkout.create');
 
@@ -65,13 +67,19 @@ Route::middleware('auth')->group(function () {
             ->name('admin.setting');
         Route::post('/admin/settings/update', [AdminController::class, 'updateSettings'])
             ->name('admin.settings.update');
+        Route::get('/admin/api/reservation-counts', [AdminController::class, 'reservationCounts']);
+        Route::get('/admin/api/reservations', [App\Http\Controllers\AdminController::class, 'reservationList']);
+        Route::patch('/admin/api/reservations/{id}/complete', [AdminController::class, 'completeReservation']);
+        Route::patch('/admin/api/reservations/{id}/cancel', [AdminController::class, 'cancelReservation']);
     });
 
     Route::middleware('can:staff')->group(function () {
         Route::get('/staff/dashboard', fn () => Inertia::render('staff/dashboard'))
             ->name('staff.dashboard');
-        Route::get('/staff/booking', fn () => Inertia::render('staff/booking'))
-            ->name('staff.booking');
+        Route::get('/staff/api/reservation-counts', [StaffController::class, 'reservationCounts']);
+        Route::get('/staff/api/reservations', [StaffController::class, 'reservationList']);
+        Route::patch('/staff/api/reservations/{id}/complete', [StaffController::class, 'completeReservation']);
+        Route::patch('/staff/api/reservations/{id}/cancel', [StaffController::class, 'cancelReservation']);
     });
 
 });

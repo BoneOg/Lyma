@@ -58,6 +58,40 @@ class ReservationController extends Controller
         return response()->json(['occupied_time_slots' => $occupiedTimeSlots]);
     }
 
+    public function getFullyBookedDates(Request $request)
+    {
+        $request->validate([
+            'month' => 'required|integer|between:1,12',
+            'year' => 'required|integer|min:2024',
+        ]);
+
+        $month = $request->month;
+        $year = $request->year;
+        $capacity = SystemSetting::getCapacity();
+        $totalTimeSlots = TimeSlot::active()->count();
+
+        // Get all dates in the month that have all time slots fully booked
+        $fullyBookedDates = Reservation::whereYear('reservation_date', $year)
+            ->whereMonth('reservation_date', $month)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->selectRaw('reservation_date, time_slot_id, COUNT(*) as reservation_count')
+            ->groupBy('reservation_date', 'time_slot_id')
+            ->havingRaw('COUNT(*) >= ?', [$capacity])
+            ->get()
+            ->groupBy('reservation_date')
+            ->filter(function ($dateReservations) use ($totalTimeSlots) {
+                // Check if all time slots for this date are fully booked
+                return $dateReservations->count() >= $totalTimeSlots;
+            })
+            ->keys()
+            ->map(function ($date) {
+                return Carbon::parse($date)->day;
+            })
+            ->toArray();
+
+        return response()->json(['fully_booked_dates' => $fullyBookedDates]);
+    }
+
     public function store(StoreReservationRequest $request)
     {
         $validated = $request->validated();
