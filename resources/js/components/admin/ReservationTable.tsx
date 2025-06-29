@@ -8,6 +8,7 @@ import {
 } from '../../ui/select';
 import CalendarSearch from './CalendarSearch';
 import ConfirmationModal from './ConfirmationModal';
+import QuickReservation from './QuickReservation';
 import { useNotification } from '../../contexts/NotificationContext';
 
 interface Reservation {
@@ -24,10 +25,24 @@ interface Reservation {
   updated_at: string;
 }
 
+interface TimeSlot {
+  id: number;
+  start_time: string;
+  end_time: string;
+  formatted_time: string;
+  start_time_formatted: string;
+}
+
+interface SystemSettings {
+  max_advance_booking_days: number;
+}
+
 interface Props {
   status: string;
   onReservationUpdate?: () => void;
   endpointPrefix?: string;
+  timeSlots?: TimeSlot[];
+  systemSettings?: SystemSettings;
 }
 
 function formatDate(dateString: string) {
@@ -94,7 +109,7 @@ const months = [
 
 const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
 
-const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpointPrefix }) => {
+const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpointPrefix, timeSlots, systemSettings }) => {
   const { showNotification } = useNotification();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [expanded, setExpanded] = useState<number | null>(null);
@@ -112,6 +127,7 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
     reservationName: string;
   } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [showQuickReservation, setShowQuickReservation] = useState(false);
 
   // Get unique years from reservations
   const years = React.useMemo(() => {
@@ -314,6 +330,13 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <h2 className="text-2xl text-[#3f411a] font-lexend font-bold">Reservations</h2>
         <div className="flex flex-wrap gap-2 items-center w-full md:w-auto justify-end">
+        <button
+            onClick={() => setShowQuickReservation(true)}
+            className="rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300 hover:bg-[#e8e6b3] transition-colors"
+            title="Quick Reservation"
+          >
+            +
+          </button>
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className="w-100 rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300">
               <SelectValue />
@@ -432,6 +455,34 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
         message={`Are you sure you want to ${confirmAction?.type} the reservation for ${confirmAction?.reservationName}?`}
         type={confirmAction?.type || 'complete'}
       />
+
+      {timeSlots && systemSettings && (
+        <QuickReservation
+          isOpen={showQuickReservation}
+          onClose={() => setShowQuickReservation(false)}
+          onReservationCreated={() => {
+            // Refresh the reservations list
+            setLoading(true);
+            fetch(`${endpointPrefix || '/admin'}/api/reservations?status=${status}`)
+              .then(res => res.json())
+              .then(data => {
+                let filtered = data.reservations || [];
+                if (status === 'all') {
+                  filtered = filtered.filter((r: Reservation) => r.status !== 'pending');
+                }
+                setReservations(filtered);
+                setLoading(false);
+              });
+            
+            // Call the callback to update dashboard counts
+            if (onReservationUpdate) {
+              onReservationUpdate();
+            }
+          }}
+          timeSlots={timeSlots}
+          systemSettings={systemSettings}
+        />
+      )}
     </div>
   );
 };
