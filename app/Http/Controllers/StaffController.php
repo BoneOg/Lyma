@@ -10,7 +10,27 @@ class StaffController extends Controller
 {
     public function dashboard()
     {
-        return Inertia::render('staff/dashboard');
+        $timeSlots = \App\Models\TimeSlot::active()
+            ->select('id', 'start_time', 'end_time')
+            ->get()
+            ->map(function ($slot) {
+                return [
+                    'id' => $slot->id,
+                    'start_time' => $slot->start_time,
+                    'end_time' => $slot->end_time,
+                    'formatted_time' => $slot->formatted_time,
+                    'start_time_formatted' => $slot->start_time_formatted,
+                ];
+            });
+
+        $systemSettings = [
+            'max_advance_booking_days' => \App\Models\SystemSetting::getMaxAdvanceBookingDays(),
+        ];
+
+        return Inertia::render('staff/dashboard', [
+            'timeSlots' => $timeSlots,
+            'systemSettings' => $systemSettings,
+        ]);
     }
 
     public function reservationCounts()
@@ -131,6 +151,35 @@ class StaffController extends Controller
                 'success' => false,
                 'message' => 'Failed to cancel reservation'
             ], 500);
+        }
+    }
+
+    public function quickReservation(Request $request)
+    {
+        $validated = $request->validate([
+            'guest_first_name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
+            'guest_last_name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
+            'guest_email' => ['required', 'email', 'max:100'],
+            'guest_phone' => ['required', 'string', 'max:20', 'regex:/^[\d\s\-\+]+$/'],
+            'reservation_date' => ['required', 'date', 'after_or_equal:today'],
+            'time_slot_id' => ['required', 'exists:time_slots,id'],
+            'guest_count' => ['required', 'integer', 'min:1', 'max:8'],
+        ]);
+
+        try {
+            $reservation = \App\Models\Reservation::create([
+                'guest_first_name' => $validated['guest_first_name'],
+                'guest_last_name' => $validated['guest_last_name'],
+                'guest_email' => $validated['guest_email'],
+                'guest_phone' => $validated['guest_phone'],
+                'reservation_date' => $validated['reservation_date'],
+                'time_slot_id' => $validated['time_slot_id'],
+                'guest_count' => $validated['guest_count'],
+                'status' => 'confirmed',
+            ]);
+            return response()->json(['success' => true, 'reservation' => $reservation]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to create reservation: ' . $e->getMessage()], 500);
         }
     }
 } 

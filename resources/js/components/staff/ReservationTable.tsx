@@ -6,8 +6,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../ui/select';
-import CalendarSearch from '../admin/CalendarSearch';
-import ConfirmationModal from '../admin/ConfirmationModal';
+import CalendarSearch from './CalendarSearch';
+import ConfirmationModal from './ConfirmationModal';
+import QuickReservation from './QuickReservation';
 import { useNotification } from '../../contexts/NotificationContext';
 
 interface Reservation {
@@ -24,17 +25,29 @@ interface Reservation {
   updated_at: string;
 }
 
+interface TimeSlot {
+  id: number;
+  start_time: string;
+  end_time: string;
+  formatted_time: string;
+  start_time_formatted: string;
+}
+
+interface SystemSettings {
+  max_advance_booking_days: number;
+}
+
 interface Props {
   status: string;
   onReservationUpdate?: () => void;
+  endpointPrefix?: string;
+  timeSlots?: TimeSlot[];
+  systemSettings?: SystemSettings;
 }
 
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
-  });
+  if (!dateString) return '';
+  return dateString.slice(0, 10);
 }
 
 function normalizeDate(dateString: string) {
@@ -42,7 +55,61 @@ function normalizeDate(dateString: string) {
   return date.toISOString().split('T')[0];
 }
 
-const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
+function compareTimeSlots(timeA: string, timeB: string): number {
+  // Convert time strings to comparable values
+  const parseTime = (timeStr: string): number => {
+    const time = timeStr.toLowerCase();
+    const [timePart, period] = time.split(' ');
+    const [hours, minutes] = timePart.split(':').map(Number);
+    
+    let hour24 = hours;
+    if (period === 'pm' && hours !== 12) {
+      hour24 = hours + 12;
+    } else if (period === 'am' && hours === 12) {
+      hour24 = 0;
+    }
+    
+    return hour24 * 60 + minutes; // Convert to minutes for easy comparison
+  };
+  
+  return parseTime(timeA) - parseTime(timeB);
+}
+
+const statusColors: Record<string, string> = {
+  confirmed: 'bg-green-200 text-green-900 border-green-400',
+  completed: 'bg-blue-200 text-blue-900 border-blue-400',
+  cancelled: 'bg-red-200 text-red-900 border-red-400',
+  all: 'bg-yellow-100 text-yellow-900 border-yellow-400',
+};
+
+const actionButtonColors: Record<string, string> = {
+  confirmed: 'bg-green-500 hover:bg-green-600',
+  completed: 'bg-blue-500 hover:bg-blue-600',
+  cancelled: 'bg-red-500 hover:bg-red-600',
+  all: 'bg-yellow-400 hover:bg-yellow-500 text-yellow-900',
+};
+
+const sortOptions = [
+  { value: 'firstName-asc', label: 'First Name (A-Z)' },
+  { value: 'firstName-desc', label: 'First Name (Z-A)' },
+  { value: 'lastName-asc', label: 'Last Name (A-Z)' },
+  { value: 'lastName-desc', label: 'Last Name (Z-A)' },
+  { value: 'timeSlot-am-pm', label: 'Time Slot (Morning-Evening)' },
+  { value: 'timeSlot-pm-am', label: 'Time Slot (Evening-Morning)' },
+  { value: 'guest-asc', label: 'Guests (Lowest-Highest)' },
+  { value: 'guest-desc', label: 'Guests (Highest-Lowest)' },
+  { value: 'date-asc', label: 'Reservation Date (Earliest-Latest)' },
+  { value: 'date-desc', label: 'Reservation Date (Latest-Earliest)' },
+];
+
+const months = [
+  'All', 'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+
+const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpointPrefix, timeSlots, systemSettings }) => {
   const { showNotification } = useNotification();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [expanded, setExpanded] = useState<number | null>(null);
@@ -60,6 +127,7 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
     reservationName: string;
   } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [showQuickReservation, setShowQuickReservation] = useState(false);
 
   // Get unique years from reservations
   const years = React.useMemo(() => {
@@ -69,7 +137,7 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/staff/api/reservations?status=${status}`)
+    fetch(`${endpointPrefix || '/staff'}/api/reservations?status=${status}`)
       .then(res => res.json())
       .then(data => {
         let filtered = data.reservations || [];
@@ -80,7 +148,7 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
         setReservations(filtered);
         setLoading(false);
       });
-  }, [status]);
+  }, [status, endpointPrefix]);
 
   const handleExpand = (id: number) => {
     setExpanded(expanded === id ? null : id);
@@ -136,9 +204,9 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
       case 'lastName-desc':
         return b.guest_last_name.localeCompare(a.guest_last_name);
       case 'timeSlot-am-pm':
-        return (a.time_slot || '').localeCompare(b.time_slot || '');
+        return compareTimeSlots(a.time_slot || '', b.time_slot || '');
       case 'timeSlot-pm-am':
-        return (b.time_slot || '').localeCompare(a.time_slot || '');
+        return compareTimeSlots(b.time_slot || '', a.time_slot || '');
       case 'guest-asc':
         return a.guest_count - b.guest_count;
       case 'guest-desc':
@@ -176,8 +244,8 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
     setActionLoading(true);
     try {
       const endpoint = confirmAction.type === 'complete' 
-        ? `/staff/api/reservations/${confirmAction.reservationId}/complete`
-        : `/staff/api/reservations/${confirmAction.reservationId}/cancel`;
+        ? `${endpointPrefix || '/staff'}/api/reservations/${confirmAction.reservationId}/complete`
+        : `${endpointPrefix || '/staff'}/api/reservations/${confirmAction.reservationId}/cancel`;
 
       const response = await fetch(endpoint, {
         method: 'PATCH',
@@ -242,183 +310,124 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
   const formatSelectedDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
     });
   };
 
   const getButtonText = () => {
-    if (actionLoading) {
-      return confirmAction?.type === 'complete' ? 'Completing...' : 'Cancelling...';
+    if (selectedDate) {
+      return formatSelectedDate(selectedDate);
+    } else if (selectedMonth && selectedYear) {
+      return `${selectedMonth} ${selectedYear}`;
     }
-    return confirmAction?.type === 'complete' ? 'Complete' : 'Cancel';
+    return 'Date';
   };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'confirmed':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'completed':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-center h-32">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-olive"></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="bg-white rounded-lg shadow">
-      {/* Header */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 font-lexend">Reservations</h2>
-            <p className="text-gray-600 mt-1 font-lexend">Manage and view all reservations</p>
-          </div>
+    <div className="bg-white rounded-4xl shadow-lg p-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h2 className="text-2xl text-[#3f411a] font-lexend font-bold">Reservations</h2>
+        <div className="flex flex-wrap gap-2 items-center w-full md:w-auto justify-end">
+          <button
+            onClick={() => setShowQuickReservation(true)}
+            className="rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300 hover:bg-[#e8e6b3] transition-colors"
+            title="Quick Reservation"
+          >
+            +
+          </button>
           
-          {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Search */}
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search reservations..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-olive focus:border-transparent w-full sm:w-64 font-lexend"
-              />
-              <svg className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-
-            {/* Sort */}
-            <Select value={sort} onValueChange={setSort}>
-              <SelectTrigger className="w-full sm:w-48 font-lexend">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="date-asc">Date (Oldest First)</SelectItem>
-                <SelectItem value="date-desc">Date (Newest First)</SelectItem>
-                <SelectItem value="firstName-asc">First Name (A-Z)</SelectItem>
-                <SelectItem value="firstName-desc">First Name (Z-A)</SelectItem>
-                <SelectItem value="lastName-asc">Last Name (A-Z)</SelectItem>
-                <SelectItem value="lastName-desc">Last Name (Z-A)</SelectItem>
-                <SelectItem value="timeSlot-am-pm">Time (AM-PM)</SelectItem>
-                <SelectItem value="timeSlot-pm-am">Time (PM-AM)</SelectItem>
-                <SelectItem value="guest-asc">Guests (Low-High)</SelectItem>
-                <SelectItem value="guest-desc">Guests (High-Low)</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Date Filter */}
-            <button
-              onClick={() => setShowCalendar(true)}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-lexend"
-            >
-              {selectedDate ? formatSelectedDate(selectedDate) : 
-               selectedMonth && selectedYear ? `${selectedMonth} ${selectedYear}` : 
-               'Filter by Date'}
-            </button>
-          </div>
+          <Select value={sort} onValueChange={setSort}>
+            <SelectTrigger className="w-100 rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300 hover:bg-[#e8e6b3]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="w-100 bg-[#f6f5c6] py-2 text-[#3f411a] border-[#f6f5c6]">
+              {sortOptions.map(opt => (
+                <SelectItem key={opt.value} value={opt.value} className="text-[#3f411a] hover:bg-[#e8e6b3] focus:bg-[#e8e6b3]  font-lexend">
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          <button
+            onClick={() => setShowCalendar(true)}
+            className="rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300 hover:bg-[#e8e6b3] transition-colors"
+          >
+            {getButtonText()}
+          </button>
+          
+          <input
+            type="text"
+            className="w-68 rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300"
+            placeholder="Search..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
       </div>
-
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-lexend">Guest</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-lexend">Date & Time</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-lexend">Guests</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-lexend">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-lexend">Actions</th>
+      {loading ? (
+        <div className="text-center py-8 text-gray-500">Loading...</div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-8 font-lexend text-gray-500">No reservations found.</div>
+      ) : (
+        <table className="w-full text-left font-lexend">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="py-3 px-3 font-regular">First Name</th>
+              <th className="py-3 px-6 font-regular">Last Name</th>
+              <th className="py-3 px-3 font-regular">Reservation Date</th>
+              <th className="py-3 px-1 text-center font-regular">Time Slot</th>
+              <th className="py-3 px-3 text-center font-regular">Guests</th>
+              <th className="py-3 px-3 text-center font-regular">Status</th>
+              <th className="py-3 px-3 text-center font-regular">Action</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filtered.map((reservation) => (
-              <React.Fragment key={reservation.id}>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900 font-lexend">
-                          {reservation.guest_first_name} {reservation.guest_last_name}
-                        </div>
-                        <div className="text-sm text-gray-500 font-lexend">{reservation.email}</div>
-                        <div className="text-sm text-gray-500 font-lexend">{reservation.phone}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 font-lexend">{formatDate(reservation.reservation_date)}</div>
-                    <div className="text-sm text-gray-500 font-lexend">{reservation.time_slot}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-lexend">
-                    {reservation.guest_count}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border font-lexend ${getStatusColor(reservation.status)}`}>
-                      {reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)}
+          <tbody>
+            {filtered.map((r) => (
+              <React.Fragment key={r.id}>
+                <tr
+                  className={`cursor-pointer hover:bg-yellow-50 transition ${expanded === r.id ? 'bg-yellow-50' : ''}`}
+                  onClick={() => handleExpand(r.id)}
+                >
+                  <td className="py-6 px-3 font-light">{r.guest_first_name}</td>
+                  <td className="py-6 px-6 font-light">{r.guest_last_name}</td>
+                  <td className="py-6 px-3 font-light">{formatDate(r.reservation_date)}</td>
+                  <td className="py-6 px-1 text-center font-light">{r.time_slot || '-'}</td>
+                  <td className="py-6 px-3 text-center font-light">{r.guest_count}</td>
+                  <td className="py-6 px-3 text-center">
+                    <span className={`inline-block px-3 py-1 rounded-full border text-xs font-extralight capitalize ${statusColors[r.status] || 'bg-gray-200 text-gray-700 border-gray-300'}`}>
+                      {r.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleExpand(reservation.id)}
-                        className="text-olive hover:text-olive-dark font-lexend"
-                      >
-                        {expanded === reservation.id ? 'Hide' : 'View'}
-                      </button>
-                      {reservation.status === 'confirmed' && (
-                        <>
-                          <button
-                            onClick={() => handleComplete(reservation.id, reservation.guest_first_name, reservation.guest_last_name)}
-                            className="text-green-600 hover:text-green-900 font-lexend"
-                          >
-                            Complete
-                          </button>
-                          <button
-                            onClick={() => handleCancel(reservation.id, reservation.guest_first_name, reservation.guest_last_name)}
-                            className="text-red-600 hover:text-red-900 font-lexend"
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      )}
-                    </div>
+                  <td className="py-6 px-3 text-center">
+                    {r.status !== 'completed' && r.status !== 'cancelled' && (
+                      <div className="flex gap-2 justify-center">
+                        <button
+                          className="bg-blue-200 hover:bg-blue-300 text-blue-900 border-blue-400 border px-3 py-1 rounded text-xs font-extralight"
+                          onClick={e => { e.stopPropagation(); handleComplete(r.id, r.guest_first_name, r.guest_last_name); }}
+                        >
+                          Complete
+                        </button>
+                        <button
+                          className="bg-red-200 hover:bg-red-300 text-red-900 border-red-400 border px-3 py-1 rounded text-xs font-extralight"
+                          onClick={e => { e.stopPropagation(); handleCancel(r.id, r.guest_first_name, r.guest_last_name); }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
-                {expanded === reservation.id && (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-4 bg-gray-50">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm font-lexend">
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2">Reservation Details</h4>
-                          <p><span className="font-medium">Created:</span> {formatDate(reservation.created_at)}</p>
-                          <p><span className="font-medium">Updated:</span> {formatDate(reservation.updated_at)}</p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2">Contact Information</h4>
-                          <p><span className="font-medium">Email:</span> {reservation.email}</p>
-                          <p><span className="font-medium">Phone:</span> {reservation.phone}</p>
-                        </div>
+                {expanded === r.id && (
+                  <tr className="bg-yellow-50">
+                    <td colSpan={7} className="py-3 px-3">
+                      <div className="flex flex-col gap-2 text-sm text-[#3f411a] font-light">
+                        <div><b>Email:</b> {r.email}</div>
+                        <div><b>Phone:</b> {r.phone}</div>
+                        <div><b>Created At:</b> {formatDate(r.created_at)}</div>
+                        <div><b>Updated At:</b> {formatDate(r.updated_at)}</div>
                       </div>
                     </td>
                   </tr>
@@ -427,24 +436,8 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Empty State */}
-      {filtered.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900 font-lexend">No reservations found</h3>
-          <p className="mt-1 text-sm text-gray-500 font-lexend">
-            {search || selectedDate || (selectedMonth && selectedYear) 
-              ? 'Try adjusting your search or filter criteria.' 
-              : 'No reservations match the current status filter.'}
-          </p>
-        </div>
       )}
-
-      {/* Calendar Search Modal */}
+      
       <CalendarSearch
         isOpen={showCalendar}
         onClose={() => setShowCalendar(false)}
@@ -463,6 +456,34 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate }) => {
         message={`Are you sure you want to ${confirmAction?.type} the reservation for ${confirmAction?.reservationName}?`}
         type={confirmAction?.type || 'complete'}
       />
+
+      {timeSlots && systemSettings && (
+        <QuickReservation
+          isOpen={showQuickReservation}
+          onClose={() => setShowQuickReservation(false)}
+          onReservationCreated={() => {
+            // Refresh the reservations list
+            setLoading(true);
+            fetch(`${endpointPrefix || '/staff'}/api/reservations?status=${status}`)
+              .then(res => res.json())
+              .then(data => {
+                let filtered = data.reservations || [];
+                if (status === 'all') {
+                  filtered = filtered.filter((r: Reservation) => r.status !== 'pending');
+                }
+                setReservations(filtered);
+                setLoading(false);
+              });
+            
+            // Call the callback to update dashboard counts
+            if (onReservationUpdate) {
+              onReservationUpdate();
+            }
+          }}
+          timeSlots={timeSlots}
+          systemSettings={systemSettings}
+        />
+      )}
     </div>
   );
 };

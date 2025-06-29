@@ -35,14 +35,15 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
-            Inertia::clearHistory();
 
             // Role-based redirection
             if (Gate::allows('admin')) {
+                Inertia::clearHistory();
                 return Inertia::location(route('admin.dashboard'));
             }
 
             if (Gate::allows('staff')) {
+                Inertia::clearHistory();
                 return Inertia::location(route('staff.dashboard'));
             }
 
@@ -58,8 +59,8 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        Inertia::encryptHistory();
-
+        
+        Inertia::clearHistory();
         return Inertia::location('/login');
     }
 

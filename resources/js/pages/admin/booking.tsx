@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import AdminLayout from '@/components/admin/layout';
 import ReservationTable from '@/components/admin/ReservationTable';
+
+interface Props {
+  timeSlots: any[];
+  systemSettings: any;
+  [key: string]: any;
+}
 
 // Define allowed statuses
 const cardStatuses = ['confirmed', 'completed', 'cancelled', 'all'] as const;
@@ -34,6 +41,7 @@ const cardData: { label: string; color: string; activeColor: string; status: Car
 ];
 
 const Booking: React.FC = () => {
+  const { timeSlots, systemSettings } = usePage<Props>().props;
   const [counts, setCounts] = useState<Record<CardStatus, number>>({
     confirmed: 0,
     completed: 0,
@@ -89,7 +97,12 @@ const Booking: React.FC = () => {
       </div>
       {/* Bottom row - Full width container */}
       <div className="px-12">
-        <ReservationTable status={activeStatus} onReservationUpdate={handleReservationUpdate} />
+        <ReservationTable 
+          status={activeStatus} 
+          onReservationUpdate={handleReservationUpdate}
+          timeSlots={timeSlots}
+          systemSettings={systemSettings}
+        />
       </div>
     </AdminLayout>
   );

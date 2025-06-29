@@ -63,6 +63,6 @@ return [
     |
     */
 
-    'encrypt_history' => true,
+    'inertia.history.encrypt' => true,
 
 ];

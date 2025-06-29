@@ -23,12 +23,12 @@ class SystemSettingSeeder extends Seeder
             [
                 'setting_key' => 'restaurant_email',
                 'setting_value' => 'lyma@gmail.com',
-                'description' => 'Restaurant contact email'
+                'description' => 'Restaurant Contact Email'
             ],
             [
                 'setting_key' => 'restaurant_phone',
-                'setting_value' => '+639123456789',
-                'description' => 'Restaurant contact phone number'
+                'setting_value' => '+639543846071',
+                'description' => 'Restaurant Contact Phone Number'
             ],
         ];
 

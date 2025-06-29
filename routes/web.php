@@ -71,15 +71,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/api/reservations', [App\Http\Controllers\AdminController::class, 'reservationList']);
         Route::patch('/admin/api/reservations/{id}/complete', [AdminController::class, 'completeReservation']);
         Route::patch('/admin/api/reservations/{id}/cancel', [AdminController::class, 'cancelReservation']);
+        Route::post('/admin/api/quick-reservations', [AdminController::class, 'quickReservation']);
     });
 
     Route::middleware('can:staff')->group(function () {
-        Route::get('/staff/dashboard', fn () => Inertia::render('staff/dashboard'))
+        Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
             ->name('staff.dashboard');
         Route::get('/staff/api/reservation-counts', [StaffController::class, 'reservationCounts']);
         Route::get('/staff/api/reservations', [StaffController::class, 'reservationList']);
         Route::patch('/staff/api/reservations/{id}/complete', [StaffController::class, 'completeReservation']);
         Route::patch('/staff/api/reservations/{id}/cancel', [StaffController::class, 'cancelReservation']);
+        Route::post('/staff/api/quick-reservations', [StaffController::class, 'quickReservation']);
     });
 
 });
