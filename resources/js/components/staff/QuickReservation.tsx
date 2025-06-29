@@ -270,7 +270,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
               {/* Dropdowns */}
               <div className="flex flex-wrap gap-4">
                 {/* Month */}
-                <div className="relative w-48">
+                <div className="relative w-45">
                   <label className="block text-base font-extralight font-lexend mb-2 text-beige">Month</label>
                   <Select 
                     value={selectedMonth.toString()}
@@ -297,7 +297,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                 </div>
 
                 {/* Time */}
-                <div className="relative w-48">
+                <div className="relative w-40">
                   <label className="block text-base font-extralight font-lexend mb-2 text-beige">Time</label>
                   <Select 
                     value={selectedTimeSlot?.toString() || ''}
@@ -326,7 +326,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                 </div>
 
                 {/* Guests */}
-                <div className="relative w-48">
+                <div className="relative w-30">
                   <label className="block text-base font-extralight font-lexend mb-2 text-beige">Guests</label>
                   <Select 
                     value={guestCount.toString()}
