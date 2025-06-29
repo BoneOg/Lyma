@@ -44,7 +44,7 @@ const Calendar: React.FC<CalendarProps> = ({
       const isFullyBooked = isDateFullyBooked ? isDateFullyBooked(day) : false;
       const isSelected = selectedDate === day;
       
-      let className = 'cursor-pointer transition-colors h-8 flex items-center justify-center';
+      let className = 'cursor-pointer transition-colors h-8 flex items-center justify-center font-lexend font-extralight';
       
       if (isDisabled) {
         className += ' text-gray-500 cursor-not-allowed';

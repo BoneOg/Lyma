@@ -51,8 +51,8 @@ function formatDate(dateString: string) {
 }
 
 function normalizeDate(dateString: string) {
-  const date = new Date(dateString);
-  return date.toISOString().split('T')[0];
+  // Extract just the date part (YYYY-MM-DD) without timezone conversion
+  return dateString.split('T')[0];
 }
 
 function compareTimeSlots(timeA: string, timeB: string): number {

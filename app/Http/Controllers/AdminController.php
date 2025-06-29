@@ -116,11 +116,19 @@ class AdminController extends Controller
             $query->where('status', $status);
         }
         $reservations = $query->with('timeSlot')->orderByDesc('created_at')->get()->map(function ($r) {
+            // Debug: Log the raw date value
+            \Log::info('Reservation date debug', [
+                'id' => $r->id,
+                'raw_reservation_date' => $r->reservation_date,
+                'formatted_date' => $r->reservation_date->format('Y-m-d'),
+                'carbon_instance' => get_class($r->reservation_date),
+            ]);
+            
             return [
                 'id' => $r->id,
                 'guest_first_name' => $r->guest_first_name,
                 'guest_last_name' => $r->guest_last_name,
-                'reservation_date' => $r->reservation_date,
+                'reservation_date' => $r->reservation_date->format('Y-m-d'),
                 'time_slot' => $r->timeSlot ? $r->timeSlot->start_time_formatted : null,
                 'guest_count' => $r->guest_count,
                 'status' => $r->status,
@@ -221,30 +229,63 @@ class AdminController extends Controller
 
     public function quickReservation(Request $request)
     {
-        $validated = $request->validate([
-            'guest_first_name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
-            'guest_last_name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
-            'guest_email' => ['required', 'email', 'max:100'],
-            'guest_phone' => ['required', 'string', 'max:20', 'regex:/^[\d\s\-\+]+$/'],
-            'reservation_date' => ['required', 'date', 'after_or_equal:today'],
-            'time_slot_id' => ['required', 'exists:time_slots,id'],
-            'guest_count' => ['required', 'integer', 'min:1', 'max:8'],
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'date' => 'required|date|after:today',
+            'time_slot_id' => 'required|exists:time_slots,id',
+            'guests' => 'required|integer|min:1|max:20',
         ]);
 
         try {
-            $reservation = \App\Models\Reservation::create([
-                'guest_first_name' => $validated['guest_first_name'],
-                'guest_last_name' => $validated['guest_last_name'],
-                'guest_email' => $validated['guest_email'],
-                'guest_phone' => $validated['guest_phone'],
-                'reservation_date' => $validated['reservation_date'],
-                'time_slot_id' => $validated['time_slot_id'],
-                'guest_count' => $validated['guest_count'],
+            $reservation = Reservation::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'date' => $request->date,
+                'time_slot_id' => $request->time_slot_id,
+                'guests' => $request->guests,
                 'status' => 'confirmed',
+                'user_id' => auth()->id(),
             ]);
-            return response()->json(['success' => true, 'reservation' => $reservation]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Reservation created successfully',
+                'reservation' => $reservation
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Failed to create reservation: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create reservation',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function totalRevenue()
+    {
+        try {
+            // Get the reservation fee from system settings
+            $reservationFee = SystemSetting::getReservationFee();
+            
+            // Count all confirmed reservations
+            $confirmedReservations = Reservation::where('status', 'confirmed')->count();
+            
+            // Calculate total revenue
+            $totalRevenue = $confirmedReservations * $reservationFee;
+            
+            return response()->json([
+                'total_revenue' => $totalRevenue,
+                'confirmed_reservations' => $confirmedReservations,
+                'reservation_fee' => $reservationFee
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to calculate revenue',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 } 

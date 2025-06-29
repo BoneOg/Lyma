@@ -10,6 +10,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\AnalyticsController;
 
 // Home
 Route::get('/', fn () => Inertia::render('home'))->name('home');
@@ -42,6 +43,12 @@ Route::post('/maya-webhook', [PaymentController::class, 'handleWebhook'])->name(
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
+// Analytics API routes
+Route::post('/api/analytics/track', [AnalyticsController::class, 'trackPageView'])->name('analytics.track');
+Route::get('/api/analytics/chart-data', [AnalyticsController::class, 'getChartData'])->name('analytics.chart-data');
+Route::get('/api/analytics/real-time', [AnalyticsController::class, 'getRealTimeVisitors'])->name('analytics.real-time');
+Route::get('/api/analytics/today', [AnalyticsController::class, 'getTodaySummary'])->name('analytics.today');
+Route::get('/api/analytics/popular-pages', [AnalyticsController::class, 'getPopularPages'])->name('analytics.popular-pages');
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -72,6 +79,10 @@ Route::middleware('auth')->group(function () {
         Route::patch('/admin/api/reservations/{id}/complete', [AdminController::class, 'completeReservation']);
         Route::patch('/admin/api/reservations/{id}/cancel', [AdminController::class, 'cancelReservation']);
         Route::post('/admin/api/quick-reservations', [AdminController::class, 'quickReservation']);
+        
+        // Admin analytics routes
+        Route::get('/admin/api/analytics/dashboard', [AnalyticsController::class, 'getDashboardData'])->name('admin.analytics.dashboard');
+        Route::get('/admin/api/total-revenue', [AdminController::class, 'totalRevenue'])->name('admin.total-revenue');
     });
 
     Route::middleware('can:staff')->group(function () {

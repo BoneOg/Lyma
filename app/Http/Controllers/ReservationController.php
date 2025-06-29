@@ -49,6 +49,7 @@ class ReservationController extends Controller
         $capacity = SystemSetting::getCapacity();
         $occupiedTimeSlots = Reservation::where('reservation_date', $date)
             ->whereIn('status', ['pending', 'confirmed'])
+            ->notExpired()
             ->selectRaw('time_slot_id, COUNT(*) as reservation_count')
             ->groupBy('time_slot_id')
             ->havingRaw('COUNT(*) >= ?', [$capacity])
@@ -74,6 +75,7 @@ class ReservationController extends Controller
         $fullyBookedDates = Reservation::whereYear('reservation_date', $year)
             ->whereMonth('reservation_date', $month)
             ->whereIn('status', ['pending', 'confirmed'])
+            ->notExpired()
             ->selectRaw('reservation_date, time_slot_id, COUNT(*) as reservation_count')
             ->groupBy('reservation_date', 'time_slot_id')
             ->havingRaw('COUNT(*) >= ?', [$capacity])
@@ -110,6 +112,9 @@ class ReservationController extends Controller
                 'guest_count' => $validated['guest_count'],
                 'status' => 'pending',
             ]);
+
+            // Set expiration time (15 minutes from now)
+            $reservation->setExpirationTime();
 
             DB::commit();
 

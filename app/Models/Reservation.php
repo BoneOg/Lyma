@@ -23,6 +23,7 @@ class Reservation extends Model
         'guest_count',
         'status',
         'special_requests',
+        'expires_at',
     ];
 
     protected function casts(): array
@@ -31,6 +32,7 @@ class Reservation extends Model
             'reservation_date' => 'date',
             'guest_count' => 'integer',
             'status' => 'string',
+            'expires_at' => 'datetime',
         ];
     }
 
@@ -157,6 +159,50 @@ class Reservation extends Model
     public function getReservationFee(): float
     {
         return SystemSetting::getReservationFee();
+    }
+
+    // Timer methods
+    public function setExpirationTime(): void
+    {
+        $this->update(['expires_at' => now()->addMinutes(10)]);
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_at && $this->expires_at->isPast();
+    }
+
+    public function getRemainingSeconds(): int
+    {
+        if (!$this->expires_at) {
+            return 0;
+        }
+        
+        $remaining = $this->expires_at->diffInSeconds(now(), false);
+        return max(0, $remaining);
+    }
+
+    public function getRemainingTimeFormatted(): string
+    {
+        $seconds = $this->getRemainingSeconds();
+        $minutes = floor($seconds / 60);
+        $remainingSeconds = $seconds % 60;
+        return sprintf('%02d:%02d', $minutes, $remainingSeconds);
+    }
+
+    // Scope to get expired reservations
+    public function scopeExpired($query)
+    {
+        return $query->where('expires_at', '<', now());
+    }
+
+    // Scope to get non-expired reservations
+    public function scopeNotExpired($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('expires_at')
+              ->orWhere('expires_at', '>', now());
+        });
     }
 
 }

@@ -55,7 +55,7 @@ class StaffController extends Controller
                 'id' => $r->id,
                 'guest_first_name' => $r->guest_first_name,
                 'guest_last_name' => $r->guest_last_name,
-                'reservation_date' => $r->reservation_date,
+                'reservation_date' => $r->reservation_date->format('Y-m-d'),
                 'time_slot' => $r->timeSlot ? $r->timeSlot->start_time_formatted : null,
                 'guest_count' => $r->guest_count,
                 'status' => $r->status,

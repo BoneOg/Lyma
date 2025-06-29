@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Layout from '@/components/layout';
 import { usePage, router } from '@inertiajs/react'; // Keep router import for now, even if not used for this specific redirect
 import axios from 'axios';
+import Timer from '@/components/Timer';
 
 // --- Your existing interfaces ---
 interface TimeSlot {
@@ -28,13 +29,14 @@ interface Reservation {
 interface Props {
   reservation: Reservation;
   reservationFee: number;
+  expiresAt?: string;
   [key: string]: any; // Allows for additional props
 }
 // --- End of your existing interfaces ---
 
 
 export default function Checkout() {
-  const { reservation, reservationFee } = usePage<Props>().props;
+  const { reservation, reservationFee, expiresAt } = usePage<Props>().props;
   const [loading, setLoading] = useState(false); // State for loading indicator
   const [error, setError] = useState<string | null>(null); // State for error messages
 
@@ -46,6 +48,11 @@ export default function Checkout() {
       month: 'long',
       day: 'numeric',
     });
+  };
+
+  const handleExpired = () => {
+    // Redirect to home page when timer expires
+    router.visit('/');
   };
 
   // --- Modified Function: handlePayment ---
@@ -101,14 +108,9 @@ export default function Checkout() {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl text-[#3f411a] font-lexend font-extralight">Checkout Summary</h1>
-              <div className="w-8 h-8 bg-[#f6f5c6] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24" className="text-[#3f411a]">
-                  <g fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.536 1.464C22 4.93 22 7.286 22 12s0 7.071-1.464 8.536C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.464C2 19.072 2 16.714 2 12" />
-                    <path stroke-linecap="round" d="M12 6v6l4 2" />
-                  </g>
-                </svg>
-              </div>
+              {expiresAt && (
+                <Timer expiresAt={expiresAt} onExpired={handleExpired} />
+              )}
             </div>
 
             <div className="space-y-8">

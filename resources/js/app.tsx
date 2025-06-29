@@ -4,6 +4,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { NotificationProvider } from './contexts/NotificationContext';
+import { initAnalytics } from './utils/analytics';
 
 const appName = import.meta.env.VITE_APP_NAME || '';
 
@@ -12,6 +13,9 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);
+
+        // Initialize analytics tracking
+        initAnalytics();
 
         root.render(
             <NotificationProvider>

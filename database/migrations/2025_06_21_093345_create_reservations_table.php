@@ -23,12 +23,16 @@ return new class extends Migration
             // Status and notes
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             
+            // Timer for 15-minute expiration
+            $table->timestamp('expires_at')->nullable();
+            
             $table->timestamps();
             
             // Indexes
             $table->index('reservation_date');
             $table->index('status');
             $table->index('guest_email');
+            $table->index('expires_at');
         });
     }
 

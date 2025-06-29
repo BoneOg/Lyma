@@ -122,7 +122,7 @@ const SystemSettingCard: React.FC<SystemSettingCardProps> = ({ settings }) => {
     <>
       <div className="bg-white rounded-4xl shadow-lg p-8 h-full">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl text-[#3f411a] font-lexend font-extralight">System</h2>
+          <h2 className="text-2xl text-[#3f411a] font-lexend font-semibold">System</h2>
           <button
             onClick={handleEditToggle}
             className={`p-2 rounded-lg transition-all duration-200 ${
