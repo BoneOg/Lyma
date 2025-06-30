@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react';
 interface TimerProps {
   expiresAt: string;
   onExpired?: () => void;
+  onAlmostExpired?: () => void;
 }
 
-export default function Timer({ expiresAt, onExpired }: TimerProps) {
+export default function Timer({ expiresAt, onExpired, onAlmostExpired }: TimerProps) {
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [isExpired, setIsExpired] = useState<boolean>(false);
+  const [almostExpiredFired, setAlmostExpiredFired] = useState<boolean>(false);
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -24,6 +26,11 @@ export default function Timer({ expiresAt, onExpired }: TimerProps) {
         return;
       }
 
+      if (onAlmostExpired && difference <= 60000 && !almostExpiredFired) {
+        setAlmostExpiredFired(true);
+        onAlmostExpired();
+      }
+
       setTimeLeft(difference);
     };
 
@@ -34,7 +41,7 @@ export default function Timer({ expiresAt, onExpired }: TimerProps) {
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, [expiresAt, onExpired]);
+  }, [expiresAt, onExpired, onAlmostExpired]);
 
   const formatTime = (milliseconds: number) => {
     const totalSeconds = Math.floor(milliseconds / 1000);

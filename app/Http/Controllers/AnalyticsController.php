@@ -66,31 +66,31 @@ class AnalyticsController extends Controller
             'screen_height' => 'nullable|integer',
         ]);
 
-        $sessionId = $request->session()->getId();
         $userAgent = $request->header('User-Agent', '');
         $deviceType = Analytics::detectDeviceType($userAgent);
-
-        // Update existing analytics record or create new one
-        $analytics = Analytics::where('session_id', $sessionId)
-            ->where('page_url', $request->page_url)
-            ->where('created_at', '>=', Carbon::now()->subMinutes(5))
+        $ipAddress = $request->ip();
+        $pageUrl = $request->page_url;
+        $now = now();
+        $windowStart = $now->copy()->subMinutes($now->minute % 30)->setSecond(0)->setMicrosecond(0);
+        $analytics = Analytics::where('ip_address', $ipAddress)
+            ->where('user_agent', $userAgent)
+            ->where('created_at', '>=', $windowStart)
+            ->where('created_at', '<', $windowStart->copy()->addMinutes(30))
+            ->where('page_url', $pageUrl)
             ->first();
-
         if ($analytics) {
-            // Update existing record
             $analytics->update([
                 'time_on_page' => $request->time_on_page,
-                'is_bounce' => false, // User stayed on the page
+                'is_bounce' => false,
             ]);
         } else {
-            // Create new record
             Analytics::create([
-                'session_id' => $sessionId,
-                'page_url' => $request->page_url,
+                'session_id' => null,
+                'page_url' => $pageUrl,
                 'page_title' => $request->page_title,
                 'device_type' => $deviceType,
                 'user_agent' => $userAgent,
-                'ip_address' => $request->ip(),
+                'ip_address' => $ipAddress,
                 'referrer' => $request->header('Referer'),
                 'browser' => Analytics::extractBrowser($userAgent),
                 'os' => Analytics::extractOS($userAgent),
@@ -100,7 +100,6 @@ class AnalyticsController extends Controller
                 'is_bounce' => false,
             ]);
         }
-
         return response()->json(['success' => true]);
     }
 
@@ -111,36 +110,30 @@ class AnalyticsController extends Controller
     {
         $today = Carbon::today();
         $yesterday = Carbon::yesterday();
-        
         // Today's data
         $todayData = Analytics::whereDate('created_at', $today)
             ->selectRaw('
                 device_type,
                 COUNT(*) as visits,
-                COUNT(DISTINCT session_id) as unique_visitors
+                COUNT(DISTINCT CONCAT(ip_address, "_", user_agent)) as unique_visitors
             ')
             ->groupBy('device_type')
             ->get();
-
         // Yesterday's data for comparison
         $yesterdayData = Analytics::whereDate('created_at', $yesterday)
             ->selectRaw('
                 device_type,
                 COUNT(*) as visits,
-                COUNT(DISTINCT session_id) as unique_visitors
+                COUNT(DISTINCT CONCAT(ip_address, "_", user_agent)) as unique_visitors
             ')
             ->groupBy('device_type')
             ->get();
-
         // Real-time visitors (last 5 minutes)
         $realTimeData = Analytics::getRealTimeVisitors(5);
-
         // Chart data for last 30 days
         $chartData = Analytics::getChartData(30);
-
         // Popular pages
         $popularPages = Analytics::getPopularPages(7, 5);
-
         return response()->json([
             'today' => $todayData,
             'yesterday' => $yesterdayData,

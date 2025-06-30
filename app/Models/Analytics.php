@@ -86,15 +86,14 @@ class Analytics extends Model
     public static function getRealTimeVisitors($minutes = 5)
     {
         $startTime = Carbon::now()->subMinutes($minutes);
-        
         return self::where('created_at', '>=', $startTime)
             ->selectRaw('
                 device_type,
-                COUNT(*) as count
+                COUNT(DISTINCT CONCAT(ip_address, "_", user_agent)) as unique_visitors
             ')
             ->groupBy('device_type')
             ->get()
-            ->pluck('count', 'device_type')
+            ->pluck('unique_visitors', 'device_type')
             ->toArray();
     }
 
@@ -104,12 +103,11 @@ class Analytics extends Model
     public static function getTodaySummary()
     {
         $today = Carbon::today();
-        
         return self::whereDate('created_at', $today)
             ->selectRaw('
                 device_type,
                 COUNT(*) as total_visits,
-                COUNT(DISTINCT session_id) as unique_visitors,
+                COUNT(DISTINCT CONCAT(ip_address, "_", user_agent)) as unique_visitors,
                 AVG(time_on_page) as avg_time_on_page
             ')
             ->groupBy('device_type')
@@ -122,13 +120,12 @@ class Analytics extends Model
     public static function getPopularPages($days = 7, $limit = 10)
     {
         $startDate = Carbon::now()->subDays($days);
-        
         return self::where('created_at', '>=', $startDate)
             ->selectRaw('
                 page_url,
                 page_title,
                 COUNT(*) as visits,
-                COUNT(DISTINCT session_id) as unique_visitors
+                COUNT(DISTINCT CONCAT(ip_address, "_", user_agent)) as unique_visitors
             ')
             ->groupBy('page_url', 'page_title')
             ->orderBy('visits', 'desc')

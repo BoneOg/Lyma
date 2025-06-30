@@ -47,29 +47,35 @@ class TrackAnalytics
         $deviceType = Analytics::detectDeviceType($userAgent);
         $browser = Analytics::extractBrowser($userAgent);
         $os = Analytics::extractOS($userAgent);
-
-        // Get or create session ID
-        $sessionId = $request->session()->getId();
-
-        // Get screen dimensions from request headers (if available)
+        $ipAddress = $request->ip();
         $screenWidth = $request->header('X-Screen-Width');
         $screenHeight = $request->header('X-Screen-Height');
-
-        Analytics::create([
-            'session_id' => $sessionId,
-            'page_url' => $request->fullUrl(),
-            'page_title' => $this->getPageTitle($request),
-            'device_type' => $deviceType,
-            'user_agent' => $userAgent,
-            'ip_address' => $request->ip(),
-            'referrer' => $request->header('Referer'),
-            'browser' => $browser,
-            'os' => $os,
-            'screen_width' => $screenWidth ? (int) $screenWidth : null,
-            'screen_height' => $screenHeight ? (int) $screenHeight : null,
-            'is_bounce' => true, // Will be updated if user visits another page
-            'time_on_page' => null, // Will be updated via JavaScript
-        ]);
+        $pageUrl = $request->fullUrl();
+        $pageTitle = $this->getPageTitle($request);
+        $now = now();
+        $windowStart = $now->copy()->subMinutes($now->minute % 30)->setSecond(0)->setMicrosecond(0);
+        // Only create a new record if not already tracked in this 30-min window for this session (site-wide unique)
+        $exists = Analytics::where('session_id', $sessionId)
+            ->where('window_start', $windowStart)
+            ->exists();
+        if (!$exists) {
+            Analytics::create([
+                'session_id' => $sessionId,
+                'window_start' => $windowStart,
+                'page_url' => $pageUrl, // This will be the first page visited in the session/window
+                'page_title' => $pageTitle,
+                'device_type' => $deviceType,
+                'user_agent' => $userAgent,
+                'ip_address' => $ipAddress,
+                'referrer' => $request->header('Referer'),
+                'browser' => $browser,
+                'os' => $os,
+                'screen_width' => $screenWidth ? (int) $screenWidth : null,
+                'screen_height' => $screenHeight ? (int) $screenHeight : null,
+                'is_bounce' => true,
+                'time_on_page' => null,
+            ]);
+        }
     }
 
     /**

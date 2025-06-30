@@ -33,6 +33,7 @@ return new class extends Migration
             // Indexes for better performance
             $table->index(['created_at', 'device_type']);
             $table->index(['page_url', 'created_at']);
+            $table->unique(['ip_address', 'user_agent', 'created_at'], 'unique_visitor_per_30min');
         });
     }
 

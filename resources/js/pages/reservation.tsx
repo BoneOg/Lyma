@@ -10,6 +10,8 @@ import {
 import Calendar from '@/components/Calendar'
 import ReservationForm from '@/components/ReservationForm'
 import { useReservation } from '@/hooks/useReservation'
+import { useNotification } from '@/contexts/NotificationContext'
+import { useEffect } from 'react'
 
 interface Props {
   timeSlots: any[]
@@ -57,6 +59,21 @@ export default function Reservation() {
     handleConfirmBooking,
     handleCancelBooking,
   } = useReservation({ timeSlots, systemSettings, errors });
+
+  const { showNotification } = useNotification();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('expired') === '1') {
+        showNotification('Your reservation has expired. Please try booking again.', 'warning');
+        // Optionally, remove the param from the URL after showing
+        params.delete('expired');
+        const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        window.history.replaceState({}, '', newUrl);
+      }
+    }
+  }, [showNotification]);
 
   return (
     <Layout>

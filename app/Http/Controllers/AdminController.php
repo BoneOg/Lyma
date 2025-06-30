@@ -230,22 +230,24 @@ class AdminController extends Controller
     public function quickReservation(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'date' => 'required|date|after:today',
+            'guest_first_name' => 'required|string|max:255',
+            'guest_last_name' => 'required|string|max:255',
+            'guest_email' => 'required|email|max:255',
+            'guest_phone' => 'required|string|max:20',
+            'reservation_date' => 'required|date|after:today',
             'time_slot_id' => 'required|exists:time_slots,id',
-            'guests' => 'required|integer|min:1|max:20',
+            'guest_count' => 'required|integer|min:1|max:20',
         ]);
 
         try {
             $reservation = Reservation::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'date' => $request->date,
+                'guest_first_name' => $request->guest_first_name,
+                'guest_last_name' => $request->guest_last_name,
+                'guest_email' => $request->guest_email,
+                'guest_phone' => $request->guest_phone,
+                'reservation_date' => $request->reservation_date,
                 'time_slot_id' => $request->time_slot_id,
-                'guests' => $request->guests,
+                'guest_count' => $request->guest_count,
                 'status' => 'confirmed',
                 'user_id' => auth()->id(),
             ]);
