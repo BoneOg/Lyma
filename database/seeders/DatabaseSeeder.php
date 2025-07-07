@@ -11,7 +11,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             TimeSlotSeeder::class,
-            PaymentMethodSeeder::class,
             SystemSettingSeeder::class,
             ReservationSeeder::class,
             July9ReservationSeeder::class,

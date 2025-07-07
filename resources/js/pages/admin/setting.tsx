@@ -4,7 +4,6 @@ import SystemSettingCard from '@/components/admin/SystemSettingCard';
 import CalendarComponent from '@/components/admin/calendar';
 
 interface Settings {
-  reservation_fee: number;
   max_advance_booking_days: number;
   restaurant_name: string;
   restaurant_email: string;

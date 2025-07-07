@@ -7,7 +7,6 @@ use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AnalyticsController;
@@ -26,19 +25,19 @@ Route::post('/reservations', [ReservationController::class, 'store'])->name('res
 Route::get('/reservations/occupied-time-slots', [ReservationController::class, 'getOccupiedTimeSlots'])->name('reservations.occupied-time-slots');
 Route::get('/reservations/fully-booked-dates', [ReservationController::class, 'getFullyBookedDates'])->name('reservations.fully-booked-dates');
 
-Route::post('/create-maya-checkout', [PaymentController::class, 'createMayaCheckout'])->name('maya.checkout.create');
-
-// Payment callback routes (must come before the parameterized checkout route)
-Route::get('/checkout/success', [PaymentController::class, 'checkoutSuccess'])->name('checkout.success');
-Route::get('/checkout/failure', [PaymentController::class, 'checkoutFailure'])->name('checkout.failure');
-Route::get('/checkout/cancel', [PaymentController::class, 'checkoutCancel'])->name('checkout.cancel');
-
-// Checkout route with pending reservation check
+// Checkout route (for legacy support, but now just confirms reservation)
 Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])
     ->name('checkout')
     ->middleware('check.pending.reservation');
 
-Route::post('/maya-webhook', [PaymentController::class, 'handleWebhook'])->name('maya.webhook');
+// Confirm reservation route (for free reservations)
+Route::post('/checkout/{reservation}/confirm', [CheckoutController::class, 'confirmReservation'])
+    ->name('checkout.confirm')
+    ->middleware('check.pending.reservation');
+
+// Transaction route
+Route::get('/transaction/{reservation}', [CheckoutController::class, 'showTransaction'])
+    ->name('transaction');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

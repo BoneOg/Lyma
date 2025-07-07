@@ -37,9 +37,11 @@ export default function Reservation() {
     showConfirmationModal,
     isBooking,
     months,
+    years,
     
     // Setters
     setSelectedMonth,
+    setSelectedYear,
     setSelectedTimeSlot,
     setGuestCount,
     setSelectedDate,
@@ -86,9 +88,9 @@ export default function Reservation() {
             <div className="flex flex-col justify-start h-full">
               {/* Dropdowns + Calendar */}
               <div className="flex flex-col justify-start h-full">
-                <div className="flex space-x-8 mb-10">
+                <div className="flex space-x-4 mb-10">
                   {/* Month */}
-                  <div className="relative w-48">
+                  <div className="relative w-40">
                     <label className="block text-base font-extralight font-lexend mb-2">Month</label>
                     <Select 
                       value={selectedMonth.toString()}
@@ -114,8 +116,32 @@ export default function Reservation() {
                     </Select>
                   </div>
 
+                  {/* Year */}
+                  <div className="relative w-28">
+                    <label className="block text-base font-extralight font-lexend mb-2">Year</label>
+                    <Select
+                      value={selectedYear.toString()}
+                      onValueChange={(value) => setSelectedYear(parseInt(value))}
+                    >
+                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#3f411a] border-white text-white">
+                        {years.map((year) => (
+                          <SelectItem
+                            key={year}
+                            value={year.toString()}
+                            className="bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5a5d2a] focus:bg-[#5a5d2a]"
+                          >
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
                   {/* Time */}
-                  <div className="relative w-48">
+                  <div className="relative w-36">
                     <label className="block text-base font-extralight font-lexend mb-2">Time</label>
                     <Select 
                       value={selectedTimeSlot?.toString() || ''}
@@ -149,7 +175,7 @@ export default function Reservation() {
                   </div>
 
                   {/* Guests */}
-                  <div className="relative w-48">
+                  <div className="relative w-24">
                     <label className="block text-base font-extralight font-lexend mb-2">Guests</label>
                     <Select 
                       value={guestCount.toString()}

@@ -101,7 +101,7 @@ class ReservationController extends Controller
         try {
             DB::beginTransaction();
 
-            // No table assignment, just create reservation
+            // Create reservation with pending status (needs review)
             $reservation = Reservation::create([
                 'guest_first_name' => $validated['guest_first_name'],
                 'guest_last_name' => $validated['guest_last_name'],
@@ -110,7 +110,7 @@ class ReservationController extends Controller
                 'reservation_date' => $validated['reservation_date'],
                 'time_slot_id' => $validated['time_slot_id'],
                 'guest_count' => $validated['guest_count'],
-                'status' => 'pending',
+                'status' => 'pending', // Pending until reviewed in checkout
             ]);
 
             // Set expiration time (15 minutes from now)
@@ -118,9 +118,9 @@ class ReservationController extends Controller
 
             DB::commit();
 
-            // Redirect to checkout with reservation data
+            // Redirect to checkout for review
             return redirect()->route('checkout', ['reservation' => $reservation->id])
-                ->with('success', 'Reservation created successfully! Please complete your payment.');
+                ->with('success', 'Reservation created successfully! Please review your details.');
 
         } catch (\Exception $e) {
             DB::rollBack();

@@ -22,7 +22,7 @@ interface UseReservationProps {
 export const useReservation = ({ timeSlots, systemSettings, errors }: UseReservationProps) => {
   // Form state
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [selectedYear] = useState(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<number | null>(
     timeSlots.length > 0 ? timeSlots[0].id : null
   );
@@ -44,6 +44,12 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const years = [
+    new Date().getFullYear(),
+    new Date().getFullYear() + 1,
+    new Date().getFullYear() + 2,
   ];
 
   // Load admin disabled dates from localStorage
@@ -251,9 +257,11 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     showConfirmationModal,
     isBooking,
     months,
+    years,
     
     // Setters
     setSelectedMonth,
+    setSelectedYear,
     setSelectedTimeSlot,
     setGuestCount,
     setSelectedDate,

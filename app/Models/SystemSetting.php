@@ -38,11 +38,6 @@ class SystemSetting extends Model
         Cache::forget("system_setting_{$key}");
     }
 
-    public static function getReservationFee(): float
-    {
-        return (float) self::get('reservation_fee', 200.00);
-    }
-
     public static function getMaxAdvanceBookingDays(): int
     {
         return (int) self::get('max_advance_booking_days', 30);

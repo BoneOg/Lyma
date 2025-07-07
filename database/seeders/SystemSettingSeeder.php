@@ -11,11 +11,6 @@ class SystemSettingSeeder extends Seeder
     {
         $settings = [
             [
-                'setting_key' => 'reservation_fee',
-                'setting_value' => '1000.00',
-                'description' => 'Non-refundable reservation fee amount in PHP'
-            ],
-            [
                 'setting_key' => 'max_advance_booking_days',
                 'setting_value' => '30',
                 'description' => 'Maximum days in advance for booking'

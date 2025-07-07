@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
-use App\Models\SystemSetting;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -28,8 +27,47 @@ class CheckoutController extends Controller
         
         return Inertia::render('checkout', [
             'reservation' => $reservation,
-            'reservationFee' => SystemSetting::getReservationFee(),
             'expiresAt' => $reservation->expires_at?->toISOString(),
+        ]);
+    }
+
+    public function confirmReservation(Request $request, Reservation $reservation)
+    {
+        // Check if reservation is expired
+        if ($reservation->isExpired()) {
+            return redirect()->route('home')->with('error', 'This reservation has expired. Please make a new reservation.');
+        }
+
+        // Confirm the reservation (make it free)
+        $reservation->update(['status' => 'confirmed']);
+
+        // Load the time slot relationship for the transaction page
+        $reservation->load(['timeSlot' => function ($query) {
+            $query->select('id', 'start_time', 'end_time', 'is_active');
+        }]);
+
+        // Redirect to transaction page with success using Inertia
+        return Inertia::render('transaction', [
+            'reservation' => $reservation,
+            'paymentStatus' => 'success',
+            'statusMessage' => 'Reservation confirmed successfully! Your table is reserved.',
+        ]);
+    }
+
+    public function showTransaction(Request $request, Reservation $reservation)
+    {
+        // Load the time slot relationship for the transaction page
+        $reservation->load(['timeSlot' => function ($query) {
+            $query->select('id', 'start_time', 'end_time', 'is_active');
+        }]);
+
+        $status = $request->query('status', 'success');
+        $message = $request->query('message', 'Reservation confirmed successfully! Your table is reserved.');
+
+        return Inertia::render('transaction', [
+            'reservation' => $reservation,
+            'paymentStatus' => $status,
+            'statusMessage' => $message,
         ]);
     }
 }

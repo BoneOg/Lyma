@@ -63,7 +63,7 @@ const Calendar: React.FC<CalendarProps> = ({
           className={className}
         >
           {day}
-          {isFullyBooked && (
+          {isFullyBooked && !isDisabled && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-8 h-0.5 bg-red-500"></div>
             </div>

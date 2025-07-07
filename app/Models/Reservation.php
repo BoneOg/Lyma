@@ -42,16 +42,6 @@ class Reservation extends Model
         return $this->belongsTo(TimeSlot::class);
     }
 
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class);
-    }
-
-    public function payment(): HasOne
-    {
-        return $this->hasOne(Payment::class);
-    }
-
     // Scopes
     public function scopePending($query)
     {
@@ -151,20 +141,10 @@ class Reservation extends Model
         $this->update(['status' => 'completed']);
     }
 
-    public function hasPaidPayment(): bool
-    {
-        return $this->payments()->where('payment_status', 'completed')->exists();
-    }
-
-    public function getReservationFee(): float
-    {
-        return SystemSetting::getReservationFee();
-    }
-
     // Timer methods
     public function setExpirationTime(): void
     {
-        $this->update(['expires_at' => now()->addSeconds(10)]);
+        $this->update(['expires_at' => now()->addMinutes(10)]);
     }
 
     public function isExpired(): bool

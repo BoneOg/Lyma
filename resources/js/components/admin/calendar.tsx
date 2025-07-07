@@ -9,7 +9,6 @@ import {
 import Notification from '@/components/Notification';
 
 interface Settings {
-  reservation_fee: number;
   max_advance_booking_days: number;
   restaurant_email: string;
   restaurant_phone: string;
@@ -20,7 +19,15 @@ interface CalendarComponentProps {
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
-  const [selectedMonth, setSelectedMonth] = useState('June');
+  const today = new Date();
+  const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + settings.max_advance_booking_days);
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]);
+  const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedTime, setSelectedTime] = useState('All Time');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [showEnableModal, setShowEnableModal] = useState(false);
@@ -63,11 +70,6 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
     localStorage.setItem('disabledTimeSlots', JSON.stringify(timeSlotsObj));
   }, [disabledDates, disabledTimeSlots]);
 
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
   const timeSlots = [
     { id: 'all', time: 'all', formatted: 'All Time' },
     { id: 1, time: '11:00', formatted: '11:00 AM' },
@@ -88,27 +90,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
   };
 
   const isDateDisabled = (day: number) => {
-    const today = new Date();
     const monthIndex = months.indexOf(selectedMonth);
-    const selectedDate = new Date(today.getFullYear(), monthIndex, day);
-    
-    // Disable past dates (yesterday and earlier)
-    const selectedDateOnly = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    
-    if (selectedDateOnly < todayOnly) {
+    const date = new Date(selectedYear, monthIndex, day);
+    if (date < minDate || date > maxDate) {
       return true;
     }
-    
-    // Disable dates beyond max_advance_booking_days
-    const maxBookingDate = new Date(today);
-    maxBookingDate.setDate(today.getDate() + settings.max_advance_booking_days);
-    const maxBookingDateOnly = new Date(maxBookingDate.getFullYear(), maxBookingDate.getMonth(), maxBookingDate.getDate());
-    
-    if (selectedDateOnly > maxBookingDateOnly) {
-      return true;
-    }
-    
     return false;
   };
 
@@ -233,11 +219,9 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
     setShowNotification(false);
   };
 
-  const today = new Date();
-
   const renderCalendar = () => {
-    const daysInMonth = getDaysInMonth(selectedMonth, today.getFullYear());
-    const firstDay = getFirstDayOfMonth(selectedMonth, today.getFullYear());
+    const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
+    const firstDay = getFirstDayOfMonth(selectedMonth, selectedYear);
     const days = [];
 
     // Add empty cells for days before the first day of the month
@@ -276,7 +260,25 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ settings }) => {
   return (
     <div className="bg-[#3f411a] text-white rounded-4xl p-6 shadow-lg h-full flex flex-col justify-between">
       <div>
-        <h3 className="text-2xl font-semibold mt-1 font-lexend mb-3">Calendar</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-2xl font-semibold font-lexend">Calendar</h3>
+          <div className="flex gap-2 items-center">
+            {Array.from({ length: 3 }, (_, i) => today.getFullYear() + i).map((year) => (
+              <button
+                key={year}
+                onClick={() => setSelectedYear(year)}
+                className={`px-3 py-1 rounded font-lexend font-medium shadow transition
+                  ${year === selectedYear
+                    ? 'bg-[#525a1f] text-[#fcfcef] border-2 border-[#3f411a] font-bold'
+                    : 'bg-[#f6f5c6] text-[#3f411a] hover:bg-[#e8e6b3]'
+                  }`}
+                style={{ minWidth: 56 }}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="mt-7">
           {/* Month and Time Selectors */}
           <div className="grid grid-cols-16 gap-4 mb-4 mt-0">

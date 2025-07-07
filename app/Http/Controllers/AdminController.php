@@ -48,7 +48,6 @@ class AdminController extends Controller
     public function setting()
     {
         $settings = [
-            'reservation_fee' => SystemSetting::getReservationFee(),
             'max_advance_booking_days' => SystemSetting::getMaxAdvanceBookingDays(),
             'restaurant_email' => SystemSetting::getRestaurantEmail(),
             'restaurant_phone' => SystemSetting::getRestaurantPhone(),
@@ -65,13 +64,11 @@ class AdminController extends Controller
         
         try {
             $request->validate([
-                'reservation_fee' => 'required|numeric|min:0',
                 'max_advance_booking_days' => 'required|integer|min:1|max:365',
                 'restaurant_email' => 'required|email',
                 'restaurant_phone' => 'required|string|max:20|regex:/^[\d\s\-\+\(\)]+$/',
             ]);
 
-            SystemSetting::set('reservation_fee', $request->reservation_fee, 'Reservation fee in pesos');
             SystemSetting::set('max_advance_booking_days', $request->max_advance_booking_days, 'Maximum days in advance for booking');
             SystemSetting::set('restaurant_email', $request->restaurant_email, 'Restaurant contact email');
             SystemSetting::set('restaurant_phone', $request->restaurant_phone, 'Restaurant contact phone');
@@ -262,31 +259,6 @@ class AdminController extends Controller
                 'success' => false,
                 'message' => 'Failed to create reservation',
                 'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function totalRevenue()
-    {
-        try {
-            // Get the reservation fee from system settings
-            $reservationFee = SystemSetting::getReservationFee();
-            
-            // Count all confirmed reservations
-            $confirmedReservations = Reservation::where('status', 'confirmed')->count();
-            
-            // Calculate total revenue
-            $totalRevenue = $confirmedReservations * $reservationFee;
-            
-            return response()->json([
-                'total_revenue' => $totalRevenue,
-                'confirmed_reservations' => $confirmedReservations,
-                'reservation_fee' => $reservationFee
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Failed to calculate revenue',
-                'message' => $e->getMessage()
             ], 500);
         }
     }
