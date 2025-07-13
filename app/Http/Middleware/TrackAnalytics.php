@@ -54,6 +54,7 @@ class TrackAnalytics
         $pageTitle = $this->getPageTitle($request);
         $now = now();
         $windowStart = $now->copy()->subMinutes($now->minute % 30)->setSecond(0)->setMicrosecond(0);
+        $sessionId = session()->getId();
         // Only create a new record if not already tracked in this 30-min window for this session (site-wide unique)
         $exists = Analytics::where('session_id', $sessionId)
             ->where('window_start', $windowStart)
