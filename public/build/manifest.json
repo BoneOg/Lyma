@@ -1,0 +1,218 @@
+{
+  "_Calendar-D9GXNItm.js": {
+    "file": "assets/Calendar-D9GXNItm.js",
+    "name": "Calendar",
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "_layout-C_KUoVgK.js": {
+    "file": "assets/layout-C_KUoVgK.js",
+    "name": "layout",
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "_layout-h5t_-nNX.js": {
+    "file": "assets/layout-h5t_-nNX.js",
+    "name": "layout",
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "_select-kjGqlmna.js": {
+    "file": "assets/select-kjGqlmna.js",
+    "name": "select",
+    "imports": [
+      "resources/js/app.tsx",
+      "_utils-kWyodwa4.js"
+    ]
+  },
+  "_utils-kWyodwa4.js": {
+    "file": "assets/utils-kWyodwa4.js",
+    "name": "utils",
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-B4RVpokt.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.tsx": {
+    "file": "assets/app-D4IaeF40.js",
+    "name": "app",
+    "src": "resources/js/app.tsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/pages/404.tsx",
+      "resources/js/pages/about.tsx",
+      "resources/js/pages/admin/booking.tsx",
+      "resources/js/pages/admin/dashboard.tsx",
+      "resources/js/pages/admin/setting.tsx",
+      "resources/js/pages/admin/transactions.tsx",
+      "resources/js/pages/auth/login.tsx",
+      "resources/js/pages/checkout.tsx",
+      "resources/js/pages/contact.tsx",
+      "resources/js/pages/home.tsx",
+      "resources/js/pages/menu.tsx",
+      "resources/js/pages/reservation.tsx",
+      "resources/js/pages/staff/dashboard.tsx",
+      "resources/js/pages/transaction.tsx"
+    ],
+    "css": [
+      "assets/app-B4RVpokt.css"
+    ]
+  },
+  "resources/js/pages/404.tsx": {
+    "file": "assets/404-C7ul9-jK.js",
+    "name": "404",
+    "src": "resources/js/pages/404.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js"
+    ]
+  },
+  "resources/js/pages/about.tsx": {
+    "file": "assets/about-DeXOdDyy.js",
+    "name": "about",
+    "src": "resources/js/pages/about.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js"
+    ]
+  },
+  "resources/js/pages/admin/booking.tsx": {
+    "file": "assets/booking-D2bP3cUY.js",
+    "name": "booking",
+    "src": "resources/js/pages/admin/booking.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-C_KUoVgK.js",
+      "_select-kjGqlmna.js",
+      "_Calendar-D9GXNItm.js",
+      "_utils-kWyodwa4.js"
+    ]
+  },
+  "resources/js/pages/admin/dashboard.tsx": {
+    "file": "assets/dashboard-CzYsuEnU.js",
+    "name": "dashboard",
+    "src": "resources/js/pages/admin/dashboard.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-C_KUoVgK.js",
+      "_utils-kWyodwa4.js"
+    ]
+  },
+  "resources/js/pages/admin/setting.tsx": {
+    "file": "assets/setting-CuIWthvs.js",
+    "name": "setting",
+    "src": "resources/js/pages/admin/setting.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-C_KUoVgK.js",
+      "_select-kjGqlmna.js",
+      "_utils-kWyodwa4.js"
+    ]
+  },
+  "resources/js/pages/admin/transactions.tsx": {
+    "file": "assets/transactions-CjolQPCW.js",
+    "name": "transactions",
+    "src": "resources/js/pages/admin/transactions.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-C_KUoVgK.js"
+    ]
+  },
+  "resources/js/pages/auth/login.tsx": {
+    "file": "assets/login-Dk0H_iOb.js",
+    "name": "login",
+    "src": "resources/js/pages/auth/login.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "resources/js/pages/checkout.tsx": {
+    "file": "assets/checkout-fuPbLUCj.js",
+    "name": "checkout",
+    "src": "resources/js/pages/checkout.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js"
+    ]
+  },
+  "resources/js/pages/contact.tsx": {
+    "file": "assets/contact-1UfNp1GX.js",
+    "name": "contact",
+    "src": "resources/js/pages/contact.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js"
+    ]
+  },
+  "resources/js/pages/home.tsx": {
+    "file": "assets/home-CL8flNn6.js",
+    "name": "home",
+    "src": "resources/js/pages/home.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js"
+    ]
+  },
+  "resources/js/pages/menu.tsx": {
+    "file": "assets/menu-Cl4v2X_1.js",
+    "name": "menu",
+    "src": "resources/js/pages/menu.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js"
+    ]
+  },
+  "resources/js/pages/reservation.tsx": {
+    "file": "assets/reservation-CHvkZp-5.js",
+    "name": "reservation",
+    "src": "resources/js/pages/reservation.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js",
+      "_select-kjGqlmna.js",
+      "_Calendar-D9GXNItm.js",
+      "_utils-kWyodwa4.js"
+    ]
+  },
+  "resources/js/pages/staff/dashboard.tsx": {
+    "file": "assets/dashboard-D1bFX8P-.js",
+    "name": "dashboard",
+    "src": "resources/js/pages/staff/dashboard.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_select-kjGqlmna.js",
+      "_Calendar-D9GXNItm.js",
+      "_utils-kWyodwa4.js"
+    ]
+  },
+  "resources/js/pages/transaction.tsx": {
+    "file": "assets/transaction-CsyiLTVM.js",
+    "name": "transaction",
+    "src": "resources/js/pages/transaction.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx",
+      "_layout-h5t_-nNX.js"
+    ]
+  }
+}
