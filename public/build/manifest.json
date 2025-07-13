@@ -1,38 +1,46 @@
 {
-  "_Calendar-BLNAF38Y.js": {
-    "file": "assets/Calendar-BLNAF38Y.js",
+  "_Calendar-tdxah6tI.js": {
+    "file": "assets/Calendar-tdxah6tI.js",
     "name": "Calendar",
     "imports": [
-      "resources/js/app.tsx"
+      "resources/js/pages/home.tsx"
     ]
   },
-  "_layout-69fc0IS_.js": {
-    "file": "assets/layout-69fc0IS_.js",
+  "_chevron-up-CVt-akz0.js": {
+    "file": "assets/chevron-up-CVt-akz0.js",
+    "name": "chevron-up",
+    "imports": [
+      "resources/js/pages/home.tsx",
+      "_utils-C0spas-Y.js"
+    ]
+  },
+  "_index-M82VqutJ.js": {
+    "file": "assets/index-M82VqutJ.js",
+    "name": "index",
+    "imports": [
+      "resources/js/pages/home.tsx"
+    ]
+  },
+  "_layout-BObr1LJK.js": {
+    "file": "assets/layout-BObr1LJK.js",
     "name": "layout",
     "imports": [
-      "resources/js/app.tsx"
+      "resources/js/pages/home.tsx"
     ]
   },
-  "_layout-DRytsfjT.js": {
-    "file": "assets/layout-DRytsfjT.js",
+  "_layout-d2Z__Pc8.js": {
+    "file": "assets/layout-d2Z__Pc8.js",
     "name": "layout",
     "imports": [
-      "resources/js/app.tsx"
+      "resources/js/pages/home.tsx"
     ]
   },
-  "_select-D9tEQXsi.js": {
-    "file": "assets/select-D9tEQXsi.js",
-    "name": "select",
-    "imports": [
-      "resources/js/app.tsx",
-      "_utils-DHPi0CnU.js"
-    ]
-  },
-  "_utils-DHPi0CnU.js": {
-    "file": "assets/utils-DHPi0CnU.js",
+  "_utils-C0spas-Y.js": {
+    "file": "assets/utils-C0spas-Y.js",
     "name": "utils",
     "imports": [
-      "resources/js/app.tsx"
+      "resources/js/pages/home.tsx",
+      "_index-M82VqutJ.js"
     ]
   },
   "resources/css/app.css": {
@@ -41,10 +49,15 @@
     "isEntry": true
   },
   "resources/js/app.tsx": {
-    "file": "assets/app-Brt80gIY.js",
+    "file": "assets/app-CF-wQo7H.js",
     "name": "app",
     "src": "resources/js/app.tsx",
     "isEntry": true,
+    "imports": [
+      "resources/js/pages/home.tsx",
+      "_index-M82VqutJ.js",
+      "resources/js/pages/checkout.tsx"
+    ],
     "dynamicImports": [
       "resources/js/pages/404.tsx",
       "resources/js/pages/about.tsx",
@@ -66,153 +79,150 @@
     ]
   },
   "resources/js/pages/404.tsx": {
-    "file": "assets/404-DkpaNbbp.js",
+    "file": "assets/404-BTfuEG4Q.js",
     "name": "404",
     "src": "resources/js/pages/404.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js"
+      "resources/js/pages/home.tsx"
     ]
   },
   "resources/js/pages/about.tsx": {
-    "file": "assets/about-BJj9BkPr.js",
+    "file": "assets/about-BTfuEG4Q.js",
     "name": "about",
     "src": "resources/js/pages/about.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js"
+      "resources/js/pages/home.tsx"
     ]
   },
   "resources/js/pages/admin/booking.tsx": {
-    "file": "assets/booking-BP9R8h3O.js",
+    "file": "assets/booking-CASFe4iu.js",
     "name": "booking",
     "src": "resources/js/pages/admin/booking.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-69fc0IS_.js",
-      "_select-D9tEQXsi.js",
-      "_Calendar-BLNAF38Y.js",
-      "_utils-DHPi0CnU.js"
+      "resources/js/pages/home.tsx",
+      "resources/js/pages/admin/setting.tsx",
+      "_Calendar-tdxah6tI.js",
+      "resources/js/pages/checkout.tsx",
+      "_chevron-up-CVt-akz0.js",
+      "_utils-C0spas-Y.js",
+      "_index-M82VqutJ.js"
     ]
   },
   "resources/js/pages/admin/dashboard.tsx": {
-    "file": "assets/dashboard-Cqy70Phx.js",
+    "file": "assets/dashboard-DUBKl1lH.js",
     "name": "dashboard",
     "src": "resources/js/pages/admin/dashboard.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-69fc0IS_.js",
-      "_utils-DHPi0CnU.js"
+      "resources/js/pages/home.tsx",
+      "_utils-C0spas-Y.js",
+      "_index-M82VqutJ.js"
     ]
   },
   "resources/js/pages/admin/setting.tsx": {
-    "file": "assets/setting-DO5YReQ0.js",
+    "file": "assets/setting-CISVU9wO.js",
     "name": "setting",
     "src": "resources/js/pages/admin/setting.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-69fc0IS_.js",
-      "_select-D9tEQXsi.js",
-      "_utils-DHPi0CnU.js"
+      "resources/js/pages/home.tsx",
+      "_chevron-up-CVt-akz0.js",
+      "_utils-C0spas-Y.js",
+      "_index-M82VqutJ.js"
     ]
   },
   "resources/js/pages/admin/transactions.tsx": {
-    "file": "assets/transactions-B8bz1Xgr.js",
+    "file": "assets/transactions-BTfuEG4Q.js",
     "name": "transactions",
     "src": "resources/js/pages/admin/transactions.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-69fc0IS_.js"
+      "resources/js/pages/home.tsx"
     ]
   },
   "resources/js/pages/auth/login.tsx": {
-    "file": "assets/login-D08Zjwws.js",
+    "file": "assets/login-BTfuEG4Q.js",
     "name": "login",
     "src": "resources/js/pages/auth/login.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx"
+      "resources/js/pages/home.tsx"
     ]
   },
   "resources/js/pages/checkout.tsx": {
-    "file": "assets/checkout-5Tze7HBv.js",
+    "file": "assets/checkout-D3xdo3uc.js",
     "name": "checkout",
     "src": "resources/js/pages/checkout.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js"
+      "resources/js/pages/home.tsx"
     ]
   },
   "resources/js/pages/contact.tsx": {
-    "file": "assets/contact-BPnodm0g.js",
+    "file": "assets/contact-BTfuEG4Q.js",
     "name": "contact",
     "src": "resources/js/pages/contact.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js"
+      "resources/js/pages/home.tsx"
     ]
   },
   "resources/js/pages/home.tsx": {
-    "file": "assets/home-PFokJuVg.js",
+    "file": "assets/home-Mc8wXMEx.js",
     "name": "home",
     "src": "resources/js/pages/home.tsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js"
-    ]
+    "isEntry": true
   },
   "resources/js/pages/menu.tsx": {
-    "file": "assets/menu-D5Oi66vk.js",
+    "file": "assets/menu-BTfuEG4Q.js",
     "name": "menu",
     "src": "resources/js/pages/menu.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js"
+      "resources/js/pages/home.tsx"
     ]
   },
   "resources/js/pages/reservation.tsx": {
-    "file": "assets/reservation-C2fUY4L_.js",
+    "file": "assets/reservation-PyONNCWG.js",
     "name": "reservation",
     "src": "resources/js/pages/reservation.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js",
-      "_select-D9tEQXsi.js",
-      "_Calendar-BLNAF38Y.js",
-      "_utils-DHPi0CnU.js"
+      "resources/js/pages/home.tsx",
+      "_layout-d2Z__Pc8.js",
+      "resources/js/pages/admin/setting.tsx",
+      "_Calendar-tdxah6tI.js",
+      "resources/js/pages/checkout.tsx",
+      "_chevron-up-CVt-akz0.js",
+      "_utils-C0spas-Y.js",
+      "_index-M82VqutJ.js"
     ]
   },
   "resources/js/pages/staff/dashboard.tsx": {
-    "file": "assets/dashboard-C-UkgG4U.js",
+    "file": "assets/dashboard-DjUtwpy7.js",
     "name": "dashboard",
     "src": "resources/js/pages/staff/dashboard.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_select-D9tEQXsi.js",
-      "_Calendar-BLNAF38Y.js",
-      "_utils-DHPi0CnU.js"
+      "resources/js/pages/home.tsx",
+      "resources/js/pages/admin/setting.tsx",
+      "_Calendar-tdxah6tI.js",
+      "resources/js/pages/checkout.tsx",
+      "_chevron-up-CVt-akz0.js",
+      "_utils-C0spas-Y.js",
+      "_index-M82VqutJ.js"
     ]
   },
   "resources/js/pages/transaction.tsx": {
-    "file": "assets/transaction-DdqRLoPV.js",
+    "file": "assets/transaction-BTfuEG4Q.js",
     "name": "transaction",
     "src": "resources/js/pages/transaction.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
-      "resources/js/app.tsx",
-      "_layout-DRytsfjT.js"
+      "resources/js/pages/home.tsx"
     ]
   }
 }
