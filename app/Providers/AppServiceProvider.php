@@ -21,10 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Add this block:
-        if (Config::get('app.env') === 'local' && Config::get('app.url')) {
-            URL::forceRootUrl(Config::get('app.url'));
-            // If you are using HTTPS with Ngrok (which you are), it's good to force the scheme too
+        // Force HTTPS in production only
+        if (Config::get('app.env') === 'production') {
             URL::forceScheme('https');
         }
     }
