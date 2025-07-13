@@ -12,8 +12,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TimeSlotSeeder::class,
             SystemSettingSeeder::class,
-            ReservationSeeder::class,
-            July9ReservationSeeder::class,
+
         ]);
     }
 }
