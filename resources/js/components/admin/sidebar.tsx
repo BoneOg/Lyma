@@ -35,7 +35,7 @@ const AdminSidebar: React.FC = () => {
   const currentPage = getCurrentPage();
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-olive text-white flex flex-col shadow-xl z-20 border-r border-olive-light">
+    <div className="fixed top-0 left-0 h-screen w-64 bg-[#3c4119] text-white flex flex-col shadow-xl z-20 border-r border-olive-light">
       {/* Logo */}
       <div className="p-6 border-b border-olive-light">
         <Link href="/admin/dashboard" className="block overflow-hidden">

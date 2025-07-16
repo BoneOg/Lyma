@@ -144,7 +144,7 @@ class Reservation extends Model
     // Timer methods
     public function setExpirationTime(): void
     {
-        $this->update(['expires_at' => now()->addMinutes(10)]);
+        $this->update(['expires_at' => now()->addMinutes(30)]);
     }
 
     public function isExpired(): bool

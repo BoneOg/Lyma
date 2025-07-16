@@ -10,6 +10,7 @@ import CalendarSearch from './CalendarSearch';
 import ConfirmationModal from './ConfirmationModal';
 import QuickReservation from './QuickReservation';
 import { useNotification } from '../../contexts/NotificationContext';
+import { Check, X } from 'lucide-react';
 
 interface Reservation {
   id: number;
@@ -75,18 +76,12 @@ function compareTimeSlots(timeA: string, timeB: string): number {
   return parseTime(timeA) - parseTime(timeB);
 }
 
+// Update statusColors to use CSS variables
 const statusColors: Record<string, string> = {
-  confirmed: 'bg-green-200 text-green-900 border-green-400',
-  completed: 'bg-blue-200 text-blue-900 border-blue-400',
-  cancelled: 'bg-red-200 text-red-900 border-red-400',
+  confirmed: 'bg-[hsl(var(--primary))] text-white border-none ',
+  completed: 'bg-[hsl(var(--secondary))] text-black border-none',
+  cancelled: 'bg-[hsl(var(--destructive))] text-white border-none',
   all: 'bg-yellow-100 text-yellow-900 border-yellow-400',
-};
-
-const actionButtonColors: Record<string, string> = {
-  confirmed: 'bg-green-500 hover:bg-green-600',
-  completed: 'bg-blue-500 hover:bg-blue-600',
-  cancelled: 'bg-red-500 hover:bg-red-600',
-  all: 'bg-yellow-400 hover:bg-yellow-500 text-yellow-900',
 };
 
 const sortOptions = [
@@ -102,12 +97,9 @@ const sortOptions = [
   { value: 'date-desc', label: 'Reservation Date (Latest-Earliest)' },
 ];
 
-const months = [
-  'All', 'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
 
-const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+
+
 
 const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpointPrefix, timeSlots, systemSettings }) => {
   const { showNotification } = useNotification();
@@ -116,7 +108,10 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('date-asc');
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(() => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  });
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -126,14 +121,10 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
     reservationId: number;
     reservationName: string;
   } | null>(null);
-  const [actionLoading, setActionLoading] = useState(false);
+
   const [showQuickReservation, setShowQuickReservation] = useState(false);
 
-  // Get unique years from reservations
-  const years = React.useMemo(() => {
-    const y = Array.from(new Set(reservations.map(r => r.reservation_date.slice(0, 4))));
-    return ['All', ...y.sort()];
-  }, [reservations]);
+
 
   useEffect(() => {
     setLoading(true);
@@ -241,7 +232,7 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
   const executeAction = async () => {
     if (!confirmAction) return;
 
-    setActionLoading(true);
+
     try {
       const endpoint = confirmAction.type === 'complete' 
         ? `${endpointPrefix || '/admin'}/api/reservations/${confirmAction.reservationId}/complete`
@@ -282,7 +273,6 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
       console.error('Error executing action:', error);
       showNotification(`Failed to ${confirmAction.type} reservation. Please try again.`, 'error');
     } finally {
-      setActionLoading(false);
       setShowConfirmModal(false);
       setConfirmAction(null);
     }
@@ -326,115 +316,140 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
   };
 
   return (
-    <div className="bg-white rounded-4xl shadow-lg p-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <h2 className="text-2xl text-[#3f411a] font-lexend font-bold">Reservations</h2>
-        <div className="flex flex-wrap gap-2 items-center w-full md:w-auto justify-end">
+    <div className="bg-white border border-primary-light h-[450px] shadow-lg p-6 flex flex-col">
+      <div className="flex gap-4 mb-2">
+        {/* Search with icon, short height */}
+        <div className="flex items-center flex-1 gap-3 basis-[55%] h-10 border-primary-light border bg-primary-light text-olive font-lexend px-2 py-1 transition-all duration-300 hover:scale-[1.02] focus-within:ring-1 focus-within:ring-olive focus-within:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-olive mr-1 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+          </svg>
+          <input
+            type="text"
+            className="flex-1 bg-transparent outline-none border-none px-0 py-0"
+            placeholder="Search by guest name, email, number or details..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
+        {/* Date with icon, short height */}
         <button
-            onClick={() => setShowQuickReservation(true)}
-            className="rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300 hover:bg-[#e8e6b3] transition-colors"
-            title="Quick Reservation"
-          >
-            +
-          </button>
+          onClick={() => setShowCalendar(true)}
+          className="flex items-center basis-[15%] gap-3 h-10 border-primary-light border bg-primary-light text-olive font-lexend font-light px-2 py-1 transition-all duration-300 hover:scale-[1.09] focus:ring-1 focus:ring-olive focus:outline-none"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-olive mr-1 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" strokeWidth="2" />
+            <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          {getButtonText()}
+        </button>
+        {/* Sort dropdown with icon, short height */}
+        <div className="flex items-center basis-[30%] gap-3 h-10 border-primary-light border bg-primary-light text-olive font-lexend font-light px-2 py-1 rounded-none transition-all duration-300 hover:scale-[1.02] focus-within:ring-1 focus-within:ring-olive outline-none focus-within:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-olive mr-1 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-6.414 6.414A2 2 0 0013 14.586V19a1 1 0 01-1.447.894l-2-1A1 1 0 019 18v-3.414a2 2 0 00-.586-1.414L2 6.707A1 1 0 012 6V4z" />
+          </svg>
           <Select value={sort} onValueChange={setSort}>
-            <SelectTrigger className="w-100 rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300">
+            <SelectTrigger className="shadcn-select-trigger flex-1 bg-transparent border-none outline-none shadow-none px-0 py-0 focus:outline-none focus:ring-0 focus:ring-transparent focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="w-100 bg-[#f6f5c6] py-2 text-[#3f411a] border-[#f6f5c6]">
+            <SelectContent className="bg-[#f6f5c6] py-2 text-[#3f411a] border-[#f6f5c6]">
               {sortOptions.map(opt => (
-                <SelectItem key={opt.value} value={opt.value} className="text-[#3f411a] hover:bg-[#e8e6b3] focus:bg-[#e8e6b3] font-lexend">
+                <SelectItem key={opt.value} value={opt.value} className="text-[#3f411a] hover:bg-[#e8e6b3] outline-none  font-lexend font-light">
                   {opt.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          
-          <button
-            onClick={() => setShowCalendar(true)}
-            className="rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300 hover:bg-[#e8e6b3] transition-colors"
-          >
-            {getButtonText()}
-          </button>
-          
-          <input
-            type="text"
-            className="w-68 rounded-xl bg-[#f6f5c6] text-[#3f411a] font-lexend border-none px-4 py-2 focus:ring-2 focus:ring-yellow-300"
-            placeholder="Search..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
         </div>
       </div>
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading...</div>
+        <div className="text-center py-8 font-lexend font-light text-gray-500">Loading...</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-8 font-lexend text-gray-500">No reservations found.</div>
       ) : (
-        <table className="w-full text-left font-lexend">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="py-3 px-3 font-regular">First Name</th>
-              <th className="py-3 px-6 font-regular">Last Name</th>
-              <th className="py-3 px-3 font-regular">Reservation Date</th>
-              <th className="py-3 px-1 text-center font-regular">Time Slot</th>
-              <th className="py-3 px-3 text-center font-regular">Guests</th>
-              <th className="py-3 px-3 text-center font-regular">Status</th>
-              <th className="py-3 px-3 text-center font-regular">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((r) => (
-              <React.Fragment key={r.id}>
-                <tr
-                  className={`cursor-pointer hover:bg-yellow-50 transition ${expanded === r.id ? 'bg-yellow-50' : ''}`}
-                  onClick={() => handleExpand(r.id)}
-                >
-                  <td className="py-6 px-3 font-light">{r.guest_first_name}</td>
-                  <td className="py-6 px-6 font-light">{r.guest_last_name}</td>
-                  <td className="py-6 px-3 font-light">{formatDate(r.reservation_date)}</td>
-                  <td className="py-6 px-1 text-center font-light">{r.time_slot || '-'}</td>
-                  <td className="py-6 px-3 text-center font-light">{r.guest_count}</td>
-                  <td className="py-6 px-3 text-center">
-                    <span className={`inline-block px-3 py-1 rounded-full border text-xs font-extralight capitalize ${statusColors[r.status] || 'bg-gray-200 text-gray-700 border-gray-300'}`}>
-                      {r.status}
-                    </span>
-                  </td>
-                  <td className="py-6 px-3 text-center">
-                    {r.status !== 'completed' && r.status !== 'cancelled' && (
-                      <div className="flex gap-2 justify-center">
-                        <button
-                          className="bg-blue-200 hover:bg-blue-300 text-blue-900 border-blue-400 border px-3 py-1 rounded text-xs font-extralight"
-                          onClick={e => { e.stopPropagation(); handleComplete(r.id, r.guest_first_name, r.guest_last_name); }}
-                        >
-                          Complete
-                        </button>
-                        <button
-                          className="bg-red-200 hover:bg-red-300 text-red-900 border-red-400 border px-3 py-1 rounded text-xs font-extralight"
-                          onClick={e => { e.stopPropagation(); handleCancel(r.id, r.guest_first_name, r.guest_last_name); }}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-                {expanded === r.id && (
-                  <tr className="bg-yellow-50">
-                    <td colSpan={7} className="py-3 px-3">
-                      <div className="flex flex-col gap-2 text-sm text-[#3f411a] font-light">
-                        <div><b>Email:</b> {r.email}</div>
-                        <div><b>Phone:</b> {r.phone}</div>
-                        <div><b>Created At:</b> {formatDate(r.created_at)}</div>
-                        <div><b>Updated At:</b> {formatDate(r.updated_at)}</div>
+        <div className="w-full flex-1 min-h-0 overflow-y-auto">
+          <table className="w-full text-left font-lexend table-fixed">
+            <colgroup>
+              <col style={{ width: '170px' }} />
+              <col style={{ width: '90px' }} />
+              <col style={{ width: '105px' }} />
+              <col style={{ width: '80px' }} />
+              <col style={{ width: '70px' }} />
+              <col style={{ width: '95px' }} />
+              <col style={{ width: '95px' }} />
+            </colgroup>
+            <thead>
+              <tr className="border-b border-gray-200 bg-white sticky top-0 z-10">
+                <th className="py-3 px-5 font-medium truncate">First Name</th>
+                <th className="py-3 px-2 font-medium truncate">Last Name</th>
+                <th className="py-3 px-2 font-medium truncate text-center">Reservation Date</th>
+                <th className="py-3 px-1 font-medium truncate text-center">Time Slot</th>
+                <th className="py-3 px-1 font-medium truncate text-center">Guests</th>
+                <th className="py-3 px-1 font-medium text-center truncate">Status</th>
+                <th className="py-3 px-1 font-medium text-center truncate">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((r) => (
+                <React.Fragment key={r.id}>
+                  <tr
+                    className={`cursor-pointer hover:bg-gray-100 transition ${expanded === r.id ? 'bg-gray-100' : ''}${expanded === r.id ? '' : ' border-b border-gray-200'}`}
+                    onClick={() => handleExpand(r.id)}
+                  >
+                    <td className="py-5 px-5 font-regular truncate align-top" style={{ wordBreak: 'break-word' }}>{r.guest_first_name}</td>
+                    <td className="py-5 px-2 font-regular truncate align-top" style={{ wordBreak: 'break-word' }}>{r.guest_last_name}</td>
+                    <td className="py-5 px-2 font-regular truncate align-top text-center" style={{ wordBreak: 'break-word' }}>{formatDate(r.reservation_date)}</td>
+                    <td className="py-5 px-1 font-regular truncate align-top text-center" style={{ wordBreak: 'break-word' }}>{r.time_slot || '-'}</td>
+                    <td className="py-5 px-1 font-regular truncate align-top text-center" style={{ wordBreak: 'break-word' }}>{r.guest_count}</td>
+                    <td className="py-4 px-1 text-center align-top">
+                      <span
+                        className={`inline-flex items-center justify-center border text-xs font-extralight capitalize ${statusColors[r.status] || 'bg-gray-200 text-gray-700 border-gray-300'}`}
+                        style={{ width: '100px', height: '32px', borderRadius: '16px', fontWeight: 300 }}
+                      >
+                        {r.status}
+                      </span>
+                    </td>
+                    <td className="py-4 px-1 text-center align-top" style={{ minWidth: '70px' }}>
+                      <div style={{ minHeight: '34px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {r.status !== 'completed' && r.status !== 'cancelled' && (
+                          <div className="flex gap-2 justify-center">
+                            <button
+                              className="group h-10 w-10 flex items-center justify-center rounded-md bg-transparent border-none hover:bg-green-100 focus-visible:bg-green-100 transition-colors"
+                              title="Complete"
+                              style={{ lineHeight: 0 }}
+                              onClick={e => { e.stopPropagation(); handleComplete(r.id, r.guest_first_name, r.guest_last_name); }}
+                            >
+                              <Check className="w-8 h-8 text-green-600 group-hover:text-green-800 group-focus-visible:text-green-800 transition-colors" />
+                            </button>
+                            <button
+                              className="group h-10 w-10 flex items-center justify-center rounded-md bg-transparent border-none hover:bg-red-100 focus-visible:bg-red-100 transition-colors"
+                              title="Cancel"
+                              style={{ lineHeight: 0 }}
+                              onClick={e => { e.stopPropagation(); handleCancel(r.id, r.guest_first_name, r.guest_last_name); }}
+                            >
+                              <X className="w-8 h-8 text-red-600 group-hover:text-red-800 group-focus-visible:text-red-800 transition-colors" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+                  {expanded === r.id ? (
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                      <td colSpan={7} className="py-3 px-3">
+                        <div className="flex flex-col gap-2 text-sm text-[#3f411a] font-light">
+                          <div><b>Email:</b> {r.email}</div>
+                          <div><b>Phone:</b> {r.phone}</div>
+                          <div><b>Created At:</b> {formatDate(r.created_at)}</div>
+                          <div><b>Updated At:</b> {formatDate(r.updated_at)}</div>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
       
       <CalendarSearch

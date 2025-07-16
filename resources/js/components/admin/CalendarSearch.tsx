@@ -31,6 +31,8 @@ const CalendarSearch: React.FC<CalendarSearchProps> = ({
     }
     return new Date().getFullYear();
   });
+  const [showMonthYearPanel, setShowMonthYearPanel] = useState(false);
+  const [panelYear, setPanelYear] = useState(currentYear);
   const [showMonthDropdown, setShowMonthDropdown] = useState(false);
   const [showYearDropdown, setShowYearDropdown] = useState(false);
 
@@ -134,7 +136,7 @@ const CalendarSearch: React.FC<CalendarSearchProps> = ({
         <div
           key={day}
           onClick={() => handleDateClick(day)}
-          className={`cursor-pointer transition-colors h-8 flex items-center justify-center rounded-lg ${
+          className={`cursor-pointer transition-colors h-8 flex items-center justify-center rounded-lg font-lexend ${
             isSelected
               ? 'bg-[#f6f5c6] text-[#3f411a]'
               : 'text-[#3f411a] hover:bg-[#f6f5c6] hover:text-[#3f411a]'
@@ -156,7 +158,7 @@ const CalendarSearch: React.FC<CalendarSearchProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 shadow-lg max-w-sm w-full mx-4">
+      <div className="bg-beige-light rounded p-8 shadow-lg max-w-lg w-full mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-semibold text-[#3f411a] font-lexend">Select Date</h3>
           <button
@@ -171,112 +173,89 @@ const CalendarSearch: React.FC<CalendarSearchProps> = ({
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={handlePreviousMonth}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 rounded hover:bg-olive-light hover:text-beige-light transition-colors"
+            aria-label="Previous Month"
           >
-            <svg className="w-5 h-5 text-[#3f411a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          
-          <div className="flex items-center gap-2">
-            {/* Month Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setShowMonthDropdown(!showMonthDropdown)}
-                className="px-3 py-1 text-lg font-semibold text-[#3f411a] font-lexend hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                {currentMonth}
-                <svg className="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {showMonthDropdown && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[120px]">
+          <div className="relative mx-2 flex-1 flex justify-center">
+            <button
+              onClick={() => { setShowMonthYearPanel(!showMonthYearPanel); setPanelYear(currentYear); }}
+              className="px-4 py-2 text-lg font-semibold text-[#3f411a] font-lexend rounded hover:bg-gray-300 transition-colors text-center whitespace-nowrap"
+              style={{ minWidth: 140 }}
+            >
+              {currentMonth} {currentYear}
+            </button>
+            {showMonthYearPanel && (
+              <div className="absolute left-1/2 -translate-x-1/2 mt-3 bg-[#fcfcef] border border-gray-400 rounded-lg shadow-lg z-10 min-w-[380px] p-4">
+                <div className="relative mb-4">
+                  <button onClick={() => setPanelYear(panelYear - 1)} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-olive-light hover:text-beige-light transition-colors">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <span className="block text-xl font-semibold text-[#3f411a] font-lexend select-none text-center">{panelYear}</span>
+                  <button onClick={() => setPanelYear(panelYear + 1)} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-olive-light hover:text-beige-light transition-colors">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+                <div className="grid grid-cols-3 gap-1 mb-4">
                   {months.map((month) => (
                     <button
                       key={month}
-                      onClick={() => handleMonthSelect(month)}
-                      className={`block w-full text-left px-3 py-2 hover:bg-gray-100 transition-colors font-lexend ${
-                        month === currentMonth ? 'bg-[#f6f5c6] text-[#3f411a]' : 'text-[#3f411a]'
-                      }`}
+                      onClick={() => {
+                        setCurrentMonth(month);
+                        setCurrentYear(panelYear);
+                        setShowMonthYearPanel(false);
+                      }}
+                      className={`flex items-center justify-center px-6 py-3 hover:bg-olive hover:text-beige cursor-pointer transition-colors rounded font-lexend text-olive text-sm ${month === currentMonth && panelYear === currentYear ? 'bg-olive text-beige  font-medium' : ''}`}
                     >
                       {month}
                     </button>
                   ))}
                 </div>
-              )}
-            </div>
-
-            {/* Year Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setShowYearDropdown(!showYearDropdown)}
-                className="px-3 py-1 text-lg font-semibold text-[#3f411a] font-lexend hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                {currentYear}
-                <svg className="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {showYearDropdown && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[80px]">
-                  {years.map((year) => (
-                    <button
-                      key={year}
-                      onClick={() => handleYearSelect(year)}
-                      className={`block w-full text-left px-3 py-2 hover:bg-gray-100 transition-colors font-lexend ${
-                        year === currentYear ? 'bg-[#f6f5c6] text-[#3f411a]' : 'text-[#3f411a]'
-                      }`}
-                    >
-                      {year}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                <button onClick={() => setShowMonthYearPanel(false)} className="w-full mt-2 px-3 py-2 text-base text-olive font-lexend bg-gray-200 hover:bg-gray-300 text-gray-700 transition-colors cursor-pointer rounded">Close</button>
+              </div>
+            )}
           </div>
-
           <button
             onClick={handleNextMonth}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 rounded hover:bg-olive-light hover:text-beige-light transition-colors"
+            aria-label="Next Month"
           >
-            <svg className="w-5 h-5 text-[#3f411a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-          </button>
-        </div>
-
-        {/* Select This Month Button */}
-        <div className="mb-4">
-          <button
-            onClick={handleSelectThisMonth}
-            className="w-full bg-[#f6f5c6] hover:bg-[#e8e6b3] text-[#3f411a] py-2 px-4 rounded-lg transition-colors font-lexend text-sm"
-          >
-            Select This Month
           </button>
         </div>
 
         {/* Calendar Grid */}
         <div className="grid grid-cols-7 text-center gap-y-2 mb-4">
           {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
-            <div key={day} className="text-sm font-medium text-gray-500 font-lexend">{day}</div>
+            <div key={day} className="text-base font-medium text-gray-500 font-lexend">{day}</div>
           ))}
           {renderCalendar()}
         </div>
-
+        {/* Select This Month Button (moved below grid) */}
+        <div className="mb-4">
+          <button
+            onClick={handleSelectThisMonth}
+            className="w-full bg-[#f6f5c6] hover:bg-[#e8e6b3] text-[#3f411a] py-2 px-4 rounded-lg transition-colors font-lexend text-base"
+          >
+            Select This Month
+          </button>
+        </div>
         {/* Action Buttons */}
         <div className="flex gap-3">
-          {selectedDate && (
-            <button
-              onClick={handleClearDate}
-              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg transition-colors font-lexend"
-            >
-              Clear
-            </button>
-          )}
+          <button
+            onClick={handleClearDate}
+            className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg transition-colors font-lexend text-base"
+          >
+            Clear
+          </button>
           <button
             onClick={onClose}
-            className="flex-1 bg-[#f6f5c6] hover:bg-[#e8e6b3] text-[#3f411a] py-2 px-4 rounded-lg transition-colors font-lexend"
+            className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg transition-colors font-lexend text-base"
           >
             Close
           </button>

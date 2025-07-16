@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import AdminLayout from '@/components/admin/layout';
 import ReservationTable from '@/components/admin/ReservationTable';
+import QuickReservation from '@/components/admin/QuickReservation';
+import { Plus } from 'lucide-react';
 
 interface Props {
   timeSlots: any[];
@@ -15,27 +17,27 @@ type CardStatus = typeof cardStatuses[number];
 
 const cardData: { label: string; color: string; activeColor: string; status: CardStatus }[] = [
   { 
-    label: 'Confirmed Reservation', 
-    color: 'bg-green-200 hover:bg-green-300 text-green-900 border-green-400', 
-    activeColor: 'bg-green-300 text-green-900 border-green-500 ring-4 ring-green-300',
+    label: 'CONFIRMED\nRESERVATION', 
+    color: 'border-primary-light bg-primary-light text-primary',
+    activeColor: 'border-olive bg-olive text-white ring-2 ring-primary ring-offset-2',
     status: 'confirmed' 
   },
   { 
-    label: 'Completed Reservation', 
-    color: 'bg-blue-200 hover:bg-blue-300 text-blue-900 border-blue-400', 
-    activeColor: 'bg-blue-300 text-blue-900 border-blue-500 ring-4 ring-blue-300',
+    label: 'COMPLETED\nRESERVATION', 
+    color: 'border-primary-light bg-primary-light text-primary',
+    activeColor: 'border-olive bg-olive text-white ring-2 ring-primary ring-offset-2',
     status: 'completed' 
   },
   { 
-    label: 'Cancelled Reservation', 
-    color: 'bg-red-200 hover:bg-red-300 text-red-900 border-red-400', 
-    activeColor: 'bg-red-300 text-red-900 border-red-500 ring-4 ring-red-300',
+    label: 'CANCELLED\nRESERVATION', 
+    color: 'border-primary-light bg-primary-light text-primary',
+    activeColor: 'border-olive bg-olive text-white ring-2 ring-primary ring-offset-2',
     status: 'cancelled' 
   },
   { 
-    label: 'All Reservation', 
-    color: 'bg-yellow-100 hover:bg-yellow-200 text-yellow-900 border-yellow-400', 
-    activeColor: 'bg-yellow-200 text-yellow-900 border-yellow-500 ring-4 ring-yellow-300',
+    label: 'ALL\nRESERVATION', 
+    color: 'border-primary-light bg-primary-light text-primary',
+    activeColor: 'border-olive bg-olive text-white ring-2 ring-primary ring-offset-2',
     status: 'all' 
   },
 ];
@@ -49,6 +51,7 @@ const Booking: React.FC = () => {
     all: 0,
   });
   const [activeStatus, setActiveStatus] = useState<CardStatus>('all');
+  const [showQuickReservation, setShowQuickReservation] = useState(false);
 
   const fetchCounts = () => {
     fetch('/admin/api/reservation-counts')
@@ -77,19 +80,24 @@ const Booking: React.FC = () => {
 
   return (
     <AdminLayout>
-      <p className="text-olive text-4xl font-bold px-12 py-10 font-lexend">BOOKING</p>
+      <div className="flex flex-col items-center px-12 py-10">
+        <p className="text-olive text-7xl font-thin font-lexend text-center">BOOKING</p>
+        <div className="w-50 h-[1px] bg-olive mt-6" style={{ opacity: 0.5 }} />
+      </div>
       {/* Horizontal clickable cards */}
       <div className="px-12 flex gap-6 mb-8">
-        {cardData.map((card) => (
+        {cardData.map((card, idx) => (
           <button
             key={card.label}
-            className={`flex-1 rounded-2xl shadow border-2 p-8 font-lexend font-light text-xl transition-all duration-200 cursor-pointer ${
-              activeStatus === card.status ? card.activeColor : card.color
+            className={`flex-1 border-2 p-8 font-lexend font-light text-xl transition-all duration-300 cursor-pointer shadow-card hover:scale-[1.03] ${
+              activeStatus === card.status
+                ? card.activeColor
+                : card.color
             }`}
             onClick={() => setActiveStatus(card.status)}
           >
             <div className="flex flex-col items-center justify-center">
-              <span>{card.label}</span>
+              <span>{card.label.split('\n').map((line, i) => (<React.Fragment key={i}>{line}<br /></React.Fragment>))}</span>
               <span className="mt-4 text-4xl font-bold tracking-wide">{counts[card.status]}</span>
             </div>
           </button>
@@ -97,9 +105,25 @@ const Booking: React.FC = () => {
       </div>
       {/* Bottom row - Full width container */}
       <div className="px-12">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl text-[#3f411a] font-lexend font-light">All Reservations</h2>
+          <button
+            onClick={() => setShowQuickReservation(true)}
+            className="bg-[#3c4119] text-sm text-white font-lexend font-light border-none px-6 py-4 hover:bg-[#525a1f] transition-colors flex items-center gap-2"
+          >
+            <Plus size={18} /> New Reservation
+          </button>
+        </div>
         <ReservationTable 
           status={activeStatus} 
           onReservationUpdate={handleReservationUpdate}
+          timeSlots={timeSlots}
+          systemSettings={systemSettings}
+        />
+        <QuickReservation
+          isOpen={showQuickReservation}
+          onClose={() => setShowQuickReservation(false)}
+          onReservationCreated={handleReservationUpdate}
           timeSlots={timeSlots}
           systemSettings={systemSettings}
         />

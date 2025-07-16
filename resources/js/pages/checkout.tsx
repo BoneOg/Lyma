@@ -126,13 +126,13 @@ export default function Checkout() {
             </h1>
 
             {/* Timer */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <Timer 
                 expiresAt={expiresAt} 
                 onExpired={handleExpired}
                 onAlmostExpired={handleAlmostExpired}
               />
-            </div>
+            </div> */}
 
             {/* Reservation Details */}
             <div className="space-y-4 mb-8">

@@ -9,47 +9,125 @@
   --color-beige: #f5f5c3;
   --color-beige-light: #fcfcef;
   --color-beige-dark: #e2e2a8;
+
+  --background: 45 15% 96%;
+  --foreground: 20 14% 4%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 20 14% 4%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14% 4%;
+
+  --primary: 85 20% 25%;
+  --primary-foreground: 0 0% 98%;
+
+  --secondary: 40 25% 88%;
+  --secondary-foreground: 20 14% 4%;
+
+  --destructive: 0 62% 45%;
+
+  --muted: 45 20% 92%;
+  --muted-foreground: 85 8% 46%;
+
+  --accent: 40 35% 82%;
+  --accent-foreground: 20 14% 4%;
+
+  --border: 45 25% 85%;
+  --input: 45 25% 85%;
+  --ring: 85 20% 25%;
+
+  /* Luxury gradients */
+  --gradient-luxury: linear-gradient(135deg, hsl(85 20% 25%), hsl(40 35% 82%));
+  --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(45 20% 96%));
+  
+  /* Elegant shadows */
+  --shadow-luxury: 0 8px 32px -4px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 4px 20px -2px hsl(20 14% 4% / 0.08);
+
+  --radius: 0.5rem;
+
+  --sidebar-background: 0 0% 98%;
+
+  --sidebar-foreground: 240 5.3% 26.1%;
+
+  --sidebar-primary: 240 5.9% 10%;
+
+  --sidebar-primary-foreground: 0 0% 98%;
+
+  --sidebar-accent: 240 4.8% 95.9%;
+
+  --sidebar-accent-foreground: 240 5.9% 10%;
+
+  --sidebar-border: 220 13% 91%;
+
+  --sidebar-ring: 217.2 91.2% 59.8%;
+
+  --primary-a: 85 20% 25% / 0.05;
+  --primary-a-hover: 85 20% 25% / 0.5;
+  --primary-border-a: 85 20% 25% / 0.2;
 }
 
 @font-face {
   font-family: 'LexendGiga';
-  src: url('/assets/font/lexendgiga.ttf') format('truetype');
+  src: url('/assets/font/LexendGiga-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LexendGiga';
+  src: url('/assets/font/LexendGiga-ExtraLight.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'LexendGiga';
-  src: url('/assets/font/lexendgiga.ttf') format('truetype');
+  src: url('/assets/font/LexendGiga-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'LexendGiga';
-  src: url('/assets/font/lexendgiga.ttf') format('truetype');
-  font-weight: normal;
+  src: url('/assets/font/LexendGiga-Regular.ttf') format('truetype');
+  font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'LexendGiga';
-  src: url('/assets/font/lexendgiga.ttf') format('truetype');
+  src: url('/assets/font/LexendGiga-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'LexendGiga';
-  src: url('/assets/font/lexendgiga.ttf') format('truetype');
+  src: url('/assets/font/LexendGiga-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'LexendGiga';
-  src: url('/assets/font/lexendgiga.ttf') format('truetype');
+  src: url('/assets/font/LexendGiga-Bold.ttf') format('truetype');
   font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LexendGiga';
+  src: url('/assets/font/LexendGiga-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LexendGiga';
+  src: url('/assets/font/LexendGiga-Black.ttf') format('truetype');
+  font-weight: 900;
   font-style: normal;
 }
 
@@ -129,6 +207,174 @@
   border-color: var(--color-beige-dark);
 }
 
+.bg-background {
+  background-color: hsl(var(--background));
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-luxury {
+  box-shadow: var(--shadow-luxury);
+}
+
+.bg-foreground {
+  background-color: hsl(var(--foreground));
+}
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+.bg-card {
+  background-color: hsl(var(--card));
+}
+.text-card-foreground {
+  color: hsl(var(--card-foreground));
+}
+.bg-popover {
+  background-color: hsl(var(--popover));
+}
+.text-popover-foreground {
+  color: hsl(var(--popover-foreground));
+}
+.bg-primary {
+  background-color: hsl(var(--primary));
+}
+.text-primary {
+  color: hsl(var(--primary));
+}
+.border-primary {
+  border-color: hsl(var(--primary));
+}
+.text-primary-foreground {
+  color: hsl(var(--primary-foreground));
+}
+.bg-secondary {
+  background-color: hsl(var(--secondary));
+}
+.text-secondary {
+  color: hsl(var(--secondary));
+}
+.text-secondary-foreground {
+  color: hsl(var(--secondary-foreground));
+}
+.bg-muted {
+  background-color: hsl(var(--muted));
+}
+.text-muted {
+  color: hsl(var(--muted));
+}
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+.bg-accent {
+  background-color: hsl(var(--accent));
+}
+.text-accent {
+  color: hsl(var(--accent));
+}
+.text-accent-foreground {
+  color: hsl(var(--accent-foreground));
+}
+.bg-border {
+  background-color: hsl(var(--border));
+}
+.border-border {
+  border-color: hsl(var(--border));
+}
+.bg-input {
+  background-color: hsl(var(--input));
+}
+.border-input {
+  border-color: hsl(var(--input));
+}
+.bg-ring {
+  background-color: hsl(var(--ring));
+}
+.border-ring {
+  border-color: hsl(var(--ring));
+}
+.bg-gradient-luxury {
+  background-image: var(--gradient-luxury);
+}
+.bg-gradient-subtle {
+  background-image: var(--gradient-subtle);
+}
+.bg-sidebar-background {
+  background-color: hsl(var(--sidebar-background));
+}
+.text-sidebar-foreground {
+  color: hsl(var(--sidebar-foreground));
+}
+.bg-sidebar-primary {
+  background-color: hsl(var(--sidebar-primary));
+}
+.text-sidebar-primary-foreground {
+  color: hsl(var(--sidebar-primary-foreground));
+}
+.bg-sidebar-accent {
+  background-color: hsl(var(--sidebar-accent));
+}
+.text-sidebar-accent-foreground {
+  color: hsl(var(--sidebar-accent-foreground));
+}
+.border-sidebar-border {
+  border-color: hsl(var(--sidebar-border));
+}
+.border-sidebar-ring {
+  border-color: hsl(var(--sidebar-ring));
+}
+
+.bg-primary-light {
+  background-color: hsl(var(--primary-a));
+}
+.bg-primary-hover {
+  background-color: hsl(var(--primary-a-hover));
+}
+.border-primary-light {
+  border-color: hsl(var(--primary-border-a));
+}
+
+.hover\:text-beige:hover {
+  color: var(--color-beige);
+}
+.hover\:text-beige-light:hover {
+  color: var(--color-beige-light);
+}
+.hover\:text-beige-dark:hover {
+  color: var(--color-beige-dark);
+}
+.hover\:text-olive:hover {
+  color: var(--color-olive);
+}
+.hover\:text-olive-light:hover {
+  color: var(--color-olive-light);
+}
+.hover\:text-olive-dark:hover {
+  color: var(--color-olive-dark);
+}
+.hover\:bg-olive:hover {
+  background-color: var(--color-olive);
+}
+.hover\:bg-beige:hover {
+  background-color: var(--color-beige);
+}
+.hover\:bg-beige-light:hover {
+  background-color: var(--color-beige-light);
+}
+.hover\:bg-beige-dark:hover {
+  background-color: var(--color-beige-dark);
+}
+.hover\:bg-olive:hover {
+  background-color: var(--color-olive);
+}
+.hover\:bg-olive-light:hover {
+  background-color: var(--color-olive-light);
+}
+.hover\:bg-olive-dark:hover {
+  background-color: var(--color-olive-dark);
+}
+
 @keyframes slide-up {
   from {
     transform: translateY(100%);
@@ -142,4 +388,10 @@
 
 .animate-slide-up {
   animation: slide-up 0.3s ease-out;
+}
+
+.shadcn-select-trigger:focus,
+.shadcn-select-trigger:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
 }

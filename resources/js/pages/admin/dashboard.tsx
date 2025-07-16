@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminLayout from '@/components/admin/layout';
-import { ChartAreaInteractive } from '@/components/ChartAreaInteractive';
+
 import { SectionCards } from '@/components/SectionCards';
 
 const Dashboard: React.FC = () => {
@@ -17,10 +17,7 @@ const Dashboard: React.FC = () => {
           <SectionCards />
         </div>
         
-        {/* Chart Section */}
-        <div className="px-12">
-          <ChartAreaInteractive />
-        </div>
+
       </div>
     </AdminLayout>
   );
