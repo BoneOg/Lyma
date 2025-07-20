@@ -21,7 +21,7 @@ class AuthController extends Controller
             if ($user->isAdmin()) {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->isStaff()) {
-                return redirect()->route('staff.dashboard');
+                return redirect()->route('staff.booking');
             }
         }
 
@@ -44,7 +44,7 @@ class AuthController extends Controller
 
             if (Gate::allows('staff')) {
                 Inertia::clearHistory();
-                return Inertia::location(route('staff.dashboard'));
+                return Inertia::location(route('staff.booking'));
             }
 
             Auth::logout();

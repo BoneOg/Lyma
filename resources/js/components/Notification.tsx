@@ -15,7 +15,7 @@ const Notification: React.FC<NotificationProps> = ({
   isVisible,
   onClose,
   duration = 5000,
-  position = 'bottom-right'
+  position = 'bottom-right' // This prop is now handled by the provider container
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -36,34 +36,15 @@ const Notification: React.FC<NotificationProps> = ({
   const getTypeStyles = () => {
     switch (type) {
       case 'success':
-        return 'bg-green-200 text-green-900 border-green-400 border-2';
+        return 'bg-[hsl(var(--primary))] text-white border-[hsl(var(--primary))] border-2';
       case 'error':
-        return 'bg-red-200 text-red-900 border-red-400 border-2';
+        return 'bg-[hsl(var(--destructive))] text-white border-[hsl(var(--destructive))] border-2';
       case 'warning':
         return 'bg-yellow-100 text-yellow-900 border-yellow-400 border-2';
       case 'info':
         return 'bg-blue-200 text-blue-900 border-blue-400 border-2';
       default:
         return 'bg-gray-200 text-gray-900 border-gray-400 border-2';
-    }
-  };
-
-  const getPositionStyles = () => {
-    switch (position) {
-      case 'top-right':
-        return 'top-4 right-4';
-      case 'top-left':
-        return 'top-4 left-4';
-      case 'bottom-right':
-        return 'bottom-4 right-4';
-      case 'bottom-left':
-        return 'bottom-4 left-4';
-      case 'top-center':
-        return 'top-4 left-1/2 transform -translate-x-1/2';
-      case 'bottom-center':
-        return 'bottom-4 left-1/2 transform -translate-x-1/2';
-      default:
-        return 'bottom-4 right-4';
     }
   };
 
@@ -99,8 +80,9 @@ const Notification: React.FC<NotificationProps> = ({
   };
 
   return (
+    // Removed fixed positioning - now uses relative positioning within flex container
     <div
-      className={`fixed ${getPositionStyles()} z-50 transition-all duration-300 ease-in-out ${
+      className={`relative transition-all duration-300 ease-in-out ${
         isAnimating ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       }`}
     >
@@ -127,4 +109,4 @@ const Notification: React.FC<NotificationProps> = ({
   );
 };
 
-export default Notification; 
+export default Notification;

@@ -57,4 +57,14 @@ class SystemSetting extends Model
     {
         return (int) self::get('capacity', 5);
     }
+
+    public static function getRestaurantName(): string
+    {
+        return self::get('restaurant_name', 'Lyma By Chef Marc');
+    }
+
+    public static function getRestaurantAddress(): string
+    {
+        return self::get('restaurant_address', 'Tourism Road General Luna, Siargao Island');
+    }
 }

@@ -5,10 +5,12 @@ interface ReservationFormProps {
   lastName: string;
   email: string;
   phone: string;
+  specialRequests: string;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
+  onSpecialRequestsChange: (value: string) => void;
   formatSelectedDateTime: () => string;
 }
 
@@ -17,10 +19,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   lastName,
   email,
   phone,
+  specialRequests,
   onFirstNameChange,
   onLastNameChange,
   onEmailChange,
   onPhoneChange,
+  onSpecialRequestsChange,
   formatSelectedDateTime
 }) => {
   const handleNameInput = (value: string, setter: (value: string) => void) => {
@@ -36,9 +40,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   }
 
   const handlePhoneInput = (value: string) => {
-    // Only allow numbers, spaces, hyphens, and plus signs, limit to 12 characters
+    // Only allow numbers, spaces, hyphens, and plus signs, limit to 15 characters
     const phoneRegex = /^[\d\s\-\+]*$/
-    if (phoneRegex.test(value) && value.length <= 12) {
+    if (phoneRegex.test(value) && value.length <= 15) {
       onPhoneChange(value)
     }
   }
@@ -90,23 +94,28 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         />
       </div>
       
-      <div>
-        <label className="block text-base font-extralight font-lexend mb-2">Phone Number</label>
-        <div className="relative">
-          <div className="flex items-center bg-transparent border-b border-white pb-2">
-            <span className="text-white text-base font-extralight mr-1 select-none">+</span>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => handlePhoneInput(e.target.value)}
-              className="flex-1 bg-transparent text-white outline-none text-base font-extralight font-lexend pr-12"
-              placeholder="63"
-              required
-            />
-            <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">
-              {phone.length}/12
-            </span>
-          </div>
+      {/* Phone Number and Special Requests */}
+      <div className="flex space-x-6">
+        <div className="flex-1">
+          <label className="block text-base font-extralight font-lexend mb-2">Phone Number</label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => handlePhoneInput(e.target.value)}
+            className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
+            placeholder="+1 234 567 8901"
+            required
+          />
+        </div>
+        <div className="flex-1">
+          <label className="block text-base font-extralight font-lexend mb-2">Special Requests</label>
+          <input
+            type="text"
+            value={specialRequests}
+            onChange={(e) => onSpecialRequestsChange(e.target.value)}
+            className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
+            placeholder="ex. Food Allergies"
+          />
         </div>
       </div>
     </div>

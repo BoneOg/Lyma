@@ -11,6 +11,8 @@ interface TimeSlot {
 
 interface SystemSettings {
   max_advance_booking_days: number;
+  min_guest_size?: number;
+  max_guest_size?: number;
 }
 
 interface UseReservationProps {
@@ -23,17 +25,21 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
   // Form state
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<number | null>(
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<number | string | null>(
     timeSlots.length > 0 ? timeSlots[0].id : null
   );
-  const [guestCount, setGuestCount] = useState(1);
+  const [guestCount, setGuestCount] = useState(systemSettings.min_guest_size || 1);
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('63');
+  const [phone, setPhone] = useState('');
+  const [specialRequests, setSpecialRequests] = useState('');
   const [occupiedTimeSlots, setOccupiedTimeSlots] = useState<number[]>([]);
+  const [disabledTimeSlots, setDisabledTimeSlots] = useState<number[]>([]);
   const [fullyBookedDates, setFullyBookedDates] = useState<number[]>([]);
+  const [closedDates, setClosedDates] = useState<number[]>([]);
+  const [specialHoursData, setSpecialHoursData] = useState<{[key: number]: {special_start: string, special_end: string}}>({});
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   
@@ -71,9 +77,11 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     }
   }, []);
 
-  // Fetch fully booked dates when month changes
+  // Fetch fully booked dates, closed dates, and special hours dates when month changes
   useEffect(() => {
     fetchFullyBookedDates();
+    fetchClosedDates();
+    fetchSpecialHoursDates();
   }, [selectedMonth, selectedYear]);
 
   // Date calculations
@@ -88,6 +96,39 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     } catch (error) {
       console.error('Error fetching fully booked dates:', error);
       setFullyBookedDates([]);
+    }
+  };
+
+  const fetchClosedDates = async () => {
+    try {
+      const response = await fetch(`/reservations/closed-dates?month=${selectedMonth + 1}&year=${selectedYear}`);
+      const data = await response.json();
+      setClosedDates(data.closed_dates || []);
+    } catch (error) {
+      console.error('Error fetching closed dates:', error);
+      setClosedDates([]);
+    }
+  };
+
+  const fetchSpecialHoursDates = async () => {
+    try {
+      const response = await fetch(`/reservations/special-hours-dates?month=${selectedMonth + 1}&year=${selectedYear}`);
+      const data = await response.json();
+      const specialHoursMap: {[key: number]: {special_start: string, special_end: string}} = {};
+      
+      if (data.special_hours_data) {
+        data.special_hours_data.forEach((item: any) => {
+          specialHoursMap[item.day] = {
+            special_start: item.special_start,
+            special_end: item.special_end
+          };
+        });
+      }
+      
+      setSpecialHoursData(specialHoursMap);
+    } catch (error) {
+      console.error('Error fetching special hours dates:', error);
+      setSpecialHoursData({});
     }
   };
 
@@ -112,6 +153,11 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
       return true;
     }
 
+    // Check if date is completely closed
+    if (closedDates.includes(day)) {
+      return true;
+    }
+
     return false;
   };
 
@@ -120,23 +166,24 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     return fullyBookedDates.includes(day);
   };
 
+  // New function to check if a date is closed (for grey color)
+  const isDateClosed = (day: number) => {
+    return closedDates.includes(day);
+  };
+
+  // New function to check if a date has special hours (for yellow color)
+  const isDateSpecialHours = (day: number) => {
+    return specialHoursData.hasOwnProperty(day);
+  };
+
+  // New function to get special hours for a specific date
+  const getSpecialHoursForDate = (day: number) => {
+    return specialHoursData[day] || null;
+  };
+
   // Helper function to check if a time slot is admin-disabled for the selected date
   const isTimeSlotAdminDisabled = (timeSlotId: number) => {
-    if (!selectedDate) return false;
-    
-    const monthName = months[selectedMonth];
-    const dateKey = `${monthName}-${selectedDate}`;
-    const disabledSlots = adminDisabledTimeSlots.get(dateKey);
-    
-    if (disabledSlots) {
-      // Check if this specific time slot is disabled
-      const timeSlot = timeSlots.find(slot => slot.id === timeSlotId);
-      if (timeSlot) {
-        return disabledSlots.has(timeSlot.start_time_formatted);
-      }
-    }
-    
-    return false;
+    return disabledTimeSlots.includes(timeSlotId);
   };
 
   const fetchOccupiedTimeSlots = async (date: string) => {
@@ -144,9 +191,11 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
       const response = await fetch(`/reservations/occupied-time-slots?date=${date}`);
       const data = await response.json();
       setOccupiedTimeSlots(data.occupied_time_slots || []);
+      setDisabledTimeSlots(data.disabled_time_slots || []);
     } catch (error) {
       console.error('Error fetching occupied time slots:', error);
       setOccupiedTimeSlots([]);
+      setDisabledTimeSlots([]);
     }
   };
 
@@ -154,15 +203,29 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     setSelectedDate(day);
     const formattedDate = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     fetchOccupiedTimeSlots(formattedDate);
-  };
-
-  // Reset time slot if it becomes occupied
-  useEffect(() => {
-    if (selectedTimeSlot && occupiedTimeSlots.includes(selectedTimeSlot)) {
-      const firstAvailableSlot = timeSlots.find(slot => !occupiedTimeSlots.includes(slot.id));
+    
+    // Auto-select special hours if the selected date has special hours
+    if (isDateSpecialHours(day)) {
+      setSelectedTimeSlot('special-hours');
+    } else {
+      // Reset to first available time slot for regular dates
+      const firstAvailableSlot = timeSlots.find(slot => 
+        !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id)
+      );
       setSelectedTimeSlot(firstAvailableSlot?.id || null);
     }
-  }, [occupiedTimeSlots, selectedTimeSlot, timeSlots]);
+  };
+
+  // Reset time slot if it becomes occupied or disabled
+  useEffect(() => {
+    if (selectedTimeSlot && typeof selectedTimeSlot === 'number' && 
+        (occupiedTimeSlots.includes(selectedTimeSlot) || disabledTimeSlots.includes(selectedTimeSlot))) {
+      const firstAvailableSlot = timeSlots.find(slot => 
+        !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id)
+      );
+      setSelectedTimeSlot(firstAvailableSlot?.id || null);
+    }
+  }, [occupiedTimeSlots, disabledTimeSlots, selectedTimeSlot, timeSlots]);
 
   const formatSelectedDateTime = () => {
     const parts = [];
@@ -177,9 +240,16 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     
     // Add time if selected
     if (selectedTimeSlot) {
-      const selectedTime = timeSlots.find(slot => slot.id === selectedTimeSlot);
-      if (selectedTime) {
-        parts.push(selectedTime.start_time_formatted);
+      if (selectedTimeSlot === 'special-hours') {
+        const specialHours = getSpecialHoursForDate(selectedDate!);
+        if (specialHours) {
+          parts.push(`${specialHours.special_start} - ${specialHours.special_end} (Special Hours)`);
+        }
+      } else {
+        const selectedTime = timeSlots.find(slot => slot.id === selectedTimeSlot);
+        if (selectedTime) {
+          parts.push(selectedTime.start_time_formatted);
+        }
       }
     }
     
@@ -197,7 +267,7 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
   const isFormValid = () => {
     return selectedDate &&
       selectedTimeSlot &&
-      !occupiedTimeSlots.includes(selectedTimeSlot) &&
+      (selectedTimeSlot === 'special-hours' || (!occupiedTimeSlots.includes(selectedTimeSlot as number) && !disabledTimeSlots.includes(selectedTimeSlot as number))) &&
       firstName.trim() &&
       lastName.trim() &&
       email.trim() &&
@@ -223,9 +293,11 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
         guest_last_name: lastName.trim(),
         guest_email: email.trim(),
         guest_phone: phone.trim(),
+        special_requests: specialRequests.trim(),
         reservation_date: `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`,
-        time_slot_id: selectedTimeSlot,
+        time_slot_id: selectedTimeSlot === 'special-hours' ? null : selectedTimeSlot,
         guest_count: guestCount,
+        is_special_hours: selectedTimeSlot === 'special-hours',
       };
 
       router.post('/reservations', formData);
@@ -252,8 +324,12 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     lastName,
     email,
     phone,
+    specialRequests,
     occupiedTimeSlots,
+    disabledTimeSlots,
     fullyBookedDates,
+    closedDates,
+    specialHoursData,
     showConfirmationModal,
     isBooking,
     months,
@@ -269,10 +345,14 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     setLastName,
     setEmail,
     setPhone,
+    setSpecialRequests,
     
     // Functions
     isDateDisabled,
     isDateFullyBooked,
+    isDateClosed,
+    isDateSpecialHours,
+    getSpecialHoursForDate,
     isTimeSlotAdminDisabled,
     handleDateSelect,
     formatSelectedDateTime,

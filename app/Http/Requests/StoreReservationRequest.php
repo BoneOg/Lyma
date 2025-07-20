@@ -48,6 +48,11 @@ class StoreReservationRequest extends FormRequest
                 'max:20',
                 'regex:/^[\d\s\-\+]+$/',
             ],
+            'special_requests' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
             'reservation_date' => [
                 'required',
                 'date',
@@ -55,20 +60,31 @@ class StoreReservationRequest extends FormRequest
                 'before_or_equal:' . $this->getMaxBookingDate(),
             ],
             'time_slot_id' => [
-                'required',
+                'nullable',
                 'exists:time_slots,id',
                 function ($attribute, $value, $fail) {
-                    $timeSlot = TimeSlot::find($value);
-                    if (!$timeSlot || !$timeSlot->is_active) {
-                        $fail('The selected time slot is not available.');
+                    if ($value !== null) {
+                        $timeSlot = TimeSlot::find($value);
+                        if (!$timeSlot || !$timeSlot->is_active) {
+                            $fail('The selected time slot is not available.');
+                        }
                     }
                 },
+                function ($attribute, $value, $fail) {
+                    $isSpecialHours = $this->input('is_special_hours', false);
+                    if ($value === null && !$isSpecialHours) {
+                        $fail('Either a time slot must be selected or special hours must be enabled.');
+                    }
+                },
+            ],
+            'is_special_hours' => [
+                'boolean',
             ],
             'guest_count' => [
                 'required',
                 'integer',
-                'min:1',
-                'max:8',
+                'min:' . SystemSetting::get('min_guest_size', 1),
+                'max:' . SystemSetting::get('max_guest_size', 10),
             ],
         ];
     }
@@ -91,14 +107,15 @@ class StoreReservationRequest extends FormRequest
             'guest_email.email' => 'Please enter a valid email address.',
             'guest_phone.required' => 'Phone number is required.',
             'guest_phone.regex' => 'Phone number may only contain numbers, spaces, hyphens, and plus signs.',
+            'special_requests.max' => 'Special requests cannot exceed 500 characters.',
             'reservation_date.required' => 'Reservation date is required.',
             'reservation_date.after_or_equal' => "Reservations must be made for future dates.",
             'reservation_date.before_or_equal' => "Reservations can only be made up to {$maxAdvanceDays} days in advance.",
-            'time_slot_id.required' => 'Time slot is required.',
+
             'time_slot_id.exists' => 'Selected time slot is invalid.',
             'guest_count.required' => 'Number of guests is required.',
-            'guest_count.min' => 'At least 1 guest is required.',
-            'guest_count.max' => 'Maximum of 8 guests allowed.',
+            'guest_count.min' => 'At least ' . SystemSetting::get('min_guest_size', 1) . ' guest is required.',
+            'guest_count.max' => 'Maximum of ' . SystemSetting::get('max_guest_size', 10) . ' guests allowed.',
         ];
     }
 
@@ -130,6 +147,7 @@ class StoreReservationRequest extends FormRequest
             'guest_last_name' => trim($this->guest_last_name ?? ''),
             'guest_email' => trim($this->guest_email ?? ''),
             'guest_phone' => trim($this->guest_phone ?? ''),
+            'special_requests' => trim($this->special_requests ?? ''),
         ]);
     }
 }

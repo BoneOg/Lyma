@@ -7,10 +7,11 @@ interface Reservation {
   guest_last_name: string;
   guest_email: string;
   guest_phone: string;
+  special_requests?: string;
   reservation_date: string;
   guest_count: number;
   status: string;
-  time_slot: {
+  time_slot?: {
     id: number;
     start_time: string;
     end_time: string;
@@ -22,9 +23,13 @@ interface TransactionProps {
   reservation: Reservation | null;
   paymentStatus: 'success' | 'failed' | 'cancelled';
   statusMessage: string;
+  specialHoursData?: {
+    special_start: string;
+    special_end: string;
+  };
 }
 
-const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, statusMessage }) => {
+const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, statusMessage, specialHoursData }) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -117,6 +122,13 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
                     <span className="text-[#f6f5c6] font-bold">Phone:</span>
                     <span className="text-white ml-2">{reservation.guest_phone}</span>
                   </div>
+                  
+                  {reservation.special_requests && (
+                    <div>
+                      <span className="text-[#f6f5c6] font-bold">Special Requests:</span>
+                      <span className="text-white ml-2">{reservation.special_requests}</span>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-4">
@@ -131,7 +143,14 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
                   
                   <div>
                     <span className="text-[#f6f5c6] font-bold">Time:</span>
-                    <span className="text-white ml-2">{reservation.time_slot.start_time} - {reservation.time_slot.end_time}</span>
+                    <span className="text-white ml-2">
+                      {specialHoursData 
+                        ? `${specialHoursData.special_start} - ${specialHoursData.special_end} (Special Hours)`
+                        : reservation.time_slot 
+                          ? `${reservation.time_slot.start_time} - ${reservation.time_slot.end_time}`
+                          : 'Time not specified'
+                      }
+                    </span>
                   </div>
                   
                   <div>

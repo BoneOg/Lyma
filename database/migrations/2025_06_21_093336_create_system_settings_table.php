@@ -24,6 +24,23 @@ return new class extends Migration
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        // Insert default guest size settings
+        DB::table('system_settings')->insert([
+            'setting_key' => 'min_guest_size',
+            'setting_value' => 1,
+            'description' => 'Minimum number of guests allowed per reservation',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('system_settings')->insert([
+            'setting_key' => 'max_guest_size',
+            'setting_value' => 10,
+            'description' => 'Maximum number of guests allowed per reservation',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     public function down(): void

@@ -33,7 +33,9 @@ export default function Reservation() {
     lastName,
     email,
     phone,
+    specialRequests,
     occupiedTimeSlots,
+    disabledTimeSlots,
     showConfirmationModal,
     isBooking,
     months,
@@ -49,10 +51,14 @@ export default function Reservation() {
     setLastName,
     setEmail,
     setPhone,
+    setSpecialRequests,
     
     // Functions
     isDateDisabled,
     isDateFullyBooked,
+    isDateClosed,
+    isDateSpecialHours,
+    getSpecialHoursForDate,
     isTimeSlotAdminDisabled,
     handleDateSelect,
     formatSelectedDateTime,
@@ -102,7 +108,7 @@ export default function Reservation() {
                       <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#3f411a] border-white text-white">
+                      <SelectContent className="bg-[#3f411a] border-white text-white max-h-none overflow-y-visible">
                         {months.map((month, index) => (
                           <SelectItem 
                             key={month} 
@@ -141,35 +147,76 @@ export default function Reservation() {
                   </div>
 
                   {/* Time */}
-                  <div className="relative w-36">
+                  <div className="relative w-40">
                     <label className="block text-base font-extralight font-lexend mb-2">Time</label>
                     <Select 
                       value={selectedTimeSlot?.toString() || ''}
-                      onValueChange={(value) => setSelectedTimeSlot(parseInt(value))}
+                      onValueChange={(value) => {
+                        if (value === 'special-hours') {
+                          setSelectedTimeSlot('special-hours');
+                        } else {
+                          setSelectedTimeSlot(parseInt(value));
+                        }
+                      }}
                     >
-                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
-                        <SelectValue />
+                      <SelectTrigger className={`bg-transparent border-b border-white text-white w-full font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto text-left ${
+                        selectedTimeSlot === 'special-hours' ? 'py-3 text-xs' : 'py-2 text-base'
+                      }`}>
+                        <SelectValue>
+                          {(() => {
+                            if (selectedTimeSlot === 'special-hours') {
+                              return 'Special Hours';
+                            } else if (selectedTimeSlot && typeof selectedTimeSlot === 'number') {
+                              const selectedTime = timeSlots.find(slot => slot.id === selectedTimeSlot);
+                              return selectedTime ? selectedTime.start_time_formatted : '';
+                            }
+                            return '';
+                          })()}
+                        </SelectValue>
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white">
-                        {timeSlots.map((slot) => {
-                          const isOccupied = occupiedTimeSlots.includes(slot.id)
-                          const isAdminDisabled = isTimeSlotAdminDisabled(slot.id)
-                          const isDisabled = isOccupied || isAdminDisabled
+                        {(() => {
+                          // Check if selected date has special hours
+                          const specialHours = selectedDate ? getSpecialHoursForDate(selectedDate) : null;
                           
-                          return (
-                            <SelectItem 
-                              key={slot.id} 
-                              value={slot.id.toString()} 
-                              className={`bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5a5d2a] focus:bg-[#5a5d2a] ${isDisabled ? 'text-gray-100' : ''}`}
-                              disabled={isDisabled}
-                            >
-                              {slot.start_time_formatted} {
-                                isOccupied ? '(Fully Booked)' : 
-                                isAdminDisabled ? '(Unavailable)' : ''
-                              }
-                            </SelectItem>
-                          )
-                        })}
+                          if (specialHours) {
+                            // Show special hours time range
+                            return (
+                              <SelectItem 
+                                value="special-hours" 
+                                className="bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5a5d2a] focus:bg-[#5a5d2a]"
+                              >
+                                {specialHours.special_start} - {specialHours.special_end} (Special Hours)
+                              </SelectItem>
+                            );
+                          } else {
+                            // Show regular time slots
+                            return timeSlots.map((slot) => {
+                              const isOccupied = occupiedTimeSlots.includes(slot.id)
+                              const isAdminDisabled = disabledTimeSlots.includes(slot.id)
+                              const isDisabled = isOccupied || isAdminDisabled
+                              
+                              return (
+                                <SelectItem 
+                                  key={slot.id} 
+                                  value={slot.id.toString()} 
+                                  className={`bg-[#3f411a] font-extralight font-lexend focus:bg-[#5a5d2a] relative ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-[#5a5d2a]'} ${isOccupied ? '!opacity-100' : ''} ${isAdminDisabled ? '!opacity-100' : ''}`}
+                                  disabled={isDisabled}
+                                >
+                                  <span className={isOccupied ? 'text-[#D4847C]' : isAdminDisabled ? 'text-[#5295bb]' : 'text-white'}>
+                                    {slot.start_time_formatted}
+                                  </span>
+                                  {isOccupied && (
+                                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
+                                  )}
+                                  {isAdminDisabled && !isOccupied && (
+                                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#5295bb] rounded-full opacity-100"></div>
+                                  )}
+                                </SelectItem>
+                              )
+                            });
+                          }
+                        })()}
                       </SelectContent>
                     </Select>
                   </div>
@@ -185,15 +232,25 @@ export default function Reservation() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white">
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                          <SelectItem 
-                            key={num} 
-                            value={num.toString()} 
-                            className="bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5a5d2a] focus:bg-[#5a5d2a]"
-                          >
-                            {num}
-                          </SelectItem>
-                        ))}
+                        {(() => {
+                          const minGuest = systemSettings.min_guest_size || 1;
+                          const maxGuest = systemSettings.max_guest_size || 10;
+                          const guestOptions = [];
+                          
+                          for (let i = minGuest; i <= maxGuest; i++) {
+                            guestOptions.push(i);
+                          }
+                          
+                          return guestOptions.map((num) => (
+                            <SelectItem 
+                              key={num} 
+                              value={num.toString()} 
+                              className="bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5a5d2a] focus:bg-[#5a5d2a]"
+                            >
+                              {num}
+                            </SelectItem>
+                          ));
+                        })()}
                       </SelectContent>
                     </Select>
                   </div>
@@ -207,8 +264,47 @@ export default function Reservation() {
                   onDateSelect={handleDateSelect}
                   isDateDisabled={isDateDisabled}
                   isDateFullyBooked={isDateFullyBooked}
+                  isDateClosed={isDateClosed}
+                  isDateSpecialHours={isDateSpecialHours}
                   months={months}
+                  className="grid grid-cols-7 text-center gap-y-7 text-white text-lg"
+                  dayClassName={(day, { isDisabled, isFullyBooked, isSelected, isClosed, isSpecialHours }) => {
+                    let className = 'transition-colors w-8 h-8 flex items-center justify-center font-lexend font-extralight relative';
+                    
+                    if (isClosed) {
+                      className += ' text-[#5295bb] cursor-not-allowed';
+                    } else if (isFullyBooked) {
+                      className += ' text-[#D4847C] cursor-not-allowed';
+                    } else if (isSelected && isSpecialHours) {
+                      className += ' bg-[#f6f5c6] text-[#C5A572] font-semibold  rounded-full cursor-pointer';
+                    } else if (isSelected) {
+                      className += ' bg-[#f6f5c6] text-[#3f411a] font-semibold rounded-full cursor-pointer';
+                    } else if (isSpecialHours) {
+                      className += ' text-[#C5A572] hover:text-beige-dark cursor-pointer';
+                    } else if (isDisabled) {
+                      className += ' text-gray-400 cursor-not-allowed';
+                    } else {
+                      className += ' text-white hover:text-beige-dark cursor-pointer';
+                    }
+                    return className;
+                  }}  
                 />
+
+                {/* Legend */}
+                <div className="flex justify-center items-center space-x-6 mt-6">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-[#D4847C]"></div>
+                    <span className="text-white font-extralight font-lexend text-sm">Fully Booked</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-[#C5A572]"></div>
+                    <span className="text-white font-extralight font-lexend text-sm">Special Hours</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-[#5295bb]"></div>
+                    <span className="text-white font-extralight font-lexend text-sm">Closed</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -219,10 +315,12 @@ export default function Reservation() {
                 lastName={lastName}
                 email={email}
                 phone={phone}
+                specialRequests={specialRequests}
                 onFirstNameChange={setFirstName}
                 onLastNameChange={setLastName}
                 onEmailChange={setEmail}
                 onPhoneChange={setPhone}
+                onSpecialRequestsChange={setSpecialRequests}
                 formatSelectedDateTime={formatSelectedDateTime}
               />
 
@@ -270,6 +368,12 @@ export default function Reservation() {
                 <p className="text-white font-extralight font-lexend">{email}</p>
                 <p className="text-white font-extralight font-lexend">{phone}</p>
               </div>
+              {specialRequests && (
+                <div className="border-b border-white pb-2">
+                  <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Special Requests:</span>
+                  <p className="text-white font-extralight font-lexend">{specialRequests}</p>
+                </div>
+              )}
             </div>
 
             <div className="flex space-x-4">

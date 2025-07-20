@@ -20,6 +20,7 @@ interface Reservation {
   guest_last_name: string;
   guest_email: string;
   guest_phone: string;
+  special_requests?: string;
   reservation_date: string;
   guest_count: number;
   status: string;
@@ -33,10 +34,11 @@ interface Props {
     guest_last_name: string;
     guest_email: string;
     guest_phone: string;
+    special_requests?: string;
     reservation_date: string;
     guest_count: number;
     status: string;
-    time_slot: {
+    time_slot?: {
       id: number;
       start_time: string;
       end_time: string;
@@ -44,13 +46,17 @@ interface Props {
     };
   };
   expiresAt: string;
+  specialHoursData?: {
+    special_start: string;
+    special_end: string;
+  };
   [key: string]: any;
 }
 // --- End of your existing interfaces ---
 
 
 export default function Checkout() {
-  const { reservation, expiresAt } = usePage<Props>().props;
+  const { reservation, expiresAt, specialHoursData } = usePage<Props>().props;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { showNotification } = useNotification();
@@ -150,6 +156,12 @@ export default function Checkout() {
                 <span className="text-[#3f411a]/80 font-lexend font-extralight">Phone</span>
                 <span className="text-[#3f411a] font-lexend font-medium">{reservation.guest_phone}</span>
               </div>
+              {reservation.special_requests && (
+                <div className="flex justify-between items-center py-3 border-b border-[#3f411a]/20">
+                  <span className="text-[#3f411a]/80 font-lexend font-extralight">Special Requests</span>
+                  <span className="text-[#3f411a] font-lexend font-medium max-w-xs text-right">{reservation.special_requests}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center py-3 border-b border-[#3f411a]/20">
                 <span className="text-[#3f411a]/80 font-lexend font-extralight">Date</span>
                 <span className="text-[#3f411a] font-lexend font-medium">{formatDate(reservation.reservation_date)}</span>
@@ -161,7 +173,12 @@ export default function Checkout() {
               <div className="flex justify-between items-center py-3 border-b border-[#3f411a]/20">
                 <span className="text-[#3f411a]/80 font-lexend font-extralight">Time</span>
                 <span className="text-[#3f411a] font-lexend font-medium">
-                  {reservation.time_slot.start_time} - {reservation.time_slot.end_time}
+                  {specialHoursData 
+                    ? `${specialHoursData.special_start} - ${specialHoursData.special_end} (Special Hours)`
+                    : reservation.time_slot 
+                      ? `${reservation.time_slot.start_time} - ${reservation.time_slot.end_time}`
+                      : 'Time not specified'
+                  }
                 </span>
               </div>
               <div className="flex justify-between items-center py-3">

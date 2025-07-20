@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('guest_last_name', 50)->nullable();
             $table->string('guest_email', 100)->nullable();
             $table->string('guest_phone', 20)->nullable();
+            $table->text('special_requests')->nullable();
             
             // Reservation details
             $table->date('reservation_date');

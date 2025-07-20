@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'admin',
             'name' => 'Admin User',
-            'password' => Hash::make('Lyma.Adm1n'),
+            'password' => Hash::make('123123123'),
             'role' => 'admin',
         ]);
 
@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'staff',
             'name' => 'Staff Member',
-            'password' => Hash::make('Lyma.$taff'),
+            'password' => Hash::make('123123123'),
             'role' => 'staff',
         ]);
 

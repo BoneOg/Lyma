@@ -1,0 +1,47 @@
+import React from 'react';
+
+interface ConfirmationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  message: string;
+  type: 'complete' | 'cancel';
+}
+
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  type
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
+      <div className="bg-background text-olive rounded p-6 shadow-lg max-w-md w-full mx-4">
+        <h3 className="text-xl mb-4 font-lexend font-semibold tracking-tighter">{title}</h3>
+        <p className="text-olive mb-6 font-lexend font-light tracking-tight">{message}</p>
+        
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 bg-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive)/0.8)] text-white border-none py-3 px-4 rounded font-regular transition-colors font-lexend cursor-pointer"
+          >
+            No
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 bg-olive hover:bg-olive-light text-white border-none py-3 px-4 rounded font-regular transition-colors font-lexend cursor-pointer"
+          >
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ConfirmationModal; 

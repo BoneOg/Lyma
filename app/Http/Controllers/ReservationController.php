@@ -31,6 +31,8 @@ class ReservationController extends Controller
 
         $systemSettings = [
             'max_advance_booking_days' => SystemSetting::getMaxAdvanceBookingDays(),
+            'min_guest_size' => (int) SystemSetting::get('min_guest_size'),
+            'max_guest_size' => (int) SystemSetting::get('max_guest_size'),
         ];
 
         return Inertia::render('reservation', [
@@ -56,7 +58,16 @@ class ReservationController extends Controller
             ->pluck('time_slot_id')
             ->toArray();
 
-        return response()->json(['occupied_time_slots' => $occupiedTimeSlots]);
+        // Get disabled time slots for this date
+        $disabledTimeSlots = \App\Models\DisabledTimeSlot::where('date', $date)
+            ->whereNotNull('time_slot_id')
+            ->pluck('time_slot_id')
+            ->toArray();
+
+        return response()->json([
+            'occupied_time_slots' => $occupiedTimeSlots,
+            'disabled_time_slots' => $disabledTimeSlots
+        ]);
     }
 
     public function getFullyBookedDates(Request $request)
@@ -94,6 +105,98 @@ class ReservationController extends Controller
         return response()->json(['fully_booked_dates' => $fullyBookedDates]);
     }
 
+    public function getClosedDates(Request $request)
+    {
+        $request->validate([
+            'month' => 'required|integer|between:1,12',
+            'year' => 'required|integer|min:2024',
+        ]);
+
+        $month = $request->month;
+        $year = $request->year;
+
+        // Get all dates in the month that are completely closed
+        $closedDates = \App\Models\DisabledTimeSlot::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->whereNull('time_slot_id')
+            ->where('is_closed', true)
+            ->get()
+            ->map(function ($row) {
+                return Carbon::parse($row->date)->day;
+            })
+            ->toArray();
+
+        return response()->json(['closed_dates' => $closedDates]);
+    }
+
+    public function getSpecialHoursDates(Request $request)
+    {
+        $request->validate([
+            'month' => 'required|integer|between:1,12',
+            'year' => 'required|integer|min:2024',
+        ]);
+
+        $month = $request->month;
+        $year = $request->year;
+
+        // Get all dates in the month that have special hours with their time ranges
+        $specialHoursData = \App\Models\DisabledTimeSlot::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->whereNull('time_slot_id')
+            ->where('is_closed', false)
+            ->whereNotNull('special_start')
+            ->whereNotNull('special_end')
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'day' => Carbon::parse($row->date)->day,
+                    'special_start' => Carbon::parse($row->special_start)->format('g:i A'),
+                    'special_end' => Carbon::parse($row->special_end)->format('g:i A'),
+                ];
+            })
+            ->toArray();
+
+        return response()->json(['special_hours_data' => $specialHoursData]);
+    }
+
+    // Get minimum guest size setting
+    public function getMinGuestSize()
+    {
+        try {
+            $value = SystemSetting::get('min_guest_size');
+            
+            return response()->json([
+                'success' => true,
+                'value' => $value
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting minimum guest size', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get minimum guest size setting'
+            ], 500);
+        }
+    }
+
+    // Get maximum guest size setting
+    public function getMaxGuestSize()
+    {
+        try {
+            $value = SystemSetting::get('max_guest_size');
+            
+            return response()->json([
+                'success' => true,
+                'value' => $value
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting maximum guest size', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get maximum guest size setting'
+            ], 500);
+        }
+    }
+
     public function store(StoreReservationRequest $request)
     {
         $validated = $request->validated();
@@ -107,6 +210,7 @@ class ReservationController extends Controller
                 'guest_last_name' => $validated['guest_last_name'],
                 'guest_email' => $validated['guest_email'],
                 'guest_phone' => $validated['guest_phone'],
+                'special_requests' => $validated['special_requests'] ?? null,
                 'reservation_date' => $validated['reservation_date'],
                 'time_slot_id' => $validated['time_slot_id'],
                 'guest_count' => $validated['guest_count'],

@@ -53,6 +53,7 @@
         "framer-motion": "^12.18.1",
         "globals": "^15.14.0",
         "laravel-vite-plugin": "^1.0",
+        "libphonenumber-js": "^1.12.10",
         "lucide-react": "^0.475.0",
         "motion": "^12.18.1",
         "react": "^19.0.0",

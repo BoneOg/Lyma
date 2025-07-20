@@ -14,17 +14,19 @@ const Navbar: React.FC = () => {
       <div className="mx-[100px]">
         <div className="flex justify-between items-center h-16 relative">
           {/* Logo - Left Side */}
-          <div className="flex-shrink-0 z-10 overflow-hidden w-32">
-            <Link href="/" className="block">
+          <div className="flex-shrink-0 z-10 overflow-visible w-32 h-18 flex items-center justify-center relative">
+            <Link href="/" className=" w-full h-full flex items-center justify-center">
               <img 
-                src="/assets/images/lyma.png" 
+                src="/assets/logo/lymaonly_beige.webp" 
                 alt="Lyma by Chef Mar" 
-                className="h-12 w-auto object-cover object-center"
+                className="h-12 w-auto object-contain object-center"
                 style={{
                   objectPosition: 'center',
-                  objectFit: 'cover',
-                  transform: 'scale(8) translateX(4px)',
-                  transformOrigin: 'center'
+                  objectFit: 'contain',
+                  transform: 'scale(1.8)',
+                  transformOrigin: 'center',
+                  position: 'relative',
+                  top: '16px'
                 }}
               />
             </Link>

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use App\Models\DisabledTimeSlot;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class StaffController extends Controller
 {
-    public function dashboard()
+
+    public function booking()
     {
         $timeSlots = \App\Models\TimeSlot::active()
             ->select('id', 'start_time', 'end_time')
@@ -25,9 +27,11 @@ class StaffController extends Controller
 
         $systemSettings = [
             'max_advance_booking_days' => \App\Models\SystemSetting::getMaxAdvanceBookingDays(),
+            'min_guest_size' => \App\Models\SystemSetting::get('min_guest_size'),
+            'max_guest_size' => \App\Models\SystemSetting::get('max_guest_size'),
         ];
 
-        return Inertia::render('staff/dashboard', [
+        return Inertia::render('staff/staffbooking', [
             'timeSlots' => $timeSlots,
             'systemSettings' => $systemSettings,
         ]);
@@ -51,6 +55,17 @@ class StaffController extends Controller
             $query->where('status', $status);
         }
         $reservations = $query->with('timeSlot')->orderByDesc('created_at')->get()->map(function ($r) {
+            // Get special hours data if this is a special hours reservation
+            $specialHoursData = null;
+            if (!$r->time_slot_id) {
+                $specialHoursData = \App\Models\DisabledTimeSlot::where('date', $r->reservation_date)
+                    ->whereNull('time_slot_id')
+                    ->where('is_closed', false)
+                    ->whereNotNull('special_start')
+                    ->whereNotNull('special_end')
+                    ->first();
+            }
+            
             return [
                 'id' => $r->id,
                 'guest_first_name' => $r->guest_first_name,
@@ -61,8 +76,13 @@ class StaffController extends Controller
                 'status' => $r->status,
                 'email' => $r->guest_email,
                 'phone' => $r->guest_phone,
+                'special_requests' => $r->special_requests,
                 'created_at' => $r->created_at,
                 'updated_at' => $r->updated_at,
+                'special_hours_data' => $specialHoursData ? [
+                    'special_start' => \Carbon\Carbon::parse($specialHoursData->special_start)->format('g:i A'),
+                    'special_end' => \Carbon\Carbon::parse($specialHoursData->special_end)->format('g:i A'),
+                ] : null,
             ];
         });
         return response()->json(['reservations' => $reservations]);
@@ -161,9 +181,11 @@ class StaffController extends Controller
             'guest_last_name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
             'guest_email' => ['required', 'email', 'max:100'],
             'guest_phone' => ['required', 'string', 'max:20', 'regex:/^[\d\s\-\+]+$/'],
+            'special_requests' => ['nullable', 'string', 'max:500'],
             'reservation_date' => ['required', 'date', 'after_or_equal:today'],
-            'time_slot_id' => ['required', 'exists:time_slots,id'],
-            'guest_count' => ['required', 'integer', 'min:1', 'max:8'],
+            'time_slot_id' => ['nullable', 'exists:time_slots,id'],
+            'guest_count' => ['required', 'integer', 'min:1', 'max:50'],
+            'is_special_hours' => ['boolean'],
         ]);
 
         try {
@@ -172,6 +194,7 @@ class StaffController extends Controller
                 'guest_last_name' => $validated['guest_last_name'],
                 'guest_email' => $validated['guest_email'],
                 'guest_phone' => $validated['guest_phone'],
+                'special_requests' => $validated['special_requests'] ?? null,
                 'reservation_date' => $validated['reservation_date'],
                 'time_slot_id' => $validated['time_slot_id'],
                 'guest_count' => $validated['guest_count'],
