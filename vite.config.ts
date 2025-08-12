@@ -10,7 +10,7 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
             ssr: 'resources/js/ssr.tsx',
             refresh: true,
-            buildDirectory: 'build', // makes sure it outputs to public/build
+            buildDirectory: 'build',
         }),
         react(),
         tailwindcss(),
@@ -23,9 +23,13 @@ export default defineConfig({
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
-    base: '/build/',
+    // Change this line 👇
+    base: '/lyma/public/build/',
+    // to this line 👇
+    // base: '/lyma/public/build/',
+    
     build: {
-        outDir: 'public/build', // must match Laravel's buildDirectory
-        emptyOutDir: true,      // clears old files before building
+        outDir: 'public/build',
+        emptyOutDir: true,
     },
 });
