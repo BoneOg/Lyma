@@ -23,7 +23,7 @@ export default defineConfig({
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
-    base: '',
+    base: '/build/',
     build: {
         outDir: 'public/build', // must match Laravel's buildDirectory
         emptyOutDir: true,      // clears old files before building
