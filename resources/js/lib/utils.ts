@@ -31,3 +31,4 @@ export function compareTimeSlots(timeA: string, timeB: string): number {
   };
   return parseTime(timeA) - parseTime(timeB);
 } 
+

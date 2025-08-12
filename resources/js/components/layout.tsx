@@ -1,17 +1,25 @@
 import React from 'react';
-import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
+import Navbar from './navbar';
+import Footer from './footer';
 
-interface Props {
+interface LayoutProps {
   children: React.ReactNode;
+  footerData?: {
+    restaurant_address: string;
+    restaurant_email: string;
+    restaurant_phone: string;
+    restaurant_name: string;
+  };
 }
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, footerData }) => {
   return (
-    <div className="relative">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="">{children}</main>
-      <Footer />
+      <main className="flex-grow">
+        {children}
+      </main>
+      <Footer footerData={footerData} />
     </div>
   );
 };

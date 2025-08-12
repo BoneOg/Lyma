@@ -13,7 +13,7 @@ const Underline: React.FC<UnderlineProps> = ({
   children,
   className = "",
   lineColor = "beige",
-  lineHeight = "h-0.5",
+  lineHeight = "h-px",
   duration = 0.3
 }) => {
   const textRef = useRef<HTMLSpanElement>(null);

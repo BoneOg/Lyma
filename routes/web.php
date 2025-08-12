@@ -9,6 +9,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\EmailController;
 
 
 // Home
@@ -46,6 +47,8 @@ Route::get('/transaction/{reservation}', [CheckoutController::class, 'showTransa
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
+// Test email route
+Route::post('/api/send-test-email', [EmailController::class, 'sendTestEmail']);
 
 
 

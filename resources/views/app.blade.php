@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="/assets/images/lyma.png">
+        <link rel="icon" type="image/png" href="/favicon.ico">
         
         @routes
         @viteReactRefresh

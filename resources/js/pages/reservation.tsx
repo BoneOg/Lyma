@@ -86,7 +86,7 @@ export default function Reservation() {
   return (
     <Layout>
       <div className="min-h-screen bg-[#3f411a] flex justify-center text-white px-4 pt-10">
-        <div className="max-w-5xl w-full py-12">
+        <div className="max-w-5xl w-full py-12 mt-20">
           <h1 className="text-6xl font-extralight font-lexend text-beige mb-12">RESERVATION</h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
