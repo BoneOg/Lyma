@@ -54,6 +54,31 @@ interface Props {
 }
 // --- End of your existing interfaces ---
 
+// Helper: format 24-hour time strings (e.g., "18:30" or "18:30:00") to 12-hour format (e.g., "6:30 PM")
+const formatTo12Hour = (timeString?: string | null): string => {
+  if (!timeString) return '';
+  // If already contains AM/PM, return as-is
+  const upper = timeString.toUpperCase();
+  if (upper.includes('AM') || upper.includes('PM')) return timeString;
+  const parts = timeString.split(':');
+  if (parts.length < 2) return timeString;
+  let hours = parseInt(parts[0], 10);
+  const minutes = parts[1];
+  const period = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+  return `${hours}:${minutes.padStart(2, '0')} ${period}`;
+};
+
+const formatLongDate = (dateString: string) => {
+  const d = new Date(dateString);
+  return d.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
 
 export default function Checkout() {
   const { reservation, expiresAt, specialHoursData } = usePage<Props>().props;
@@ -92,6 +117,34 @@ export default function Checkout() {
     setShowConfirmModal(true);
   };
 
+  const sendConfirmationEmail = async () => {
+    const name = `${reservation.guest_first_name} ${reservation.guest_last_name}`.trim();
+    const dateFormatted = formatLongDate(reservation.reservation_date);
+    const timeRange = specialHoursData
+      ? `${formatTo12Hour(specialHoursData.special_start)} - ${formatTo12Hour(specialHoursData.special_end)} (Special Hours)`
+      : reservation.time_slot
+        ? `${formatTo12Hour(reservation.time_slot.start_time)} - ${formatTo12Hour(reservation.time_slot.end_time)}`
+        : 'Time not specified';
+
+    const payload = {
+      to: reservation.guest_email,
+      guest_name: name,
+      phone: reservation.guest_phone || '',
+      date_formatted: dateFormatted,
+      time_range: timeRange,
+      guest_count: reservation.guest_count,
+    };
+
+    await fetch('/api/send-reservation-confirmation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || ''
+      },
+      body: JSON.stringify(payload),
+    });
+  };
+
   const confirmReservation = async () => {
     setShowConfirmModal(false);
     setLoading(true);
@@ -100,8 +153,12 @@ export default function Checkout() {
     try {
       // Use Inertia's router.post for better integration
       router.post(`/checkout/${reservation.id}/confirm`, {}, {
-        onSuccess: () => {
-          // Success is handled by the server response
+        onSuccess: async () => {
+          try {
+            await sendConfirmationEmail();
+          } catch (e) {
+            console.warn('Email send failed (non-blocking):', e);
+          }
         },
         onError: (errors) => {
           setError(errors.message || 'Failed to confirm reservation. Please try again.');
@@ -174,9 +231,9 @@ export default function Checkout() {
                 <span className="text-[#3f411a]/80 font-lexend font-extralight">Time</span>
                 <span className="text-[#3f411a] font-lexend font-medium">
                   {specialHoursData 
-                    ? `${specialHoursData.special_start} - ${specialHoursData.special_end} (Special Hours)`
+                    ? `${formatTo12Hour(specialHoursData.special_start)} - ${formatTo12Hour(specialHoursData.special_end)} (Special Hours)`
                     : reservation.time_slot 
-                      ? `${reservation.time_slot.start_time} - ${reservation.time_slot.end_time}`
+                      ? `${formatTo12Hour(reservation.time_slot.start_time)} - ${formatTo12Hour(reservation.time_slot.end_time)}`
                       : 'Time not specified'
                   }
                 </span>
