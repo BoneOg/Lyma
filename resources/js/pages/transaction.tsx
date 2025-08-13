@@ -1,5 +1,6 @@
 import React from 'react';
 import Layout from '@/components/layout';
+import ReservationSummary from '@/components/ui/ReservationSummary';
 
 interface Reservation {
   id: number;
@@ -29,31 +30,81 @@ interface TransactionProps {
   };
 }
 
+const formatTo12Hour = (timeString?: string | null): string => {
+  if (!timeString) return '';
+  const upper = timeString.toUpperCase();
+  if (upper.includes('AM') || upper.includes('PM')) return timeString;
+  const parts = timeString.split(':');
+  if (parts.length < 2) return timeString;
+  let hours = parseInt(parts[0], 10);
+  const minutes = parts[1];
+  const period = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+  return `${hours}:${minutes.padStart(2, '0')} ${period}`;
+};
+
+const formatLongDate = (dateString: string) => {
+  const d = new Date(dateString);
+  return d.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
 const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, statusMessage, specialHoursData }) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
 
   if (!reservation) {
     return (
       <Layout>
-        <div className="min-h-screen bg-[#3f411a] text-white flex items-center justify-center py-12 px-4">
-          <div className="max-w-2xl w-full text-center">
-            <div className="w-20 h-20 bg-red-500 mx-auto mb-4 flex items-center justify-center">
-              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
+        <div className="min-h-screen bg-olive relative overflow-hidden">
+          <div className="relative z-10 min-h-screen flex flex-col">
+            <div className="flex-grow flex items-center justify-center px-4 py-6">
+              <div className="w-full max-w-4xl space-y-6 text-center">
+                <h1 
+                  className="text-2xl lg:text-3xl font-extralight tracking-[0.15em]"
+                  style={{ color: 'hsl(var(--primary))' }}
+                >
+                  Reservation Not Found
+                </h1>
+                <p 
+                  className="text-sm lg:text-base font-light tracking-wide mx-auto max-w-2xl"
+                  style={{ color: 'hsl(var(--muted-foreground))' }}
+                >
+                  We couldn't find your reservation details. This might be due to a failed or cancelled reservation, or an error retrieving the reservation.
+                </p>
+                <div className="flex flex-col lg:flex-row gap-2 max-w-1xl mx-auto pt-2">
+                  <a
+                    href="/"
+                    className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                    style={{ 
+                      backgroundColor: 'var(--color-beige)',
+                      color: 'var(--color-olive)',
+                      fontFamily: 'Lexend Giga, sans-serif',
+                      letterSpacing: '0.05em',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
+                    }}
+                  >
+                    Return to Home
+                  </a>
+                  <a
+                    href="/reservation"
+                    className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                    style={{ 
+                      backgroundColor: 'hsl(var(--primary))',
+                      color: 'var(--color-beige)',
+                      fontFamily: 'Lexend Giga, sans-serif',
+                      letterSpacing: '0.05em',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
+                    }}
+                  >
+                    Make Another Reservation
+                  </a>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl font-serif mb-4">Reservation Not Found</h1>
-            <p className="text-[#f6f5c6] text-lg">
-              We couldn't find your reservation details. This might be due to a failed or cancelled reservation, or an error retrieving the reservation.
-            </p>
           </div>
         </div>
       </Layout>
@@ -62,120 +113,81 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
 
   return (
     <Layout>
-      <div className="min-h-screen bg-[#3f411a] text-white flex items-center justify-center py-12 px-4">
-        <div className="max-w-2xl w-full">
-          <div className="space-y-8">
-            {/* Success/Failure/Cancel Status */}
-            {paymentStatus === 'success' && (
-              <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-green-500 mx-auto mb-4 flex items-center justify-center">
-                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                </div>
-                <h1 className="text-4xl font-serif mb-4">Reservation Confirmed!</h1>
-                <p className="text-[#f6f5c6] text-lg">{statusMessage}</p>
-              </div>
-            )}
+      <div className="min-h-screen bg-olive relative overflow-hidden">
+        <div className="relative z-10 min-h-screen flex flex-col">
+          <div className="flex-grow flex items-center justify-center px-4 py-6">
+            <div className="w-full max-w-4xl space-y-4">
 
-            {paymentStatus === 'failed' && (
-              <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-red-500 mx-auto mb-4 flex items-center justify-center">
-                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                  </svg>
-                </div>
-                <h1 className="text-4xl font-serif mb-4">Reservation Failed!</h1>
-                <p className="text-[#f6f5c6] text-lg">{statusMessage}</p>
+              {/* Status Heading */}
+              <div className="text-center space-y-2 mt-10">
+                <h2 
+                  className="text-2xl lg:text-5xl font-extralight font-lexend tracking-[0.15em]"
+                  style={{ color: 'var(--color-beige)' }}
+                >
+                  {paymentStatus === 'success' && 'RESERVATION CONFIRMED'}
+                  {paymentStatus === 'failed' && 'RESERVATION FAILED'}
+                  {paymentStatus === 'cancelled' && 'RESERVATION CANCELLED'}
+                </h2>
+                <p
+                  className="text-sm lg:text-base font-light tracking-wide mx-auto max-w-3xl"
+                  style={{ color: 'hsl(var(--muted-foreground))' }}
+                >
+                  {statusMessage}
+                </p>
+                <div 
+                  className="w-42 h-px mx-auto"
+                  style={{ backgroundColor: 'hsl(var(--primary) / 0.3)' }}
+                />
               </div>
-            )}
 
-            {paymentStatus === 'cancelled' && (
-              <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-yellow-500 mx-auto mb-4 flex items-center justify-center">
-                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </div>
-                <h1 className="text-4xl font-serif mb-4">Reservation Cancelled!</h1>
-                <p className="text-[#f6f5c6] text-lg">{statusMessage}</p>
+              {/* Reservation Summary Card */}
+              <div className="transform transition-all duration-300 hover:scale-[1.01] mt-4">
+                <ReservationSummary
+                  guestName={`${reservation.guest_first_name} ${reservation.guest_last_name}`}
+                  email={reservation.guest_email}
+                  phone={reservation.guest_phone}
+                  specialRequests={reservation.special_requests ?? null}
+                  dateLabel={formatLongDate(reservation.reservation_date)}
+                  yearLabel={new Date(reservation.reservation_date).getFullYear().toString()}
+                  timeLabel={specialHoursData
+                    ? `${formatTo12Hour(specialHoursData.special_start)} - ${formatTo12Hour(specialHoursData.special_end)} (Special Hours)`
+                    : reservation.time_slot
+                      ? `${formatTo12Hour(reservation.time_slot.start_time)} - ${formatTo12Hour(reservation.time_slot.end_time)}`
+                      : 'Time not specified'}
+                  guestCount={reservation.guest_count}
+                />
               </div>
-            )}
 
-            {/* Reservation Details */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
-              <h2 className="text-2xl font-serif mb-6 border-b-2 border-white pb-2">Reservation Details</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-[#f6f5c6] font-bold">Guest Name:</span>
-                    <span className="text-white ml-2">{reservation.guest_first_name} {reservation.guest_last_name}</span>
-                  </div>
-                  
-                  <div>
-                    <span className="text-[#f6f5c6] font-bold">Email:</span>
-                    <span className="text-white ml-2">{reservation.guest_email}</span>
-                  </div>
-                  
-                  <div>
-                    <span className="text-[#f6f5c6] font-bold">Phone:</span>
-                    <span className="text-white ml-2">{reservation.guest_phone}</span>
-                  </div>
-                  
-                  {reservation.special_requests && (
-                    <div>
-                      <span className="text-[#f6f5c6] font-bold">Special Requests:</span>
-                      <span className="text-white ml-2">{reservation.special_requests}</span>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-[#f6f5c6] font-bold">Date:</span>
-                    <span className="text-white ml-2">{formatDate(reservation.reservation_date)}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#f6f5c6] font-bold">Year:</span>
-                    <span className="text-white ml-2">{new Date(reservation.reservation_date).getFullYear()}</span>
-                  </div>
-                  
-                  <div>
-                    <span className="text-[#f6f5c6] font-bold">Time:</span>
-                    <span className="text-white ml-2">
-                      {specialHoursData 
-                        ? `${specialHoursData.special_start} - ${specialHoursData.special_end} (Special Hours)`
-                        : reservation.time_slot 
-                          ? `${reservation.time_slot.start_time} - ${reservation.time_slot.end_time}`
-                          : 'Time not specified'
-                      }
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <span className="text-[#f6f5c6] font-bold">Number of Guests:</span>
-                    <span className="text-white ml-2">{reservation.guest_count}</span>
-                  </div>
-                </div>
+              {/* Action Buttons */}
+              <div className="flex flex-col lg:flex-row gap-2 max-w-1xl mx-auto">
+                <a
+                  href="/"
+                  className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                  style={{ 
+                    backgroundColor: 'var(--color-beige)',
+                    color: 'var(--color-olive)',
+                    fontFamily: 'Lexend Giga, sans-serif',
+                    letterSpacing: '0.05em',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
+                  }}
+                >
+                  Return to Home
+                </a>
+
+                <a
+                  href="/reservation"
+                  className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                  style={{ 
+                    backgroundColor: 'hsl(var(--primary))',
+                    color: 'var(--color-beige)',
+                    fontFamily: 'Lexend Giga, sans-serif',
+                    letterSpacing: '0.05em',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
+                  }}
+                >
+                  Make Another Reservation
+                </a>
               </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/"
-                className="bg-[#f6f5c6] text-[#3f411a] px-8 py-3 rounded-lg font-lexend font-medium hover:bg-[#e8e7b8] transition-colors text-center"
-              >
-                Return to Home
-              </a>
-              
-              <a
-                href="/reservation"
-                className="bg-transparent border-2 border-[#f6f5c6] text-[#f6f5c6] px-8 py-3 rounded-lg font-lexend font-medium hover:bg-[#f6f5c6] hover:text-[#3f411a] transition-colors text-center"
-              >
-                Make Another Reservation
-              </a>
             </div>
           </div>
         </div>

@@ -36,7 +36,6 @@ export default function Reservation() {
     specialRequests,
     occupiedTimeSlots,
     disabledTimeSlots,
-    showConfirmationModal,
     isBooking,
     months,
     years,
@@ -63,9 +62,7 @@ export default function Reservation() {
     handleDateSelect,
     formatSelectedDateTime,
     isFormValid,
-    handleBookTable,
     handleConfirmBooking,
-    handleCancelBooking,
   } = useReservation({ timeSlots, systemSettings, errors });
 
   const { showNotification } = useNotification();
@@ -325,15 +322,15 @@ export default function Reservation() {
               />
 
               <button
-                onClick={handleBookTable}
-                disabled={!isFormValid()}
-                  className={`block w-full text-center font-extralight font-lexend py-4 mt-8 text-lg transition duration-200 ${
-                  isFormValid()
-                    ? 'bg-white text-[#3f411a] hover:bg-[#f6f5c6] cursor-pointer'
-                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                onClick={handleConfirmBooking}
+                disabled={!isFormValid() || isBooking}
+                className={`block w-full text-center font-extralight font-lexend py-4 mt-8 text-lg transition duration-200 ${
+                  !isFormValid() || isBooking
+                    ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                    : 'bg-white text-[#3f411a] hover:bg-[#f6f5c6] cursor-pointer'
                 }`}
               >
-                Book a Table
+                {isBooking ? 'Booking...' : 'Book a Table'}
               </button>
               
               {/* Display errors if any */}
@@ -346,63 +343,6 @@ export default function Reservation() {
           </div>
         </div>
       </div>
-
-      {/* Confirmation Modal */}
-      {showConfirmationModal && (
-        <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-[#3f411a] border-2 border-white p-8 max-w-md w-full mx-4">
-            <h3 className="text-2xl font-extralight font-lexend text-white mb-4">Confirm Reservation</h3>
-            <p className="text-white mb-6 font-extralight font-lexend">Ready to book your table? Please confirm your details before proceeding.</p>
-            
-            <div className="space-y-4 mb-6">
-              <div className="border-b border-white pb-2">
-                <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Date & Time:</span>
-                <p className="text-white font-extralight font-lexend">{formatSelectedDateTime()}</p>
-              </div>
-              <div className="border-b border-white pb-2">
-                <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Guest:</span>
-                <p className="text-white font-extralight font-lexend">{firstName} {lastName}</p>
-              </div>
-              <div className="border-b border-white pb-2">
-                <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Contact:</span>
-                <p className="text-white font-extralight font-lexend">{email}</p>
-                <p className="text-white font-extralight font-lexend">{phone}</p>
-              </div>
-              {specialRequests && (
-                <div className="border-b border-white pb-2">
-                  <span className="text-[#f6f5c6] text-sm font-extralight font-lexend">Special Requests:</span>
-                  <p className="text-white font-extralight font-lexend">{specialRequests}</p>
-                </div>
-              )}
-            </div>
-
-            <div className="flex space-x-4">
-              <button
-                onClick={handleConfirmBooking}
-                disabled={isBooking}
-                className={`flex-1 py-3 font-extralight font-lexend transition duration-200 ${
-                  isBooking 
-                    ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                    : 'bg-white text-[#3f411a] hover:bg-[#f6f5c6]'
-                }`}
-              >
-                {isBooking ? 'Booking...' : 'Yes, Book Now'}
-              </button>
-              <button
-                onClick={handleCancelBooking}
-                disabled={isBooking}
-                className={`flex-1 border border-white py-3 font-extralight font-lexend transition duration-200 ${
-                  isBooking
-                    ? 'bg-transparent text-gray-400 cursor-not-allowed'
-                    : 'bg-transparent text-white hover:bg-white hover:text-[#3f411a]'
-                }`}
-              >
-                No, Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </Layout>
   )
 }
