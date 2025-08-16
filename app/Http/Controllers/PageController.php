@@ -44,4 +44,18 @@ class PageController extends Controller
             'footerData' => $this->getFooterData(),
         ]);
     }
+
+    public function gallery()
+    {
+        return Inertia::render('gallery', [
+            'footerData' => $this->getFooterData(),
+        ]);
+    }
+
+    public function journal()
+    {
+        return Inertia::render('journal', [
+            'footerData' => $this->getFooterData(),
+        ]);
+    }
 } 

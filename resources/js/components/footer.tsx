@@ -55,7 +55,7 @@ const Footer: React.FC<FooterProps> = ({ footerData }) => {
               <div className="absolute -bottom-2 left-0 w-12 h-px bg-[#3D401E]/30"></div>
             </h3>
             <p className="text-[#3D401E]/80 font-lexend font-light leading-relaxed text-base max-w-lg">
-              Nestled in the pristine shores of General Luna, {restaurantName} represents the essence of tropical fine dining. 
+              Nestled in the pristine shores of Siargao Island, {restaurantName} represents the essence of tropical fine dining. 
               Every dish tells a story of local ingredients transformed through innovative techniques, 
               creating an unforgettable culinary journey.
             </p>
@@ -106,23 +106,19 @@ const Footer: React.FC<FooterProps> = ({ footerData }) => {
 
           {/* Hours & Reservations */}
           <div>
-            <h4 className="text-xl font-lexend font-light text-[#3D401E] mb-6 relative">
-              Hours
+            <h4 className="text-xl font-lexend font-light text-[#3D401E] mb-8 relative">
+            Your Table Awaits
               <div className="absolute -bottom-2 left-0 w-8 h-px bg-[#3D401E]/30"></div>
             </h4>
             <div className="space-y-4 text-[#3D401E]/80 font-lexend font-light">
-              <div className="border-b border-[#3D401E]/10 pb-3">
+              <div className=" pb-3">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm uppercase tracking-wide">Mon - Fri</span>
-                  <span className="font-regular">11:00 AM - 10:00 PM</span>
+                  <span className="text-sm uppercase tracking-wide">Mon - Sun</span>
                 </div>
               </div>
-              <div className="border-b border-[#3D401E]/10 pb-3">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm uppercase tracking-wide">Sat - Sun</span>
-                  <span className="font-regular">10:00 AM - 11:00 PM</span>
-                </div>
-              </div>
+
+              
+              
             </div>
             
             <div className="mt-8 p-4 bg-[#3D401E]/5  border border-[#3D401E]/10">

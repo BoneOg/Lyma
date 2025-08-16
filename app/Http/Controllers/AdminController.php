@@ -253,7 +253,7 @@ class AdminController extends Controller
             'special_requests' => 'nullable|string|max:500',
             'reservation_date' => 'required|date|after:today',
             'time_slot_id' => 'required|exists:time_slots,id',
-            'guest_count' => 'required|integer|min:1|max:50',
+            'guest_count' => 'required|integer|min:1|max:100',
         ]);
 
         try {
@@ -543,7 +543,7 @@ class AdminController extends Controller
     public function updateMaxGuestSize(Request $request)
     {
         $validated = $request->validate([
-            'value' => 'required|integer|min:1|max:50',
+            'value' => 'required|integer|min:1|max:100',
         ]);
 
         try {
@@ -596,6 +596,231 @@ class AdminController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get maximum guest size setting'
+            ], 500);
+        }
+    }
+
+    // Get current reminder hours setting
+    public function getReminderHours()
+    {
+        try {
+            $value = \App\Models\SystemSetting::get('reminder_hours', 2);
+            
+            return response()->json([
+                'success' => true,
+                'value' => $value
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting reminder hours', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get reminder hours setting'
+            ], 500);
+        }
+    }
+
+    // Update reminder hours setting
+    public function updateReminderHours(Request $request)
+    {
+        $validated = $request->validate([
+            'value' => 'required|integer|min:1|max:24',
+        ]);
+
+        try {
+            \App\Models\SystemSetting::set('reminder_hours', $validated['value'], 'Reminder Hours');
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Reminder hours updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error updating reminder hours', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update reminder hours'
+            ], 500);
+        }
+    }
+
+    // Send email reminders for upcoming reservations
+    public function sendEmailReminders()
+    {
+        try {
+            $emailController = new \App\Http\Controllers\EmailController();
+            $result = $emailController->sendRemindersForUpcomingReservations();
+
+            if ($result['success']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Reminders processed successfully. Sent: {$result['sent']}, Failed: {$result['failed']}",
+                    'data' => $result
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $result['message'] ?? 'Failed to process reminders'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error sending email reminders', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send email reminders: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Dashboard API endpoints
+    public function getDashboardStats()
+    {
+        try {
+            $today = now()->format('Y-m-d');
+            $yesterday = now()->subDay()->format('Y-m-d');
+            $lastWeek = now()->subWeek()->format('Y-m-d');
+
+            // Get today's reservations
+            $todayReservations = Reservation::where('reservation_date', $today)->get();
+            $todayCount = $todayReservations->count();
+            
+            // Calculate today's average party size
+            $todayTotalGuests = $todayReservations->sum('guest_count');
+            $todayAvgPartySize = $todayCount > 0 ? round($todayTotalGuests / $todayCount) : 0;
+
+            // Calculate overall average party size from all reservations (more meaningful for dashboard)
+            $allReservations = Reservation::whereNotIn('status', ['pending'])->get();
+            $overallTotalGuests = $allReservations->sum('guest_count');
+            $overallAvgPartySize = $allReservations->count() > 0 ? round($overallTotalGuests / $allReservations->count()) : 0;
+
+            // Get yesterday's reservations for trend comparison
+            $yesterdayReservations = Reservation::where('reservation_date', $yesterday)->get();
+            $yesterdayCount = $yesterdayReservations->count();
+
+            // Get last week's data for trend comparison
+            $lastWeekReservations = Reservation::where('reservation_date', '>=', $lastWeek)->get();
+            $lastWeekTotalGuests = $lastWeekReservations->sum('guest_count');
+            $lastWeekAvgPartySize = $lastWeekReservations->count() > 0 ? round($lastWeekTotalGuests / $lastWeekReservations->count()) : 0;
+
+            // Get reservation counts by status
+            $confirmedCount = Reservation::where('status', 'confirmed')->count();
+            $completedCount = Reservation::where('status', 'completed')->count();
+            $cancelledCount = Reservation::where('status', 'cancelled')->count();
+            $totalCount = Reservation::whereNotIn('status', ['pending'])->count();
+
+            // Get popular time slots
+            $timeSlotStats = Reservation::selectRaw('time_slots.start_time, COUNT(*) as booking_count')
+                ->join('time_slots', 'reservations.time_slot_id', '=', 'time_slots.id')
+                ->groupBy('time_slots.start_time')
+                ->orderByDesc('booking_count')
+                ->limit(5)
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'time' => \Carbon\Carbon::parse($item->start_time)->format('g:i A'),
+                        'bookings' => $item->booking_count
+                    ];
+                });
+
+            // Get system health data
+            $systemHealth = [
+                'max_advance_days' => \App\Models\SystemSetting::getMaxAdvanceBookingDays(),
+                'capacity' => \App\Models\SystemSetting::getCapacity(),
+                'min_guest_size' => \App\Models\SystemSetting::get('min_guest_size'),
+                'max_guest_size' => \App\Models\SystemSetting::get('max_guest_size'),
+                'active_time_slots' => \App\Models\TimeSlot::where('is_active', true)->count()
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'total_reservations' => $totalCount,
+                    'confirmed_reservations' => $confirmedCount,
+                    'completed_reservations' => $completedCount,
+                    'cancelled_reservations' => $cancelledCount,
+                    'today' => [
+                        'bookings' => $todayCount,
+                        'avg_party_size' => $overallAvgPartySize, // Use overall average instead of just today's
+                        'total_guests' => $todayTotalGuests
+                    ],
+                    'yesterday' => [
+                        'bookings' => $yesterdayCount
+                    ],
+                    'last_week' => [
+                        'avg_party_size' => $lastWeekAvgPartySize
+                    ],
+                    'time_slots' => $timeSlotStats,
+                    'system_health' => $systemHealth,
+                    'trends' => [
+                        'bookings_change' => $todayCount - $yesterdayCount,
+                        'party_size_change' => $todayAvgPartySize - $lastWeekAvgPartySize
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting dashboard stats', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get dashboard statistics'
+            ], 500);
+        }
+    }
+
+    public function getPopularTimeSlots()
+    {
+        try {
+            $popularTimeSlots = Reservation::selectRaw('time_slots.start_time, COUNT(*) as booking_count')
+                ->join('time_slots', 'reservations.time_slot_id', '=', 'time_slots.id')
+                ->groupBy('time_slots.start_time')
+                ->orderByDesc('booking_count')
+                ->limit(10)
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'time' => \Carbon\Carbon::parse($item->start_time)->format('g:i A'),
+                        'bookings' => $item->booking_count
+                    ];
+                });
+
+            return response()->json([
+                'success' => true,
+                'data' => $popularTimeSlots
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting popular time slots', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get popular time slots'
+            ], 500);
+        }
+    }
+
+    public function getRecentActivity()
+    {
+        try {
+            $recentReservations = Reservation::with('timeSlot')
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get()
+                ->map(function ($reservation) {
+                    return [
+                        'id' => $reservation->id,
+                        'guest_name' => $reservation->guest_first_name . ' ' . $reservation->guest_last_name,
+                        'date' => $reservation->reservation_date->format('M d, Y'),
+                        'time' => $reservation->timeSlot ? $reservation->timeSlot->start_time_formatted : 'Special Hours',
+                        'status' => $reservation->status,
+                        'guest_count' => $reservation->guest_count,
+                        'created_at' => $reservation->created_at->diffForHumans()
+                    ];
+                });
+
+            return response()->json([
+                'success' => true,
+                'data' => $recentReservations
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting recent activity', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get recent activity'
             ], 500);
         }
     }

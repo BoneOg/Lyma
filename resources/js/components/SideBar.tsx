@@ -7,13 +7,13 @@ interface SideBarProps {
 }
 
 const navItems = [
-  "HOME",
-  "RESERVATION",
-  "ABOUT US",
-  "MENU",
-  "GALLERY",
-  "JOURNAL",
-  "CONTACT",
+  { name: "HOME", route: "/" },
+  { name: "RESERVATION", route: "/reservation" },
+  { name: "ABOUT US", route: "/about" },
+  { name: "MENU", route: "/menu" },
+  { name: "GALLERY", route: "/gallery" },
+  { name: "JOURNAL", route: "/journal" },
+  { name: "CONTACT", route: "/contact" },
 ];
 
 const SideBar: React.FC<SideBarProps> = ({ open, onClose }) => {
@@ -21,17 +21,13 @@ const SideBar: React.FC<SideBarProps> = ({ open, onClose }) => {
     <SidebarSlide isOpen={open}>
       {navItems.map((item) => (
         <a
-          key={item}
-          href={
-            item === "HOME"
-              ? "/"
-              : `#${item.replace(/ /g, "-").toLowerCase()}-section`
-          }
+          key={item.name}
+          href={item.route}
           className="text-6xl font-light font-lexend transition-all duration-300 hover:scale-110 inline-block"
           style={{ color: '#3c4119' }}
           onClick={onClose}
         >
-          {item}
+          {item.name}
         </a>
       ))}
     </SidebarSlide>

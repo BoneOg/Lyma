@@ -184,7 +184,7 @@ class StaffController extends Controller
             'special_requests' => ['nullable', 'string', 'max:500'],
             'reservation_date' => ['required', 'date', 'after_or_equal:today'],
             'time_slot_id' => ['nullable', 'exists:time_slots,id'],
-            'guest_count' => ['required', 'integer', 'min:1', 'max:50'],
+            'guest_count' => ['required', 'integer', 'min:1', 'max:100'],
             'is_special_hours' => ['boolean'],
         ]);
 

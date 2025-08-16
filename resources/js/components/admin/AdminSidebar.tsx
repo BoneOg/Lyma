@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 
 const AdminSidebar: React.FC = () => {
+  console.log('AdminSidebar: Rendering...');
   const { url } = usePage();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 

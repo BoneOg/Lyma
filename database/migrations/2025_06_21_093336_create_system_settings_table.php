@@ -36,8 +36,17 @@ return new class extends Migration
 
         DB::table('system_settings')->insert([
             'setting_key' => 'max_guest_size',
-            'setting_value' => 10,
+            'setting_value' => 50,
             'description' => 'Maximum number of guests allowed per reservation',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Insert default reminder hours setting
+        DB::table('system_settings')->insert([
+            'setting_key' => 'reminder_hours',
+            'setting_value' => 2,
+            'description' => 'Hours before reservation to send email reminder',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

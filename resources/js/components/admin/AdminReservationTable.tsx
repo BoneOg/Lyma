@@ -11,6 +11,7 @@ import ReservationTableRow from '../ui/ReservationTableRow';
 import { TooltipProvider } from '../ui/tooltip';
 import type { Reservation, TimeSlot, SystemSettings } from '../../types/reservation';
 import { sortOptions } from '../../constants/reservationTable';
+import { Plus } from 'lucide-react';
 
 interface Props {
   status: string;
@@ -201,14 +202,14 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
   };
 
   return (
-    <div className="bg-white border border-primary-light h-[450px] shadow p-6 flex flex-col">
+    <div className="bg-white border border-primary-light h-[520px] shadow p-6 flex flex-col">
       <div className="flex gap-4 mb-2">
         {/* Search with icon, short height */}
         <SearchInput
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search by guest name, email, number or details..."
-          className="flex-1 basis-[55%]"
+          placeholder="Search by guest name, email, or number..."
+          className="basis-[35%]"
         />
         {/* Date with icon, short height */}
         <DateButton
@@ -223,6 +224,12 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
           options={sortOptions}
           className="basis-[30%]"
         />
+        <button
+          onClick={() => setShowQuickReservation(true)}
+          className="basis-[20%] flex items-center justify-center gap-3 h-10 border-primary-light border bg-primary-light text-olive font-lexend font-light px-2 py-1 transition-all duration-300 hover:scale-[1.02] focus:ring-1 focus:ring-olive focus:outline-none"
+        >
+          <Plus size={18} /> New Reservation
+        </button>
       </div>
       {loading ? (
         <div className="text-center py-8 font-lexend font-light text-gray-500">Loading...</div>

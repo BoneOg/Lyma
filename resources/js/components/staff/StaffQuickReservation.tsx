@@ -133,8 +133,8 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
     const todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
 
-    // Check if date is in the past
-    if (dateToCheck <= todayMidnight) {
+    // Check if date is in the past (but allow current day)
+    if (dateToCheck < todayMidnight) {
       return true;
     }
 
@@ -165,6 +165,70 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
 
   const getSpecialHoursForDate = (day: number) => {
     return specialHoursData[day] || null;
+  };
+
+  const formatTo12Hour = (timeString?: string | null): string => {
+    if (!timeString) return '';
+    const upper = timeString.toUpperCase();
+    if (upper.includes('AM') || upper.includes('PM')) return timeString;
+    const parts = timeString.split(':');
+    if (parts.length < 2) return timeString;
+    let hours = parseInt(parts[0], 10);
+    const minutes = parts[1];
+    const period = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    if (hours === 0) hours = 12;
+    return `${hours}:${minutes.padStart(2, '0')} ${period}`;
+  };
+
+  const formatLongDate = (dateString: string) => {
+    const d = new Date(dateString);
+    return d.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const sendConfirmationEmail = async (created: { reservation_date: string; guest_email: string; guest_first_name: string; guest_last_name: string; guest_phone?: string; guest_count: number; time_slot_id?: number | null; }) => {
+    const dateLabel = formatLongDate(created.reservation_date);
+
+    let timeLabel = 'Time not specified';
+    if (selectedDate) {
+      const special = getSpecialHoursForDate(selectedDate);
+      if (special && (selectedTimeSlot === 'special-hours' || !created.time_slot_id)) {
+        timeLabel = `${formatTo12Hour(special.special_start)} - ${formatTo12Hour(special.special_end)} (Special Hours)`;
+      } else if (created.time_slot_id) {
+        const slot = timeSlots.find(ts => ts.id === created.time_slot_id);
+        if (slot) {
+          timeLabel = slot.start_time_formatted
+            ? slot.start_time_formatted
+            : `${formatTo12Hour(slot.start_time)} - ${formatTo12Hour(slot.end_time)}`;
+        }
+      }
+    }
+
+    const name = `${created.guest_first_name} ${created.guest_last_name}`.trim();
+    const payload = {
+      to: created.guest_email,
+      guest_name: name,
+      phone: created.guest_phone || '',
+      date_formatted: dateLabel,
+      time_range: timeLabel,
+      guest_count: created.guest_count,
+    };
+
+    try {
+      await fetch('/api/send-reservation-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+        },
+        body: JSON.stringify(payload),
+      });
+    } catch {}
   };
 
   const fetchOccupiedTimeSlots = async (date: string) => {
@@ -214,7 +278,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
     // Add date if selected
     if (selectedDate) {
       const date = new Date(selectedYear, selectedMonth, selectedDate);
-      const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
       const monthName = months[selectedMonth];
       parts.push(`${monthName} ${selectedDate} (${dayName})`);
     }
@@ -310,6 +374,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
 
       if (data.success) {
         showNotification('Reservation created successfully!', 'success');
+        try { await sendConfirmationEmail(data.reservation ?? formData as any); } catch {}
         if (onReservationCreated) {
           onReservationCreated();
         }
@@ -370,7 +435,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                 <div className="flex space-x-4 mb-10">
                   {/* Month */}
                   <div className="relative w-40">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">Month</label>
+                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Month</label>
                     <Select 
                       value={selectedMonth.toString()}
                       onValueChange={(value) => {
@@ -397,7 +462,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
 
                   {/* Year */}
                   <div className="relative w-28">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">Year</label>
+                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Year</label>
                     <Select
                       value={selectedYear.toString()}
                       onValueChange={(value) => setSelectedYear(parseInt(value))}
@@ -421,7 +486,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
 
                   {/* Time */}
                   <div className="relative w-40">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">Time</label>
+                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Time</label>
                     <Select 
                       value={selectedTimeSlot?.toString() || ''}
                       onValueChange={(value) => {
@@ -496,7 +561,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
 
                   {/* Guests */}
                   <div className="relative w-24">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">Guests</label>
+                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Guests</label>
                     <Select 
                       value={guestCount.toString()}
                       onValueChange={(value) => setGuestCount(parseInt(value))}
@@ -540,18 +605,19 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                   isDateClosed={isDateClosed}
                   isDateSpecialHours={isDateSpecialHours}
                   months={months}
-                  className="grid grid-cols-7 text-center gap-y-7 text-white text-lg"
-                  dayClassName={(day, { isDisabled, isFullyBooked, isSelected, isClosed, isSpecialHours }) => {
-                    let className = 'transition-colors w-8 h-8 flex items-center justify-center font-lexend font-extralight relative';
+					className="grid grid-cols-7 text-center gap-y-7 text-white text-lg"
+					weekdayClassName={() => 'h-8 flex items-center justify-center font-lexend text-beige font-medium tracking-wide opacity-80'}
+					dayClassName={(day, { isDisabled, isFullyBooked, isSelected, isClosed, isSpecialHours }) => {
+						let className = 'transition-colors h-8 w-full flex items-center justify-center font-lexend font-light relative';
                     
                     if (isClosed) {
                       className += ' text-[#5295bb] cursor-not-allowed';
                     } else if (isFullyBooked) {
                       className += ' text-[#D4847C] cursor-not-allowed';
                     } else if (isSelected && isSpecialHours) {
-                      className += ' bg-[#f6f5c6] text-[#C5A572] font-semibold rounded-full cursor-pointer';
+							className += ' text-[#C5A572] font-semibold';
                     } else if (isSelected) {
-                      className += ' bg-[#f6f5c6] text-[#3f411a] font-semibold rounded-full cursor-pointer';
+							className += ' text-[#3f411a] font-semibold';
                     } else if (isSpecialHours) {
                       className += ' text-[#C5A572] hover:text-beige-dark cursor-pointer';
                     } else if (isDisabled) {
@@ -561,21 +627,22 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                     }
                     return className;
                   }}  
+                  animatedSelection
                 />
 
                 {/* Legend */}
                 <div className="flex justify-center items-center space-x-6 mt-6">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#D4847C]"></div>
-                    <span className="text-white font-extralight font-lexend text-sm">Fully Booked</span>
+                    <div className="w-3 h-3 rounded-full bg-[#6B7A5E]"></div>
+                    <span className="text-white/80 font-light font-lexend text-sm">Fully Booked</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-[#C5A572]"></div>
-                    <span className="text-white font-extralight font-lexend text-sm">Special Hours</span>
+                    <span className="text-white/80 font-light font-lexend text-sm">Special Hours</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#5295bb]"></div>
-                    <span className="text-white font-extralight font-lexend text-sm">Closed</span>
+                    <div className="w-3 h-3 rounded-full bg-[#D4847C]"></div>
+                    <span className="text-white/80 font-light font-lexend text-sm">Closed</span>
                   </div>
                 </div>
               </div>
@@ -632,13 +699,13 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                 {/* Phone Number and Special Requests */}
                 <div className="flex space-x-6">
                   <div className="flex-1">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">Phone Number</label>
+                  <label className="block text-base font-extralight font-lexend mb-2 text-white">Phone Number</label>
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => handlePhoneInput(e.target.value)}
                       className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
-                      placeholder="+1 234 567 8901"
+                    placeholder="+639543846071"
                       required
                     />
                   </div>
@@ -658,13 +725,13 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
               <button
                 onClick={handleSubmit}
                 disabled={!isFormValid() || isSubmitting}
-                className={`block w-full text-center font-extralight font-lexend py-4 mt-8 text-lg transition duration-200 ${
+                className={`block w-full text-center font-light font-lexend py-4 mt-8 text-lg transition duration-200 uppercase ${
                   isFormValid() && !isSubmitting
-                    ? 'bg-white text-[#3f411a] hover:bg-[#f6f5c6] cursor-pointer'
-                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                    ? 'bg-beige-dark active:bg-beige text-[#3f411a] hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg cursor-pointer tracking-wider'
+                    : 'bg-gray-400 text-gray-600 cursor-not-allowed tracking-wider'
                 }`}
               >
-                {isSubmitting ? 'Creating Reservation...' : 'Create Reservation'}
+                {isSubmitting ? 'CREATING RESERVATION...' : 'CREATE RESERVATION'}
               </button>
             </div>
           </div>

@@ -141,8 +141,8 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     const todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
 
-    // Check if date is in the past or beyond max booking days
-    if (dateToCheck <= todayMidnight || dateToCheck > maxDate) {
+    // Check if date is in the past (but allow current day) or beyond max booking days
+    if (dateToCheck < todayMidnight || dateToCheck > maxDate) {
       return true;
     }
 
@@ -366,3 +366,4 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     errors
   };
 }; 
+

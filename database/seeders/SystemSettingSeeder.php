@@ -22,12 +22,12 @@ class SystemSettingSeeder extends Seeder
             ],
             [
                 'setting_key' => 'max_guest_size',
-                'setting_value' => '10',
+                'setting_value' => '50',
                 'description' => 'Maximum number of guests allowed per reservation'
             ],
             [
                 'setting_key' => 'restaurant_email',
-                'setting_value' => 'lyma@gmail.com',
+                'setting_value' => 'lymaculinary@gmail.com',
                 'description' => 'Restaurant Contact Email'
             ],
             [

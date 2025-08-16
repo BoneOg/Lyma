@@ -13,12 +13,12 @@ use App\Http\Controllers\EmailController;
 
 
 // Home
-Route::get('/', fn () => Inertia::render('home'))->name('home');
-
-// Menu, About, Contact pages
-Route::get('/menu', fn () => Inertia::render('menu'))->name('menu');
-Route::get('/about', fn () => Inertia::render('about'))->name('about');
-Route::get('/contact', fn () => Inertia::render('contact'))->name('contact');
+Route::get('/', [App\Http\Controllers\PageController::class, 'home'])->name('home');
+Route::get('/menu', [App\Http\Controllers\PageController::class, 'menu'])->name('menu');
+Route::get('/about', [App\Http\Controllers\PageController::class, 'about'])->name('about');
+Route::get('/contact', [App\Http\Controllers\PageController::class, 'contact'])->name('contact');
+Route::get('/gallery', [App\Http\Controllers\PageController::class, 'gallery'])->name('gallery');
+Route::get('/journal', [App\Http\Controllers\PageController::class, 'journal'])->name('journal');
 
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
@@ -30,28 +30,18 @@ Route::get('/reservations/special-hours-dates', [ReservationController::class, '
 Route::get('/api/settings/min-guest-size', [ReservationController::class, 'getMinGuestSize']);
 Route::get('/api/settings/max-guest-size', [ReservationController::class, 'getMaxGuestSize']);
 
-// Checkout route (for legacy support, but now just confirms reservation)
-Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])
-    ->name('checkout')
-    ->middleware('check.pending.reservation');
-
-// Confirm reservation route (for free reservations)
-Route::post('/checkout/{reservation}/confirm', [CheckoutController::class, 'confirmReservation'])
-    ->name('checkout.confirm')
-    ->middleware('check.pending.reservation');
-
-// Transaction route
-Route::get('/transaction/{reservation}', [CheckoutController::class, 'showTransaction'])
-    ->name('transaction');
-
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+// Checkout routes
+Route::get('/checkout/{reservation}', [CheckoutController::class, 'show'])->name('checkout')->middleware('check.pending.reservation');
+Route::post('/checkout/{reservation}/confirm', [CheckoutController::class, 'confirmReservation'])->name('checkout.confirm')->middleware('check.pending.reservation');
+Route::get('/transaction/{reservation}', [CheckoutController::class, 'showTransaction'])->name('transaction');
 
 // Email routes
 Route::post('/api/send-test-email', [EmailController::class, 'sendTestEmail']);
 Route::post('/api/send-reservation-confirmation', [EmailController::class, 'sendReservationConfirmation']);
 
 
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -105,6 +95,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/api/settings/min-guest-size', [AdminController::class, 'updateMinGuestSize']);
         Route::get('/admin/api/settings/max-guest-size', [AdminController::class, 'getMaxGuestSize']);
         Route::post('/admin/api/settings/max-guest-size', [AdminController::class, 'updateMaxGuestSize']);
+
+        // Email reminder settings API
+        Route::get('/admin/api/settings/reminder-hours', [AdminController::class, 'getReminderHours']);
+        Route::post('/admin/api/settings/reminder-hours', [AdminController::class, 'updateReminderHours']);
+        
+        // Email reminder management API
+        Route::post('/admin/api/email-reminders/send', [AdminController::class, 'sendEmailReminders']);
+
+        // Dashboard API endpoints
+        Route::get('/admin/api/dashboard/stats', [AdminController::class, 'getDashboardStats']);
+        Route::get('/admin/api/dashboard/popular-time-slots', [AdminController::class, 'getPopularTimeSlots']);
+        Route::get('/admin/api/dashboard/recent-activity', [AdminController::class, 'getRecentActivity']);
 
         // --- Time Slot API ---
         Route::get('/admin/api/time-slots', [AdminController::class, 'getTimeSlots']);

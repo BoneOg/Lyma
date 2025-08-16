@@ -6,6 +6,8 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+  console.log('AdminLayout: Rendering with children:', children);
+  
   return (
     <div className="min-h-screen bg-white relative">
       {/* Fixed/Floating Sidebar */}

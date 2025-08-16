@@ -1,5 +1,7 @@
 import React from 'react';
 import { TextEffect } from '@/animation/text-effect';
+import { Link } from '@inertiajs/react';
+import RectangleDraw from '@/animation/rectangleDraw';
 
 const HeroSection: React.FC = () => {
   return (
@@ -20,8 +22,8 @@ const HeroSection: React.FC = () => {
       
       {/* Content */}
       <div className="relative z-10 flex items-center h-full">
-        <div className="ml-[100px] text-white -mt-30">
-          <TextEffect per='word' preset='slide' delay={0.2} speedReveal={0.5} as="h1" className="text-5xl md:text-7xl font-lexend font-extralight text-beige mb-4 leading-tight">
+        <div className="ml-[100px] text-white -mt-10">
+          <TextEffect per='word' preset='slide' delay={0.2} speedReveal={0.5} as="h1" className="text-5xl md:text-7xl font-lexend font-extralight text-beige mb-4 -ml-2 leading-tight">
             FIVE PILLARS. ONE VISION.
           </TextEffect>
           <div className="mb-8">
@@ -29,6 +31,29 @@ const HeroSection: React.FC = () => {
               A culinary journey through tradition and innovation
             </TextEffect>
           </div>
+          
+          {/* RESERVE NOW Button */}
+          <RectangleDraw
+            borderColor="beige"
+            borderWidth="h-px"
+            duration={0.2}
+            delay={0.1}
+            className="mt-10"
+          >
+            <Link
+              href="/reservation"
+              className="flex items-center gap-2 font-lexend text-1xl font-extralight tracking-widest text-beige transition-colors duration-300 z-10 px-6 py-6"
+            >
+              <TextEffect per='word' preset='slide' delay={0.1} speedReveal={0.3} as="span">
+                RESERVE NOW
+              </TextEffect>
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                  <path fill="#FAF7CA" d="M17.47 7.47a.75.75 0 0 1 1.06 0l4 4a.75.75 0 0 1 0 1.06l-4 4a.75.75 0 0 1-1.06 0v-3.78H2a.75.75 0 0 1 0-1.5h15.47z" />
+                </svg>
+              </span>
+            </Link>
+          </RectangleDraw>
         </div>
       </div>
 

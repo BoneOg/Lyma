@@ -44,7 +44,7 @@ const GuestSize: React.FC = () => {
 
   const handleMaxGuestSizeChange = (value: string) => {
     const numValue = parseInt(value);
-    if (!isNaN(numValue) && numValue >= 1 && numValue <= 50) {
+    if (!isNaN(numValue) && numValue >= 1 && numValue <= 100) {
       setMaxGuestSize(numValue);
       // Auto-save immediately when value changes
       saveMaxGuestSizeValue(numValue);
@@ -145,7 +145,7 @@ const GuestSize: React.FC = () => {
             className="w-full px-3 py-2 border border-gray-400 rounded bg-gray-50 text-olive font-lexend font-light focus:outline-none text-sm"
             disabled={isSaving}
           >
-            {Array.from({ length: 50 }, (_, i) => i + 1).map(num => (
+            {Array.from({ length: 100 }, (_, i) => i + 1).map(num => (
               <option key={num} value={num}>{num}</option>
             ))}
           </select>

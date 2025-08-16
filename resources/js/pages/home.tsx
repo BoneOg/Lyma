@@ -5,8 +5,6 @@ import { usePage } from '@inertiajs/react';
 import AboutSection from '../components/home/AboutSection';
 import MenuSection from '../components/home/MenuSection';
 import GallerySection from '../components/home/GallerySection';
-import JournalSection from '../components/home/JournalSection';
-import ContactSection from '../components/home/ContactSection';
 
 interface Props {
   flash?: {
@@ -31,8 +29,6 @@ const Home: React.FC = () => {
       <AboutSection />
       <MenuSection />
       <GallerySection />
-      <JournalSection />
-      <ContactSection />
     </Layout>
   );
 };

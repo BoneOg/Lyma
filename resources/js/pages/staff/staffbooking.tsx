@@ -3,7 +3,6 @@ import { usePage } from '@inertiajs/react';
 import StaffLayout from '@/components/staff/StaffLayout';
 import ReservationTable from '@/components/staff/StaffReservationTable';
 import QuickReservation from '@/components/staff/StaffQuickReservation';
-import { Plus } from 'lucide-react';
 
 interface Props {
   timeSlots: any[];
@@ -103,26 +102,11 @@ const StaffBooking: React.FC = () => {
       </div>
       {/* Bottom row - Full width container */}
       <div className="px-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl text-[#3f411a] font-lexend font-light">All Reservations</h2>
-          <button
-            onClick={() => setShowQuickReservation(true)}
-            className="bg-[#3c4119] text-sm text-white font-lexend font-light border-none px-6 py-4 hover:bg-[#525a1f] transition-colors flex items-center gap-2"
-          >
-            <Plus size={18} /> New Reservation
-          </button>
-        </div>
+        <div className="mb-6"></div>
         <ReservationTable 
           status={activeStatus} 
           onReservationUpdate={handleReservationUpdate}
           endpointPrefix="/staff"
-          timeSlots={timeSlots}
-          systemSettings={systemSettings}
-        />
-        <QuickReservation
-          isOpen={showQuickReservation}
-          onClose={() => setShowQuickReservation(false)}
-          onReservationCreated={handleReservationUpdate}
           timeSlots={timeSlots}
           systemSettings={systemSettings}
         />

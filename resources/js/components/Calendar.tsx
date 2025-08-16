@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface CalendarProps {
   selectedMonth: number;
@@ -14,6 +15,7 @@ interface CalendarProps {
   dayClassName?: (day: number, opts: { isDisabled: boolean; isFullyBooked: boolean; isSelected: boolean; isClosed: boolean; isSpecialHours: boolean }) => string; // NEW: for day cell
   weekdayLabels?: string[]; // NEW
   weekdayClassName?: (weekday: string, index: number) => string; // NEW
+  animatedSelection?: boolean; // NEW: use framer-motion pill for selection
 }
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -30,6 +32,7 @@ const Calendar: React.FC<CalendarProps> = ({
   dayClassName,
   weekdayLabels = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'], // NEW default
   weekdayClassName,
+  animatedSelection = false,
 }) => {
   const getDaysInMonth = (month: number, year: number) => {
     return new Date(year, month + 1, 0).getDate();
@@ -58,13 +61,18 @@ const Calendar: React.FC<CalendarProps> = ({
       const isSpecialHours = isDateSpecialHours ? isDateSpecialHours(day) : false;
       const isSelected = selectedDate === day;
       
-      let defaultClassName = 'cursor-pointer transition-colors h-8 flex items-center justify-center font-lexend font-light';
+      let defaultClassName = 'cursor-pointer transition-colors h-8 w-full flex items-center justify-center font-lexend font-light relative';
       if (isClosed) {
-        defaultClassName += ' text-gray-400 cursor-not-allowed';
+        defaultClassName += ' text-[#D4847C] cursor-not-allowed';
       } else if (isFullyBooked) {
-        defaultClassName += ' text-[#D4847C] cursor-not-allowed relative';
+        defaultClassName += ' text-[#6B7A5E] cursor-not-allowed relative';
       } else if (isSelected) {
-        defaultClassName += ' bg-olive text-beige-light rounded px-2';
+        if (animatedSelection) {
+          // Leave background to animated pill; only adjust text color/weight
+          defaultClassName += ' text-[#3f411a] font-semibold';
+        } else {
+          defaultClassName += ' bg-olive text-beige-light rounded px-2';
+        }
       } else if (isDisabled) {
         defaultClassName += ' text-gray-400 cursor-not-allowed';
       } else {
@@ -80,15 +88,22 @@ const Calendar: React.FC<CalendarProps> = ({
           onClick={() => !isDisabled && !isFullyBooked && !isClosed && onDateSelect(day)}
           className={cellClass}
         >
-          {day}
+          {animatedSelection && isSelected && (
+            <motion.div
+              layoutId="calendarSelectedPill"
+              className="absolute inset-0 rounded-full bg-[#f6f5c6] pointer-events-none"
+              transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.6 }}
+            />
+          )}
+          <span className="relative z-10">{day}</span>
           {isFullyBooked && !isDisabled && !isClosed && (
-            <div className="absolute -top-1 left-8 w-2.5 h-2.5 bg-[#D4847C] rounded-full pointer-events-none"></div>
+            <div className="absolute -top-1 right-1/2 translate-x-3 w-2.5 h-2.5 bg-[#6B7A5E] rounded-full pointer-events-none"></div>
           )}
           {isSpecialHours && !isDisabled && !isClosed && !isFullyBooked && (
-            <div className="absolute -top-1 left-8 w-2.5 h-2.5 bg-[#C5A572] rounded-full pointer-events-none"></div>
+            <div className="absolute -top-1 right-1/2 translate-x-3 w-2.5 h-2.5 bg-[#C5A572] rounded-full pointer-events-none"></div>
           )}
           {isClosed && (
-            <div className="absolute -top-1 left-8 w-2.5 h-2.5 bg-[#5295bb] rounded-full pointer-events-none"></div>
+            <div className="absolute -top-1 right-1/2 translate-x-3 w-2.5 h-2.5 bg-[#D4847C] rounded-full pointer-events-none"></div>
           )}
         </div>
       );

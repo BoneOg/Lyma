@@ -10,6 +10,7 @@ interface Props {
   yearLabel: string;
   timeLabel: string;
   guestCount: number;
+  headerSubtitle?: string;
 }
 
 const ReservationSummary: React.FC<Props> = ({
@@ -21,12 +22,13 @@ const ReservationSummary: React.FC<Props> = ({
   yearLabel,
   timeLabel,
   guestCount,
+  headerSubtitle,
 }) => {
   return (
     <div 
       className="relative overflow-hidden font-lexend border-0"
       style={{
-        backgroundColor: 'beige',
+        backgroundColor: 'var(--color-beige)',
         boxShadow: 'var(--shadow-luxury)',
         borderRadius: '0px' // Assuming card-luxury has no border radius based on your example
       }}
@@ -45,7 +47,7 @@ const ReservationSummary: React.FC<Props> = ({
             className="text-sm lg:text-base font-light tracking-wide mx-auto max-w-3xl"
             style={{ color: 'hsl(var(--muted-foreground))' }}
           >
-            Please review and confirm your reservation details for your dining experience at Lyma
+            {headerSubtitle ?? 'Please review and confirm your reservation details for your dining experience at Lyma'}
           </p>
           <div 
             className="w-42 h-px mx-auto"

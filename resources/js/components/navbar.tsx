@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
               >
                 <Link
                   href="/reservation"
-                  className={`flex items-center gap-2 font-lexend font-light transition-colors duration-300 z-10 ${reservationTextClass}`}
+                  className={`flex items-center gap-2 font-lexend font-extralight tracking-widest transition-colors duration-300 z-10 ${reservationTextClass}`}
                 >
                   <span>RESERVATION</span>
                   <span>

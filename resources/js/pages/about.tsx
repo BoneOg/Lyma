@@ -1,9 +1,18 @@
 import React from 'react';
 import Layout from '@/components/layout';
 
-const About: React.FC = () => {
+interface AboutPageProps {
+  footerData?: {
+    restaurant_address: string;
+    restaurant_email: string;
+    restaurant_phone: string;
+    restaurant_name: string;
+  };
+}
+
+const About: React.FC<AboutPageProps> = ({ footerData }) => {
   return (
-    <Layout>
+    <Layout footerData={footerData}>
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">

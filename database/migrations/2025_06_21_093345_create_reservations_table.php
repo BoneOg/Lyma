@@ -27,6 +27,10 @@ return new class extends Migration
             // Timer for 15-minute expiration
             $table->timestamp('expires_at')->nullable();
             
+            // Email reminder tracking
+            $table->timestamp('reminder_sent_at')->nullable();
+            $table->unsignedTinyInteger('reminder_sent_count')->default(0);
+            
             $table->timestamps();
             
             // Indexes
@@ -34,6 +38,7 @@ return new class extends Migration
             $table->index('status');
             $table->index('guest_email');
             $table->index('expires_at');
+            $table->index(['reminder_sent_at', 'reminder_sent_count']);
         });
     }
 

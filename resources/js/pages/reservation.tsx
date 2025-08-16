@@ -82,9 +82,114 @@ export default function Reservation() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-[#3f411a] flex justify-center text-white px-4 pt-10">
+      <div className="min-h-screen bg-[#3f411a] relative overflow-hidden flex justify-center text-white px-4 pt-10">
+        {/* Balanced minimalist background - visible yet subtle */}
+        <div className="pointer-events-none select-none absolute inset-0 z-0" aria-hidden="true">
+          {/* Primary focal element - Carabao (left side, main anchor) */}
+          <img
+            src="/assets/images/carabao_beige.webp"
+            alt=""
+            className="absolute top-1/2 -translate-y-1/2 left-6 lg:left-12 w-32 lg:w-52 rotate-[-10deg]"
+            style={{ opacity: 0.08 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          {/* Secondary accent - Fish (upper right) */}
+          <img
+            src="/assets/images/fish_beige.webp"
+            alt=""
+            className="absolute top-[35%] right-4 lg:right-8 w-26 lg:w-64 rotate-[5deg] translate-x-32"
+            style={{ opacity: 0.07 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          {/* Ground element - Grapes (bottom left) */}
+          <img
+            src="/assets/images/grapes_beige.webp"
+            alt=""
+            className="absolute -bottom-10 left-2 lg:left-6 w-22 lg:w-36 rotate-[-1deg] -translate-x-4"
+            style={{ opacity: 0.06 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          {/* Delicate accents - strategically placed */}
+          <img
+            src="/assets/images/shell_beige.webp"
+            alt=""
+            className="hidden lg:block absolute top-12 left-[28%] w-14 rotate-[6deg]"
+            style={{ opacity: 0.05 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          <img
+            src="/assets/images/lime_beige.webp"
+            alt=""
+            className="hidden md:block absolute bottom-[15%] right- lg:right-75 w-12 lg:w-24 rotate-[10deg]"
+            style={{ opacity: 0.07 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          {/* Complementary elements - spaced for balance */}
+          <img
+            src="/assets/images/jar_beige.webp"
+            alt=""
+            className="hidden lg:block absolute top-[8%] right-[20%] w-14 xl:w-18 rotate-[-5deg]"
+            style={{ opacity: 0.045 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          <img
+            src="/assets/images/bamboo_beige.webp"
+            alt=""
+            className="hidden xl:block absolute right-[25%] top-99 translate-x-12 w-22 rotate-[2deg]"
+            style={{ opacity: 0.045 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          <img
+            src="/assets/images/coconut_beige.webp"
+            alt=""
+            className="hidden lg:block absolute bottom-[2%] right-[40%] w-14 lg:w-18 rotate-[3deg]"
+            style={{ opacity: 0.04 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          {/* Whisper elements - filling gaps without crowding */}
+          <img
+            src="/assets/images/scallop_beige.webp"
+            alt=""
+            className="hidden md:block absolute bottom-[25%] left-[15%] w-11 lg:w-20 rotate-[-7deg]"
+            style={{ opacity: 0.035 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          <img
+            src="/assets/images/leaf_beige.webp"
+            alt=""
+            className="hidden xl:block absolute top-20 right-[40%] w-18 -rotate-2"
+            style={{ opacity: 0.035 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          <img
+            src="/assets/images/sugarcane_beige.webp"
+            alt=""
+            className="hidden md:block absolute top-40 left-0 w-14 lg:w-26 -rotate-5 translate-x-50"
+            style={{ opacity: 0.04 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+
+          {/* Brand watermark - subtle but visible */}
+          <img
+            src="/assets/logo/lymaonly_beige.webp"
+            alt=""
+            className="absolute bottom-0 right-0 w-36 lg:w-52 rotate-[-6deg] translate-x-3 translate-y-3"
+            style={{ opacity: 0.035 }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+        </div>
         <div className="max-w-5xl w-full py-12 mt-20">
-          <h1 className="text-6xl font-extralight font-lexend text-beige mb-12">RESERVATION</h1>
+          <h1 className="text-6xl font-thin tracking-wider font-lexend text-beige mb-12 -ml-[1px] md:-ml-[8px]">RESERVATION</h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             {/* Left Content Container */}
@@ -94,7 +199,7 @@ export default function Reservation() {
                 <div className="flex space-x-4 mb-10">
                   {/* Month */}
                   <div className="relative w-40">
-                    <label className="block text-base font-extralight font-lexend mb-2">Month</label>
+                    <label className="block text-base text-beige font-light font-lexend mb-2">Month</label>
                     <Select 
                       value={selectedMonth.toString()}
                       onValueChange={(value) => {
@@ -121,7 +226,7 @@ export default function Reservation() {
 
                   {/* Year */}
                   <div className="relative w-28">
-                    <label className="block text-base font-extralight font-lexend mb-2">Year</label>
+                    <label className="block text-base text-beige font-light font-lexend mb-2">Year</label>
                     <Select
                       value={selectedYear.toString()}
                       onValueChange={(value) => setSelectedYear(parseInt(value))}
@@ -145,7 +250,7 @@ export default function Reservation() {
 
                   {/* Time */}
                   <div className="relative w-40">
-                    <label className="block text-base font-extralight font-lexend mb-2">Time</label>
+                    <label className="block text-base text-beige font-light font-lexend mb-2">Time</label>
                     <Select 
                       value={selectedTimeSlot?.toString() || ''}
                       onValueChange={(value) => {
@@ -220,7 +325,7 @@ export default function Reservation() {
 
                   {/* Guests */}
                   <div className="relative w-24">
-                    <label className="block text-base font-extralight font-lexend mb-2">Guests</label>
+                    <label className="block text-base text-beige font-light font-lexend mb-2">Guests</label>
                     <Select 
                       value={guestCount.toString()}
                       onValueChange={(value) => setGuestCount(parseInt(value))}
@@ -265,17 +370,18 @@ export default function Reservation() {
                   isDateSpecialHours={isDateSpecialHours}
                   months={months}
                   className="grid grid-cols-7 text-center gap-y-7 text-white text-lg"
+                  weekdayClassName={() => 'h-8 flex items-center justify-center font-lexend text-beige font-light tracking-wide opacity-80'}
                   dayClassName={(day, { isDisabled, isFullyBooked, isSelected, isClosed, isSpecialHours }) => {
-                    let className = 'transition-colors w-8 h-8 flex items-center justify-center font-lexend font-extralight relative';
+                    let className = 'transition-colors h-8 w-full flex items-center justify-center font-lexend font-light relative';
                     
                     if (isClosed) {
-                      className += ' text-[#5295bb] cursor-not-allowed';
-                    } else if (isFullyBooked) {
                       className += ' text-[#D4847C] cursor-not-allowed';
+                    } else if (isFullyBooked) {
+                      className += ' text-[#6B7A5E] cursor-not-allowed';
                     } else if (isSelected && isSpecialHours) {
-                      className += ' bg-[#f6f5c6] text-[#C5A572] font-semibold  rounded-full cursor-pointer';
+                      className += ' text-[#C5A572] font-semibold';
                     } else if (isSelected) {
-                      className += ' bg-[#f6f5c6] text-[#3f411a] font-semibold rounded-full cursor-pointer';
+                      className += ' text-[#3f411a] font-semibold';
                     } else if (isSpecialHours) {
                       className += ' text-[#C5A572] hover:text-beige-dark cursor-pointer';
                     } else if (isDisabled) {
@@ -284,22 +390,23 @@ export default function Reservation() {
                       className += ' text-white hover:text-beige-dark cursor-pointer';
                     }
                     return className;
-                  }}  
+                  }}
+                  animatedSelection
                 />
 
                 {/* Legend */}
                 <div className="flex justify-center items-center space-x-6 mt-6">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#D4847C]"></div>
-                    <span className="text-white font-extralight font-lexend text-sm">Fully Booked</span>
+                    <div className="w-3 h-3 rounded-full bg-[#6B7A5E]"></div>
+                    <span className="text-white/80 font-light font-lexend text-sm">Fully Booked</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-[#C5A572]"></div>
-                    <span className="text-white font-extralight font-lexend text-sm">Special Hours</span>
+                    <span className="text-white/80 font-light font-lexend text-sm">Special Hours</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#5295bb]"></div>
-                    <span className="text-white font-extralight font-lexend text-sm">Closed</span>
+                    <div className="w-3 h-3 rounded-full bg-[#D4847C]"></div>
+                    <span className="text-white/80 font-light font-lexend text-sm">Closed</span>
                   </div>
                 </div>
               </div>
@@ -324,13 +431,13 @@ export default function Reservation() {
               <button
                 onClick={handleConfirmBooking}
                 disabled={!isFormValid() || isBooking}
-                className={`block w-full text-center font-extralight font-lexend py-4 mt-8 text-lg transition duration-200 ${
+                className={`block w-full text-center font-light font-lexend py-4 mt-8 text-lg transition duration-200 ${
                   !isFormValid() || isBooking
-                    ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                    : 'bg-white text-[#3f411a] hover:bg-[#f6f5c6] cursor-pointer'
+                    ? 'bg-gray-400 text-gray-600 cursor-not-allowed tracking-wider'
+                    : 'bg-beige-dark text-[#3f411a] hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg cursor-pointer tracking-wider'
                 }`}
               >
-                {isBooking ? 'Booking...' : 'Book a Table'}
+                {isBooking ? 'Booking...' : 'BOOK A TABLE'}
               </button>
               
               {/* Display errors if any */}
