@@ -264,7 +264,7 @@ class AdminController extends Controller
             'guest_email' => 'required|email|max:255',
             'guest_phone' => 'required|string|max:20',
             'special_requests' => 'nullable|string|max:500',
-            'reservation_date' => 'required|date|after:today',
+            'reservation_date' => 'required|date|after_or_equal:today',
             'time_slot_id' => 'required|exists:time_slots,id',
             'guest_count' => 'required|integer|min:1|max:100',
         ]);

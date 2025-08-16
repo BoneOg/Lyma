@@ -137,7 +137,7 @@ class StoreReservationRequest extends FormRequest
      */
     private function getMinBookingDate(): string
     {
-        return Carbon::now()->format('Y-m-d H:i:s');
+        return Carbon::today()->format('Y-m-d');
     }
 
     /**
