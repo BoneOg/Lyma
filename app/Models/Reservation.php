@@ -24,6 +24,9 @@ class Reservation extends Model
         'status',
         'special_requests',
         'expires_at',
+        'is_special_hours',
+        'special_hours_start',
+        'special_hours_end',
     ];
 
     protected function casts(): array
@@ -33,6 +36,9 @@ class Reservation extends Model
             'guest_count' => 'integer',
             'status' => 'string',
             'expires_at' => 'datetime',
+            'is_special_hours' => 'boolean',
+            'special_hours_start' => 'datetime',
+            'special_hours_end' => 'datetime',
         ];
     }
 

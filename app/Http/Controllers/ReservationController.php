@@ -26,6 +26,7 @@ class ReservationController extends Controller
                     'end_time' => $slot->end_time,
                     'formatted_time' => $slot->formatted_time,
                     'start_time_formatted' => $slot->start_time_formatted,
+                    'end_time_formatted' => $slot->end_time_formatted,
                 ];
             });
 
@@ -201,21 +202,57 @@ class ReservationController extends Controller
     {
         $validated = $request->validated();
 
+        // Log the incoming data for debugging
+        \Log::info('Reservation creation request', [
+            'all_data' => $request->all(),
+            'validated_data' => $validated
+        ]);
+
         try {
             DB::beginTransaction();
 
-            // Create reservation with pending status (needs review)
-            $reservation = Reservation::create([
-                'guest_first_name' => $validated['guest_first_name'],
-                'guest_last_name' => $validated['guest_last_name'],
-                'guest_email' => $validated['guest_email'],
-                'guest_phone' => $validated['guest_phone'],
-                'special_requests' => $validated['special_requests'] ?? null,
-                'reservation_date' => $validated['reservation_date'],
-                'time_slot_id' => $validated['time_slot_id'],
-                'guest_count' => $validated['guest_count'],
-                'status' => 'pending', // Pending until reviewed in checkout
-            ]);
+            // Check if this is a special hours reservation
+            $isSpecialHours = $validated['is_special_hours'] ?? false;
+            
+            if ($isSpecialHours) {
+                // For special hours, we need to validate the special hours data
+                $specialHoursStart = $validated['special_hours_start'] ?? null;
+                $specialHoursEnd = $validated['special_hours_end'] ?? null;
+                
+                if (!$specialHoursStart || !$specialHoursEnd) {
+                    throw new \Exception('Special hours time range is required for special hours reservations.');
+                }
+                
+                // Create reservation with special hours
+                $reservation = Reservation::create([
+                    'guest_first_name' => $validated['guest_first_name'],
+                    'guest_last_name' => $validated['guest_last_name'],
+                    'guest_email' => $validated['guest_email'],
+                    'guest_phone' => $validated['guest_phone'],
+                    'special_requests' => $validated['special_requests'] ?? null,
+                    'reservation_date' => $validated['reservation_date'],
+                    'time_slot_id' => null, // No specific time slot for special hours
+                    'guest_count' => $validated['guest_count'],
+                    'status' => 'pending', // Pending until reviewed in checkout
+                    'is_special_hours' => true,
+                    'special_hours_start' => $specialHoursStart,
+                    'special_hours_end' => $specialHoursEnd,
+                ]);
+            } else {
+                // Regular time slot reservation
+                $reservation = Reservation::create([
+                    'guest_first_name' => $validated['guest_first_name'],
+                    'guest_last_name' => $validated['guest_last_name'],
+                    'guest_email' => $validated['guest_email'],
+                    'guest_phone' => $validated['guest_phone'],
+                    'special_requests' => $validated['special_requests'] ?? null,
+                    'reservation_date' => $validated['reservation_date'],
+                    'time_slot_id' => $validated['time_slot_id'],
+                    'guest_count' => $validated['guest_count'],
+                    'status' => 'pending', // Pending until reviewed in checkout
+                    'is_special_hours' => false,
+                ]);
+            }
 
             // Set expiration time (15 minutes from now)
             $reservation->setExpirationTime();
@@ -228,6 +265,11 @@ class ReservationController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            
+            \Log::error('Reservation creation error', [
+                'error' => $e->getMessage(),
+                'data' => $validated
+            ]);
             
             return back()->withErrors([
                 'general' => 'An error occurred while creating your reservation. Please try again.'

@@ -18,8 +18,13 @@ return new class extends Migration
             
             // Reservation details
             $table->date('reservation_date');
-            $table->foreignId('time_slot_id')->constrained('time_slots')->onDelete('cascade');
+            $table->foreignId('time_slot_id')->nullable()->constrained('time_slots')->onDelete('cascade');
             $table->integer('guest_count');
+            
+            // Special hours fields
+            $table->boolean('is_special_hours')->default(false);
+            $table->time('special_hours_start')->nullable();
+            $table->time('special_hours_end')->nullable();
             
             // Status and notes
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');

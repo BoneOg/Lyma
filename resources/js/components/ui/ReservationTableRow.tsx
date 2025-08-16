@@ -68,7 +68,14 @@ const ReservationTableRow: React.FC<ReservationTableRowProps> = ({ reservation, 
       <td className="py-5 px-2 font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>{formatDate(reservation.reservation_date)}</td>
       <td className="py-5 px-1 font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>
         {reservation.special_hours_data 
-          ? 'Special Hours'
+          ? (
+            <div className="flex flex-col items-center">
+              <span>Special Hours</span>
+              <span className="text-xs text-gray-500">
+                {reservation.special_hours_data.special_start} - {reservation.special_hours_data.special_end}
+              </span>
+            </div>
+          )
           : reservation.time_slot || '-'
         }
       </td>

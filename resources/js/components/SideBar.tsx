@@ -12,8 +12,6 @@ const navItems = [
   { name: "ABOUT US", route: "/about" },
   { name: "MENU", route: "/menu" },
   { name: "GALLERY", route: "/gallery" },
-  { name: "JOURNAL", route: "/journal" },
-  { name: "CONTACT", route: "/contact" },
 ];
 
 const SideBar: React.FC<SideBarProps> = ({ open, onClose }) => {

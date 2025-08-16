@@ -75,10 +75,23 @@ class StoreReservationRequest extends FormRequest
                     if ($value === null && !$isSpecialHours) {
                         $fail('Either a time slot must be selected or special hours must be enabled.');
                     }
+                    if ($value !== null && $isSpecialHours) {
+                        $fail('Cannot select both a time slot and special hours.');
+                    }
                 },
             ],
             'is_special_hours' => [
                 'boolean',
+            ],
+            'special_hours_start' => [
+                'nullable',
+                'required_if:is_special_hours,true',
+                'date_format:H:i',
+            ],
+            'special_hours_end' => [
+                'nullable',
+                'required_if:is_special_hours,true',
+                'date_format:H:i',
             ],
             'guest_count' => [
                 'required',

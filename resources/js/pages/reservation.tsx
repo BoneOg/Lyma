@@ -133,7 +133,7 @@ export default function Reservation() {
           <img
             src="/assets/images/jar_beige.webp"
             alt=""
-            className="hidden lg:block absolute top-[8%] right-[20%] w-14 xl:w-18 rotate-[-5deg]"
+            className="hidden lg:block absolute top-[8%] right-[20%] w-14 rotate-[-5deg]"
             style={{ opacity: 0.045 }}
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
           />
@@ -141,7 +141,7 @@ export default function Reservation() {
           <img
             src="/assets/images/bamboo_beige.webp"
             alt=""
-            className="hidden xl:block absolute right-[25%] top-99 translate-x-12 w-22 rotate-[2deg]"
+            className="hidden lg:block absolute right-[25%] top-99 translate-x-12 w-22 rotate-[2deg]"
             style={{ opacity: 0.045 }}
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
           />
@@ -166,7 +166,7 @@ export default function Reservation() {
           <img
             src="/assets/images/leaf_beige.webp"
             alt=""
-            className="hidden xl:block absolute top-20 right-[40%] w-18 -rotate-2"
+            className="hidden lg:block absolute top-20 right-[40%] w-18 -rotate-2"
             style={{ opacity: 0.035 }}
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
           />
@@ -188,18 +188,18 @@ export default function Reservation() {
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
           />
         </div>
-        <div className="max-w-5xl w-full py-12 mt-20">
-          <h1 className="text-6xl font-thin tracking-wider font-lexend text-beige mb-12 -ml-[1px] md:-ml-[8px]">RESERVATION</h1>
+        <div className="max-w-5xl w-full py-6 sm:py-8 md:py-12 mt-16 sm:mt-18 md:mt-20 px-4 sm:px-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-thin tracking-wider font-lexend text-beige mb-6 sm:mb-8 md:mb-12 -ml-[1px] md:-ml-[8px]">RESERVATION</h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-start">
             {/* Left Content Container */}
             <div className="flex flex-col justify-start h-full">
               {/* Dropdowns + Calendar */}
               <div className="flex flex-col justify-start h-full">
-                <div className="flex space-x-4 mb-10">
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6 sm:mb-8 md:mb-10">
                   {/* Month */}
-                  <div className="relative w-40">
-                    <label className="block text-base text-beige font-light font-lexend mb-2">Month</label>
+                  <div className="relative w-full sm:w-40">
+                    <label className="block text-sm sm:text-base text-beige font-light font-lexend mb-2">Month</label>
                     <Select 
                       value={selectedMonth.toString()}
                       onValueChange={(value) => {
@@ -207,7 +207,7 @@ export default function Reservation() {
                         setSelectedDate(null) // Reset selected date when month changes
                       }}
                     >
-                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
+                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-sm sm:text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white max-h-none overflow-y-visible">
@@ -225,13 +225,13 @@ export default function Reservation() {
                   </div>
 
                   {/* Year */}
-                  <div className="relative w-28">
-                    <label className="block text-base text-beige font-light font-lexend mb-2">Year</label>
+                  <div className="relative w-full sm:w-28">
+                    <label className="block text-sm sm:text-base text-beige font-light font-lexend mb-2">Year</label>
                     <Select
                       value={selectedYear.toString()}
                       onValueChange={(value) => setSelectedYear(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
+                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-sm sm:text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white">
@@ -239,7 +239,7 @@ export default function Reservation() {
                           <SelectItem
                             key={year}
                             value={year.toString()}
-                            className="bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5a5d2a] focus:bg-[#5a5d2a]"
+                            className="bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5d2a] focus:bg-[#5a5d2a]"
                           >
                             {year}
                           </SelectItem>
@@ -249,8 +249,8 @@ export default function Reservation() {
                   </div>
 
                   {/* Time */}
-                  <div className="relative w-40">
-                    <label className="block text-base text-beige font-light font-lexend mb-2">Time</label>
+                  <div className="relative w-full sm:w-40">
+                    <label className="block text-sm sm:text-base text-beige font-light font-lexend mb-2">Time</label>
                     <Select 
                       value={selectedTimeSlot?.toString() || ''}
                       onValueChange={(value) => {
@@ -262,8 +262,8 @@ export default function Reservation() {
                       }}
                     >
                       <SelectTrigger className={`bg-transparent border-b border-white text-white w-full font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto text-left ${
-                        selectedTimeSlot === 'special-hours' ? 'py-3 text-xs' : 'py-2 text-base'
-                      }`}>
+                        selectedTimeSlot === 'special-hours' ? 'py-3 text-xs' : 'py-2 text-sm sm:text-base'
+                      }`} style={{ minHeight: '2.5rem' }}>
                         <SelectValue>
                           {(() => {
                             if (selectedTimeSlot === 'special-hours') {
@@ -305,14 +305,14 @@ export default function Reservation() {
                                   className={`bg-[#3f411a] font-extralight font-lexend focus:bg-[#5a5d2a] relative ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-[#5a5d2a]'} ${isOccupied ? '!opacity-100' : ''} ${isAdminDisabled ? '!opacity-100' : ''}`}
                                   disabled={isDisabled}
                                 >
-                                  <span className={isOccupied ? 'text-[#D4847C]' : isAdminDisabled ? 'text-[#5295bb]' : 'text-white'}>
-                                    {slot.start_time_formatted}
+                                  <span className={isOccupied ? 'text-[#D4847C]' : isAdminDisabled ? 'text-[#D4847C]' : 'text-white'}>
+                                    {slot.start_time_formatted} - {slot.end_time_formatted}
                                   </span>
                                   {isOccupied && (
                                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
                                   )}
                                   {isAdminDisabled && !isOccupied && (
-                                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#5295bb] rounded-full opacity-100"></div>
+                                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
                                   )}
                                 </SelectItem>
                               )
@@ -324,13 +324,13 @@ export default function Reservation() {
                   </div>
 
                   {/* Guests */}
-                  <div className="relative w-24">
-                    <label className="block text-base text-beige font-light font-lexend mb-2">Guests</label>
+                  <div className="relative w-full sm:w-24">
+                    <label className="block text-sm sm:text-base text-beige font-light font-lexend mb-2">Guests</label>
                     <Select 
                       value={guestCount.toString()}
                       onValueChange={(value) => setGuestCount(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
+                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-sm sm:text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white">
@@ -346,7 +346,7 @@ export default function Reservation() {
                           return guestOptions.map((num) => (
                             <SelectItem 
                               key={num} 
-                              value={num.toString()} 
+                              value={num.toString()}
                               className="bg-[#3f411a] font-extralight font-lexend text-white hover:bg-[#5a5d2a] focus:bg-[#5a5d2a]"
                             >
                               {num}
@@ -369,10 +369,10 @@ export default function Reservation() {
                   isDateClosed={isDateClosed}
                   isDateSpecialHours={isDateSpecialHours}
                   months={months}
-                  className="grid grid-cols-7 text-center gap-y-7 text-white text-lg"
-                  weekdayClassName={() => 'h-8 flex items-center justify-center font-lexend text-beige font-light tracking-wide opacity-80'}
+                  className="grid grid-cols-7 text-center gap-y-4 sm:gap-y-6 md:gap-y-7 text-white text-sm sm:text-base md:text-lg"
+                  weekdayClassName={() => 'h-6 sm:h-7 md:h-8 flex items-center justify-center font-lexend text-beige font-light tracking-wide opacity-80 text-xs sm:text-sm md:text-base'}
                   dayClassName={(day, { isDisabled, isFullyBooked, isSelected, isClosed, isSpecialHours }) => {
-                    let className = 'transition-colors h-8 w-full flex items-center justify-center font-lexend font-light relative';
+                    let className = 'transition-colors h-6 sm:h-7 md:h-8 w-full flex items-center justify-center font-lexend font-light relative text-xs sm:text-sm md:text-base';
                     
                     if (isClosed) {
                       className += ' text-[#D4847C] cursor-not-allowed';
@@ -395,25 +395,25 @@ export default function Reservation() {
                 />
 
                 {/* Legend */}
-                <div className="flex justify-center items-center space-x-6 mt-6">
+                <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 mt-4 sm:mt-6">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#6B7A5E]"></div>
-                    <span className="text-white/80 font-light font-lexend text-sm">Fully Booked</span>
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#6B7A5E]"></div>
+                    <span className="text-white/80 font-light font-lexend text-xs sm:text-sm">Fully Booked</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#C5A572]"></div>
-                    <span className="text-white/80 font-light font-lexend text-sm">Special Hours</span>
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#C5A572]"></div>
+                    <span className="text-white/80 font-light font-lexend text-xs sm:text-sm">Special Hours</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#D4847C]"></div>
-                    <span className="text-white/80 font-light font-lexend text-sm">Closed</span>
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#D4847C]"></div>
+                    <span className="text-white/80 font-light font-lexend text-xs sm:text-sm">Closed</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right Form */}
-            <div className="flex flex-col justify-between h-full self-stretch w-full max-w-md ml-auto">
+            <div className="flex flex-col justify-between h-full self-stretch w-full max-w-md mx-auto lg:ml-auto">
               <ReservationForm
                 firstName={firstName}
                 lastName={lastName}
@@ -431,7 +431,7 @@ export default function Reservation() {
               <button
                 onClick={handleConfirmBooking}
                 disabled={!isFormValid() || isBooking}
-                className={`block w-full text-center font-light font-lexend py-4 mt-8 text-lg transition duration-200 ${
+                className={`block w-full text-center font-light font-lexend py-3 sm:py-4 mt-6 sm:mt-8 text-base sm:text-lg transition duration-200 ${
                   !isFormValid() || isBooking
                     ? 'bg-gray-400 text-gray-600 cursor-not-allowed tracking-wider'
                     : 'bg-beige-dark text-[#3f411a] hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg cursor-pointer tracking-wider'
@@ -439,13 +439,6 @@ export default function Reservation() {
               >
                 {isBooking ? 'Booking...' : 'BOOK A TABLE'}
               </button>
-              
-              {/* Display errors if any */}
-              {errors?.general && (
-                <div className="mt-6 p-4 bg-red-500 text-white rounded text-base font-extralight font-lexend">
-                  {errors.general}
-                </div>
-              )}
             </div>
           </div>
         </div>

@@ -33,6 +33,7 @@ class AdminController extends Controller
                     'end_time' => $slot->end_time,
                     'formatted_time' => $slot->formatted_time,
                     'start_time_formatted' => $slot->start_time_formatted,
+                    'end_time_formatted' => $slot->end_time_formatted,
                 ];
             });
 
@@ -140,7 +141,7 @@ class AdminController extends Controller
                 'guest_first_name' => $r->guest_first_name,
                 'guest_last_name' => $r->guest_last_name,
                 'reservation_date' => $r->reservation_date->format('Y-m-d'),
-                'time_slot' => $r->timeSlot ? $r->timeSlot->start_time_formatted : null,
+                'time_slot' => $r->timeSlot ? $r->timeSlot->start_time_formatted . ' - ' . $r->timeSlot->end_time_formatted : null,
                 'guest_count' => $r->guest_count,
                 'status' => $r->status,
                 'email' => $r->guest_email,
@@ -221,6 +222,18 @@ class AdminController extends Controller
             }
             
             $reservation->update(['status' => 'cancelled']);
+            
+            // Send cancellation email to customer
+            try {
+                $emailController = new \App\Http\Controllers\EmailController();
+                $emailController->sendCancellationEmail($reservation);
+            } catch (\Exception $e) {
+                \Log::warning('Failed to send cancellation email', [
+                    'reservation_id' => $id,
+                    'error' => $e->getMessage()
+                ]);
+                // Don't fail the cancellation if email fails
+            }
             
             \Log::info('Reservation cancelled', ['id' => $id, 'user_id' => auth()->id()]);
             

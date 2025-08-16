@@ -7,6 +7,7 @@ interface TimeSlot {
   end_time: string;
   formatted_time: string;
   start_time_formatted: string;
+  end_time_formatted: string;
 }
 
 interface SystemSettings {
@@ -181,6 +182,24 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     return specialHoursData[day] || null;
   };
 
+  // Helper function to convert 12-hour format to 24-hour format
+  const convertTo24HourFormat = (time12h: string) => {
+    if (!time12h) return null;
+    
+    // Parse time like "11:00 AM" or "3:00 PM"
+    const [time, period] = time12h.split(' ');
+    const [hours, minutes] = time.split(':').map(Number);
+    
+    let hours24 = hours;
+    if (period === 'PM' && hours !== 12) {
+      hours24 = hours + 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours24 = 0;
+    }
+    
+    return `${hours24.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  };
+
   // Helper function to check if a time slot is admin-disabled for the selected date
   const isTimeSlotAdminDisabled = (timeSlotId: number) => {
     return disabledTimeSlots.includes(timeSlotId);
@@ -248,7 +267,7 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
       } else {
         const selectedTime = timeSlots.find(slot => slot.id === selectedTimeSlot);
         if (selectedTime) {
-          parts.push(selectedTime.start_time_formatted);
+          parts.push(`${selectedTime.start_time_formatted} - ${selectedTime.end_time_formatted}`);
         }
       }
     }
@@ -265,15 +284,41 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
   };
 
   const isFormValid = () => {
-    return selectedDate &&
-      selectedTimeSlot &&
-      (selectedTimeSlot === 'special-hours' || (!occupiedTimeSlots.includes(selectedTimeSlot as number) && !disabledTimeSlots.includes(selectedTimeSlot as number))) &&
-      firstName.trim() &&
+    // Check if date and time slot are selected
+    if (!selectedDate || !selectedTimeSlot) {
+      console.log('Form validation failed: No date or time slot selected');
+      return false;
+    }
+
+    // For special hours, check if special hours data exists
+    if (selectedTimeSlot === 'special-hours') {
+      const specialHours = getSpecialHoursForDate(selectedDate);
+      console.log('Special hours validation:', { selectedDate, specialHours });
+      if (!specialHours || !specialHours.special_start || !specialHours.special_end) {
+        console.log('Form validation failed: Invalid special hours data');
+        return false;
+      }
+    } else {
+      // For regular time slots, check if they're available
+      if (occupiedTimeSlots.includes(selectedTimeSlot as number) || disabledTimeSlots.includes(selectedTimeSlot as number)) {
+        console.log('Form validation failed: Time slot not available');
+        return false;
+      }
+    }
+
+    // Check form fields
+    const formFieldsValid = firstName.trim() &&
       lastName.trim() &&
       email.trim() &&
       phone.trim() &&
       email.includes('@') &&
       email.includes('.');
+    
+    if (!formFieldsValid) {
+      console.log('Form validation failed: Form fields incomplete');
+    }
+    
+    return formFieldsValid;
   };
 
   const handleBookTable = () => {
@@ -297,11 +342,40 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
         reservation_date: `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`,
         time_slot_id: selectedTimeSlot === 'special-hours' ? null : selectedTimeSlot,
         guest_count: guestCount,
-        is_special_hours: selectedTimeSlot === 'special-hours',
+        is_special_hours: selectedTimeSlot === 'special-hours' ? true : false,
+        special_hours_start: selectedTimeSlot === 'special-hours' && selectedDate ? convertTo24HourFormat(getSpecialHoursForDate(selectedDate)?.special_start) : null,
+        special_hours_end: selectedTimeSlot === 'special-hours' && selectedDate ? convertTo24HourFormat(getSpecialHoursForDate(selectedDate)?.special_end) : null,
       };
 
-      router.post('/reservations', formData);
-      setShowConfirmationModal(false);
+      // Debug logging
+      console.log('Form data being sent:', formData);
+      console.log('Selected time slot:', selectedTimeSlot);
+      console.log('Selected date:', selectedDate);
+      console.log('Special hours data:', selectedDate ? getSpecialHoursForDate(selectedDate) : null);
+
+      router.post('/reservations', formData, {
+        onError: (errors) => {
+          console.error('Booking error:', errors);
+          // Show specific error messages
+          if (errors.general) {
+            console.error('General error:', errors.general);
+          }
+          if (errors.special_hours_start) {
+            console.error('Special hours start error:', errors.special_hours_start);
+          }
+          if (errors.special_hours_end) {
+            console.error('Special hours end error:', errors.special_hours_end);
+          }
+          if (errors.is_special_hours) {
+            console.error('Is special hours error:', errors.is_special_hours);
+          }
+          // The notification will be handled by the backend error response
+        },
+        onSuccess: () => {
+          console.log('Booking successful!');
+          setShowConfirmationModal(false);
+        }
+      });
     } catch (error) {
       console.error('Booking error:', error);
     } finally {
@@ -353,6 +427,7 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     isDateClosed,
     isDateSpecialHours,
     getSpecialHoursForDate,
+    convertTo24HourFormat,
     isTimeSlotAdminDisabled,
     handleDateSelect,
     formatSelectedDateTime,

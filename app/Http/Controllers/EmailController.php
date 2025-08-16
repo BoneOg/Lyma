@@ -44,6 +44,7 @@ HTML;
             $response = Resend::emails()->send([
                 'from' => 'Lyma Siargao <reservations@lymasiargao.com>',
                 'to' => [$data['to']],
+                'reply-to' => 'pearl@lymaculinary.com',
                 'subject' => $subject,
                 'text' => strip_tags(str_replace(['<br/>', '<br>'], "\n", $body)),
                 'html' => $body,
@@ -99,6 +100,7 @@ HTML;
             $response = Resend::emails()->send([
                 'from' => 'Lyma Siargao <reservations@lymasiargao.com>',
                 'to' => [$reservation->guest_email],
+                'reply-to' => 'pearl@lymaculinary.com',
                 'subject' => $subject,
                 'text' => strip_tags(str_replace(['<br/>', '<br>'], "\n", $body)),
                 'html' => $body,
@@ -190,6 +192,83 @@ HTML;
                 'success' => false,
                 'message' => 'Failed to process reminders: ' . $e->getMessage()
             ];
+        }
+    }
+
+    /**
+     * Send cancellation email to customer
+     */
+    public function sendCancellationEmail(Reservation $reservation): bool
+    {
+        try {
+            $subject = 'Reservation Cancelled - Lyma Siargao';
+            
+            $body = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
+                <div style='background-color: #f6f5c6; padding: 20px; text-align: center;'>
+                    <h1 style='color: #3f411a; margin: 0; font-size: 24px;'>Lyma Siargao</h1>
+                    <p style='color: #3f411a; margin: 5px 0; font-size: 16px;'>Reservation Cancelled</p>
+                </div>
+                
+                <div style='padding: 20px; background-color: white;'>
+                    <h2 style='color: #3f411a; margin-bottom: 20px;'>Hello {$reservation->guest_first_name},</h2>
+                    
+                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
+                        Your reservation has been cancelled. We understand that circumstances change, and we're here to help you reschedule when you're ready.
+                    </p>
+                    
+                    <div style='background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;'>
+                        <h3 style='color: #3f411a; margin-top: 0; margin-bottom: 15px;'>Cancelled Reservation Details:</h3>
+                        <p style='margin: 5px 0; color: #555;'><strong>Date:</strong> " . $reservation->reservation_date->format('F d, Y') . "</p>
+                        <p style='margin: 5px 0; color: #555;'><strong>Time:</strong> " . ($reservation->timeSlot ? $reservation->timeSlot->start_time_formatted . ' - ' . $reservation->timeSlot->end_time_formatted : 'TBD') . "</p>
+                        <p style='margin: 5px 0; color: #555;'><strong>Guests:</strong> {$reservation->guest_count}</p>
+                        <p style='margin: 5px 0; color: #555;'><strong>Name:</strong> {$reservation->guest_first_name} {$reservation->guest_last_name}</p>
+                    </div>
+                    
+                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
+                        If you'd like to make a new reservation, please visit our website at <a href='https://lymasiargao.com' style='color: #3f411a; text-decoration: none;'>lymasiargao.com</a> or contact us directly.
+                    </p>
+                    
+                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
+                        We look forward to welcoming you to Lyma Siargao in the future!
+                    </p>
+                    
+                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
+                        Best regards,<br>
+                        The Lyma Siargao Team
+                    </p>
+                </div>
+                
+                <div style='background-color: #f6f5c6; padding: 15px; text-align: center;'>
+                    <p style='color: #3f411a; margin: 0; font-size: 14px;'>
+                        For any questions, please contact us at pearl@lymaculinary.com
+                    </p>
+                </div>
+            </div>";
+
+            $response = Resend::emails()->send([
+                'from' => 'Lyma Siargao <reservations@lymasiargao.com>',
+                'to' => [$reservation->guest_email],
+                'reply-to' => 'reservations@lymasiargao.com>',
+                'subject' => $subject,
+                'text' => strip_tags(str_replace(['<br/>', '<br>'], "\n", $body)),
+                'html' => $body,
+            ]);
+
+            \Log::info('Reservation cancellation email sent successfully', [
+                'reservation_id' => $reservation->id,
+                'email' => $reservation->guest_email,
+                'resend_id' => $response->id ?? null,
+            ]);
+
+            return true;
+        } catch (\Throwable $e) {
+            \Log::error('Failed to send reservation cancellation email', [
+                'reservation_id' => $reservation->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
         }
     }
 }

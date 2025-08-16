@@ -15,6 +15,7 @@ interface TimeSlot {
   end_time: string;
   formatted_time: string;
   start_time_formatted: string;
+  end_time_formatted: string;
 }
 
 interface SystemSettings {
@@ -202,8 +203,8 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
       } else if (created.time_slot_id) {
         const slot = timeSlots.find(ts => ts.id === created.time_slot_id);
         if (slot) {
-          timeLabel = slot.start_time_formatted
-            ? slot.start_time_formatted
+          timeLabel = slot.start_time_formatted && slot.end_time_formatted
+            ? `${slot.start_time_formatted} - ${slot.end_time_formatted}`
             : `${formatTo12Hour(slot.start_time)} - ${formatTo12Hour(slot.end_time)}`;
         }
       }
@@ -293,7 +294,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
       } else {
         const selectedTime = timeSlots.find(slot => slot.id === selectedTimeSlot);
         if (selectedTime) {
-          parts.push(selectedTime.start_time_formatted);
+          parts.push(`${selectedTime.start_time_formatted} - ${selectedTime.end_time_formatted}`);
         }
       }
     }
@@ -506,7 +507,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                               return 'Special Hours';
                             } else if (selectedTimeSlot && typeof selectedTimeSlot === 'number') {
                               const selectedTime = timeSlots.find(slot => slot.id === selectedTimeSlot);
-                              return selectedTime ? selectedTime.start_time_formatted : '';
+                              return selectedTime ? `${selectedTime.start_time_formatted} - ${selectedTime.end_time_formatted}` : '';
                             }
                             return '';
                           })()}
@@ -542,7 +543,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                                   disabled={isDisabled}
                                 >
                                   <span className={isOccupied ? 'text-[#D4847C]' : isAdminDisabled ? 'text-[#5295bb]' : 'text-white'}>
-                                    {slot.start_time_formatted}
+                                    {slot.start_time_formatted} - {slot.end_time_formatted}
                                   </span>
                                   {isOccupied && (
                                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
@@ -611,9 +612,9 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
 						let className = 'transition-colors h-8 w-full flex items-center justify-center font-lexend font-light relative';
                     
                     if (isClosed) {
-                      className += ' text-[#5295bb] cursor-not-allowed';
-                    } else if (isFullyBooked) {
                       className += ' text-[#D4847C] cursor-not-allowed';
+                    } else if (isFullyBooked) {
+                      className += ' text-[#6B7A5E] cursor-not-allowed';
                     } else if (isSelected && isSpecialHours) {
 							className += ' text-[#C5A572] font-semibold';
                     } else if (isSelected) {

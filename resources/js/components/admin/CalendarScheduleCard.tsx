@@ -100,11 +100,11 @@ const CalendarScheduleCard: React.FC = () => {
     const dateStr = getDateStr(date);
     const special = specials.find(s => s.date === dateStr);
     if (special) {
-      if (special.is_closed) return 'bg-[#D4847C]';
-      if (special.special_start && special.special_end) return 'bg-[#C5A572]';
+      if (special.is_closed) return 'bg-red-500';
+      if (special.special_start && special.special_end) return 'bg-yellow-500';
     }
     if (disabledTimeSlots.some(d => d.date === dateStr)) {
-      return 'bg-[#2563EB]';
+      return 'bg-blue-500';
     }
     return null;
   };
@@ -561,15 +561,15 @@ const CalendarScheduleCard: React.FC = () => {
           <div className="text-xs font-medium mb-1 font-lexend">Legend:</div>
           <div className="flex flex-col gap-1 text-xs">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#D4847C] rounded-full"></div>
+              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
               <span className="font-lexend">Closed</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#C5A572] rounded-full"></div>
+              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
               <span className="font-lexend">Special Hours</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#2563EB] rounded-full"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span className="font-lexend">Disabled Time Slots</span>
             </div>
           </div>
