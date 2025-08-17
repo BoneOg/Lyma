@@ -109,43 +109,82 @@ const AboutSection: React.FC = () => {
         />
       </div>
 
-      <div className="mx-[100px] py-20 md:py-28 relative z-10">
-        {/* Left + Right columns */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24 items-stretch">
+      <div className="mx-4 sm:mx-[30px] md:mx-[30px] lg:mx-[30px] xl:mx-[100px] py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 relative z-10">
+        {/* Mobile/Tablet Layout (sm and md) - Single column with image below name */}
+        <div className="lg:hidden">
+          {/* Heading */}
+          <div className="mb-6 sm:mb-8 md:mb-10">
+            <p className="font-lexend tracking-[0.2rem] mb-4 sm:mb-6 -ml-1 uppercase leading-tight text-xs sm:text-sm font-light text-beige/60 m-0 p-0">
+              Meet Chef
+            </p>
+            <p className="font-lexend tracking-[0.2rem] uppercase text-2xl sm:text-3xl md:text-4xl font-extralight -ml-1 sm:-ml-2 md:-ml-3">
+              Marc Silvestre
+            </p>
+          </div>
+
+          {/* Chef Image - Below name for sm and md */}
+          <div className="mb-8 sm:mb-10 md:mb-12">
+            <img
+              src="/assets/images/about_chef.webp"
+              alt="Chef Marc Silvestre holding a rack of ribs in the kitchen"
+              className="h-[280px] w-full object-cover sm:h-[320px] md:h-[400px]"
+              loading="lazy"
+            />
+          </div>
+
+          {/* Copy */}
+          <div className="max-w-xl font-lexend font-extralight text-beige">
+            <p className="text-sm leading-6 sm:text-base sm:leading-7 md:text-lg md:leading-8">
+              Rooted in Filipino heritage and elevated by Western technique, it
+              redefines island dining through a harmonious fusion of tradition
+              and modernity.
+            </p>
+            <a
+              href="/about"
+              className="mt-4 sm:mt-6 inline-flex items-center gap-2 font-lexend text-xs sm:text-sm md:text-base font-light tracking-widest hover:text-beige"
+            >
+              ABOUT US 
+              <span aria-hidden>→</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Desktop Layout (lg and up) - Two column layout */}
+        <div className="hidden lg:grid grid-cols-2 gap-16 xl:gap-24 items-stretch">
           {/* Left column: heading + media/text row */}
           <div className="flex flex-col h-full">
             {/* Heading */}
-            <div className="mb-4">
+            <div className="mb-8">
               <p className="font-lexend tracking-[0.2rem] mb-6 uppercase leading-tight text-sm font-light text-beige/60 m-0 p-0">
                 Meet Chef
               </p>
-              <p className="font-lexend tracking-[0.2rem] uppercase text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extralight -ml-3">
+              <p className="font-lexend tracking-[0.2rem] uppercase text-6xl xl:text-6xl 2xl:text-8xl font-extralight -ml-3">
                 Marc Silvestre
               </p>
             </div>
 
-            {/* Row: small image + text */}
-            <div className="flex flex-col gap-8 sm:gap-10 md:flex-row md:items-start mt-auto">
-              {/* Left small image */}
+            {/* Row: small image at bottom left + text on the right */}
+            <div className="flex flex-row gap-10 items-end mt-auto">
+              {/* Left small image - positioned at bottom */}
               <div className="shrink-0">
                 <img
                   src="/assets/images/about1.webp"
                   alt="Assorted olives and ingredients"
-                  className="h-44 w-full max-w-[18rem] object-cover md:h-52 md:w-72"
+                  className="h-48 w-full max-w-[20rem] xl:h-52 xl:max-w-[22rem] 2xl:h-56 2xl:max-w-[24rem] object-cover"
                   loading="lazy"
                 />
               </div>
 
-              {/* Copy */}
-              <div className="max-w-xl font-lexend font-light  text-beige">
-                <p className="text-base leading-7 sm:text-lg md:text-xl md:leading-8">
+              {/* Copy - positioned to the right of the image */}
+              <div className="max-w-xl font-lexend font-thin text-beige">
+                <p className="text-xl leading-5 lg:text-sm xl:text-lg xl:leading-7">
                   Rooted in Filipino heritage and elevated by Western technique, it
                   redefines island dining through a harmonious fusion of tradition
                   and modernity.
                 </p>
                 <a
                   href="/about"
-                  className="mt-6 inline-flex items-center gap-2 font-lexend text-sm sm:text-base md:text-lg font-extralight tracking-widest hover:text-beige"
+                  className="mt-6 inline-flex items-center gap-2 font-lexend text-lg lg:text-sm xl:text-lg font-light tracking-widest hover:text-beige"
                 >
                   ABOUT US 
                   <span aria-hidden>→</span>
@@ -159,7 +198,7 @@ const AboutSection: React.FC = () => {
             <img
               src="/assets/images/about_chef.webp"
               alt="Chef Marc Silvestre holding a rack of ribs in the kitchen"
-              className="h-[420px] w-full object-cover sm:h-[520px] md:h-[640px] lg:h-[720px]"
+              className="h-[480px] w-full object-cover xl:h-[560px] 2xl:h-[640px]"
               loading="lazy"
             />
           </div>

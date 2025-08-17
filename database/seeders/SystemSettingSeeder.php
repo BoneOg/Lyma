@@ -27,7 +27,7 @@ class SystemSettingSeeder extends Seeder
             ],
             [
                 'setting_key' => 'restaurant_email',
-                'setting_value' => 'lymaculinary@gmail.com',
+                'setting_value' => 'pearl@lymaculinary.com',
                 'description' => 'Restaurant Contact Email'
             ],
             [

@@ -12,14 +12,14 @@ const SidebarSlide: React.FC<SidebarSlideProps> = ({ isOpen, children }) => {
       x: "-100%",
       transition: {
         duration: 0.5,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
     open: {
       x: 0,
       transition: {
         duration: 0.5,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
         staggerChildren: 0.1,
         delayChildren: 0.2,
       },
@@ -36,7 +36,7 @@ const SidebarSlide: React.FC<SidebarSlideProps> = ({ isOpen, children }) => {
       y: 0,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       },
     },
   };
@@ -51,9 +51,9 @@ const SidebarSlide: React.FC<SidebarSlideProps> = ({ isOpen, children }) => {
           animate="open"
           exit="closed"
         >
-          <motion.div className="flex items-center justify-center h-full">
+          <motion.div className="flex items-center justify-center h-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
             <motion.nav>
-              <motion.ul className="space-y-8 text-center">
+              <motion.ul className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12 2xl:space-y-16 text-center">
                 {React.Children.map(children, (child, index) => (
                   <motion.li
                     key={index}

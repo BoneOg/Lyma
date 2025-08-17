@@ -11,10 +11,7 @@ const HeroSection: React.FC = () => {
         <img 
           src="/assets/images/hero.webp" 
           alt="Lyma Restaurant Hero" 
-          className="w-full h-full object-cover"
-          style={{
-            objectPosition: 'center 70%'
-          }}
+          className="w-full h-full object-cover object-[85%_center] sm:object-[85%_center]  md:object-[85%_center]  lg:object-cover"
         />
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-black/30"></div>
@@ -22,12 +19,12 @@ const HeroSection: React.FC = () => {
       
       {/* Content */}
       <div className="relative z-10 flex items-center h-full">
-        <div className="ml-4 sm:ml-8 md:ml-[100px] text-white -mt-10 text-center md:text-left">
-          <TextEffect per='word' preset='slide' delay={0.2} speedReveal={0.5} as="h1" className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-lexend font-extralight text-beige mb-4 -ml-2 leading-tight">
+        <div className="ml-4 sm:ml-8 md:ml-[30px] lg:ml-[30px] xl:ml-[100px] text-white -mt-10 text-center md:text-left">
+          <TextEffect per='word' preset='slide' delay={0.2} speedReveal={0.5} as="h1" className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-lexend font-extralight text-beige mb-4 -ml-2 leading-tight">
             FIVE PILLARS. ONE VISION.
           </TextEffect>
           <div className="mb-8">
-            <TextEffect per='word' preset='slide' delay={0.1} speedReveal={0.5} as="p" className="text-sm sm:text-base md:text-lg lg:text-xl font-lexend font-extralight text-white/70 mb-2">
+            <TextEffect per='word' preset='slide' delay={0.1} speedReveal={0.5} as="p" className="text-xs sm:text-base md:text-sm lg:text-sm xl:text-lg 2xl:text-lg font-lexend font-extralight text-white/70 mb-2">
               A culinary journey through tradition and innovation
             </TextEffect>
           </div>
@@ -42,7 +39,7 @@ const HeroSection: React.FC = () => {
           >
             <Link
               href="/reservation"
-              className="flex items-center gap-2 font-lexend text-sm sm:text-base md:text-1xl font-extralight tracking-widest text-beige transition-colors duration-300 z-10 px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-6"
+              className="flex items-center gap-2 font-lexend text-md sm:text-base md:text-1xl lg:text-sm xl:text-lg 2xl:text-lg font-extralight tracking-widest text-beige transition-colors duration-300 z-10 px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-6"
             >
               <TextEffect per='word' preset='slide' delay={0.1} speedReveal={0.3} as="span">
                 RESERVE NOW
@@ -58,8 +55,8 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* SIARGAO - Bottom Left */}
-      <div className="absolute bottom-0 left-0 z-10 ml-4 sm:ml-8 md:ml-[100px] mb-8 sm:mb-12 md:mb-16">
-        <TextEffect per='word' preset='slide' delay={1.0} as="h2" className="text-sm sm:text-base md:text-md font-lexend font-extralight text-beige">
+      <div className="absolute bottom-0 left-0 z-10 ml-4 sm:ml-8 md:ml-[30px] lg:ml-[30px] xl:ml-[100px] mb-8 sm:mb-12 md:mb-16">
+        <TextEffect per='word' preset='slide' delay={1.0} as="h2" className="text-sm sm:text-base md:text-md lg:text-sm 2xl:text-md font-lexend font-extralight text-beige">
           SIARGAO
         </TextEffect>
       </div>

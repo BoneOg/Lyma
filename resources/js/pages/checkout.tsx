@@ -231,7 +231,7 @@ export default function Checkout() {
 						{/* Status Heading */}
 						<div className="text-center space-y-3 flex flex-col items-center justify-center mt-12">
 							<h2 
-								className="text-2xl lg:text-6xl font-thin font-lexend tracking-[0.15em] whitespace-nowrap"
+								className="text-xl lg:text-6xl font-thin font-lexend tracking-[0.15em] whitespace-nowrap"
 								style={{ color: 'var(--color-beige)' }}
 							>
 								REVIEW & CONFIRM
@@ -260,11 +260,10 @@ export default function Checkout() {
               <div className="flex flex-col lg:flex-row gap-2 max-w-1xl mx-auto">
               <button
                 onClick={() => window.history.back()}
-                  className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg"
+                  className="flex-1 py-4 px-6 font-light text-base font-lexend transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg"
                 style={{ 
                 backgroundColor: 'hsl(var(--primary)',
                 color: 'var(--color-beige)',
-                fontFamily: 'Lexend Giga, sans-serif',
                 letterSpacing: '0.05em',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
                 }}
@@ -275,7 +274,7 @@ export default function Checkout() {
                 <button
                   onClick={() => setShowConfirmModal(true)}
                   disabled={loading || disableConfirm}
-					className={`flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform ${
+					className={`flex-1 py-4 px-6 font-light text-base font-lexend transition-all duration-300 transform ${
                     loading || disableConfirm
                       ? 'cursor-not-allowed opacity-50 scale-95'
                       : 'hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg'
@@ -283,7 +282,6 @@ export default function Checkout() {
 					  style={{
                     backgroundColor: loading || disableConfirm ? 'var(--color-beige) / 0.3)' : 'var(--color-beige-dark)',
                     color: 'var(--color-olive)',
-                    fontFamily: 'Lexend Giga, sans-serif',
                     letterSpacing: '0.05em',
 						boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)',
                   }}

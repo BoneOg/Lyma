@@ -102,9 +102,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       />
       
       {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4">
         <div 
-          className="relative bg-white shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-100"
+          className="relative bg-white shadow-2xl max-w-md w-full mx-2 sm:mx-4 transform transition-all duration-300 scale-100"
           style={{ 
             backgroundColor: 'var(--color-beige)',
             borderRadius: '0px',
@@ -115,21 +115,21 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         >
 
           {/* Content */}
-          <div className="p-8 text-center">
+          <div className="p-4 sm:p-8 text-center">
             {/* Icon */}
             <div 
-              className="w-16 h-16 mx-auto mb-6 flex items-center justify-center"
+              className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 flex items-center justify-center"
               style={{ backgroundColor: 'transparent' }}
             >
               <IconComponent 
-                className="w-12 h-12" 
+                className="w-8 h-8 sm:w-12 sm:h-12" 
                 style={{ color: config.iconColor }} 
               />
             </div>
 
             {/* Title */}
             <h3 
-              className="text-2xl font-lexend font-medium mb-3 leading-tight"
+              className="text-lg sm:text-2xl font-lexend font-medium mb-2 sm:mb-3 leading-tight"
               style={{ 
                 color: 'var(--color-olive)',
                 letterSpacing: '0.05em'
@@ -141,7 +141,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             {/* Message */}
             {message && (
               <p 
-                className="text-base font-lexend font-light mb-6 leading-relaxed max-w-sm mx-auto"
+                className="text-sm sm:text-base font-lexend font-light mb-4 sm:mb-6 leading-relaxed max-w-sm mx-auto"
                 style={{ 
                   color: 'var(--color-olive)',
                   opacity: '0.8'
@@ -153,17 +153,17 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
             {/* Children Content */}
             {children && (
-              <div className="text-left mb-6 p-4 bg-black/5">
+              <div className="text-left mb-4 sm:mb-6 p-3 sm:p-4 bg-black/5">
                 {children}
               </div>
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-3 mt-8">
+            <div className="flex gap-2 sm:gap-3 mt-6 sm:mt-8">
               <button
                 onClick={onCancel}
                 disabled={cancelDisabled}
-                className="flex-1 py-3.5 px-6 font-lexend font-light text-base transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-2.5 sm:py-3.5 px-4 sm:px-6 font-lexend font-light text-sm sm:text-base transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ 
                   backgroundColor: 'transparent',
                   color: cancelDisabled ? 'hsl(var(--muted-foreground))' : 'var(--color-olive)',
@@ -178,7 +178,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               <button
                 onClick={onConfirm}
                 disabled={confirmDisabled}
-                className="flex-1 py-3.5 px-6 font-lexend font-light text-base transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-2.5 sm:py-3.5 px-4 sm:px-6 font-lexend font-light text-sm sm:text-base transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ 
                   backgroundColor: confirmDisabled ? '#d1d5db' : config.confirmBg,
                   color: 'white',

@@ -34,13 +34,13 @@ const StaffSidebar: React.FC = () => {
       <div className="p-6 border-b border-olive-light">
         <Link href="/staff/booking" className="block overflow-hidden">
           <img 
-            src="/assets/images/lyma.png" 
+            src="/assets/logo/lymabeige.webp" 
             alt="Lyma by Chef Mar" 
-            className="w-full h-16 object-cover object-center"
+            className="w-full h-16 object-contain object-center"
             style={{
               objectPosition: 'center',
-              objectFit: 'cover',
-              transform: 'scale(3)',
+              objectFit: 'contain',
+              transform: 'scale(1)',
               transformOrigin: 'center'
             }}
           />

@@ -64,13 +64,13 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
             <div className="flex-grow flex items-center justify-center px-4 py-6">
               <div className="w-full max-w-4xl space-y-6 text-center">
                 <h1 
-                  className="text-2xl lg:text-3xl font-extralight tracking-[0.15em]"
+                  className="text-xl sm:text-2xl lg:text-3xl font-extralight tracking-[0.15em] font-lexend"
                   style={{ color: 'hsl(var(--primary))' }}
                 >
                   Reservation Not Found
                 </h1>
                 <p 
-                  className="text-sm lg:text-base font-light tracking-wide mx-auto max-w-2xl"
+                  className="text-xs sm:text-sm lg:text-base font-light tracking-wide mx-auto max-w-2xl font-lexend"
                   style={{ color: 'hsl(var(--muted-foreground))' }}
                 >
                   We couldn't find your reservation details. This might be due to a failed or cancelled reservation, or an error retrieving the reservation.
@@ -78,11 +78,10 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
                 <div className="flex flex-col lg:flex-row gap-2 max-w-1xl mx-auto pt-2">
                   <a
                     href="/"
-                    className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                    className="flex-1 py-4 px-6 font-light text-base font-lexend transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
                     style={{ 
                       backgroundColor: 'var(--color-beige)',
                       color: 'var(--color-olive)',
-                      fontFamily: 'Lexend Giga, sans-serif',
                       letterSpacing: '0.05em',
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
                     }}
@@ -91,11 +90,10 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
                   </a>
                   <a
                     href="/reservation"
-                    className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                    className="flex-1 py-4 px-6 font-light text-base font-lexend transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
                     style={{ 
                       backgroundColor: 'hsl(var(--primary))',
                       color: 'var(--color-beige)',
-                      fontFamily: 'Lexend Giga, sans-serif',
                       letterSpacing: '0.05em',
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
                     }}
@@ -220,13 +218,13 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
           />
         </div>
         <div className="relative z-10 min-h-screen flex flex-col">
-          <div className="flex-grow flex items-center justify-center px-4 py-6">
+          <div className="flex-grow flex items-center justify-center px-4 py-6 mt-14 sm:mt-14 md:mt-24 mb-8 sm:mb-12 md:mb-16">
             <div className="w-full max-w-4xl space-y-4">
 
               {/* Status Heading */}
               <div className="text-center space-y-3 flex flex-col items-center justify-center">
                 <h2 
-                  className="text-2xl lg:text-6xl font-thin font-lexend tracking-[0.15em] whitespace-nowrap"
+                  className="text-lg sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-thin font-lexend tracking-[0.15em] whitespace-nowrap"
                   style={{ color: 'var(--color-beige)' }}
                 >
                   {paymentStatus === 'success' && 'RESERVATION CONFIRMED'}
@@ -263,11 +261,10 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
               <div className="flex flex-col lg:flex-row gap-2 max-w-1xl mx-auto">
                 <a
                   href="/"
-                  className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                  className="flex-1 py-4 px-6 font-light text-base font-lexend transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
                   style={{ 
                     backgroundColor: 'hsl(var(--primary))',
                     color: 'var(--color-beige)',
-                    fontFamily: 'Lexend Giga, sans-serif',
                     letterSpacing: '0.05em',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
                   }}
@@ -277,11 +274,10 @@ const Transaction: React.FC<TransactionProps> = ({ reservation, paymentStatus, s
 
                 <a
                   href="/reservation"
-                  className="flex-1 py-4 px-6 font-light text-base transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
+                  className="flex-1 py-4 px-6 font-light text-base font-lexend transition-all duration-300 transform hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg text-center"
                   style={{ 
                     backgroundColor: 'var(--color-beige-dark)',
                     color: 'var(--color-olive)',
-                    fontFamily: 'Lexend Giga, sans-serif',
                     letterSpacing: '0.05em',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
                   }}
