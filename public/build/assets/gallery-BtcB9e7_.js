@@ -1,0 +1,1 @@
+import{j as r}from"./app-D0O3NomQ.js";import{L as t}from"./layout-BC5_hjP2.js";import{G as s}from"./GallerySection-CAQavsGJ.js";import"./proxy-C_vlYdpQ.js";const l=({footerData:o})=>r.jsx(t,{footerData:o,children:r.jsx(s,{})});export{l as default};
