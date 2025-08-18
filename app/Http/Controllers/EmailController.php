@@ -23,22 +23,70 @@ class EmailController extends Controller
 
         $subject = "Your Reservation at Lyma Siargao is Confirmed — {$data['date_formatted']}";
 
-        $body = <<<HTML
-<p>Dear {$data['guest_name']},</p>
-<p>Thank you for choosing Lyma Siargao. We are pleased to confirm your reservation as follows:</p>
-<p><strong>Reservation Details:</strong></p>
-<ul>
-  <li><strong>Guest Name:</strong> {$data['guest_name']}</li>
-  <li><strong>Email:</strong> {$data['to']}</li>
-  <li><strong>Phone:</strong> {$data['phone']}</li>
-  <li><strong>Date:</strong> {$data['date_formatted']}</li>
-  <li><strong>Time:</strong> {$data['time_range']}</li>
-  <li><strong>Number of Guests:</strong> {$data['guest_count']}</li>
-</ul>
-<p>We look forward to welcoming you and providing an exceptional dining experience. If you need to modify or cancel your reservation, please visit our website at <a href="https://lymasiargao.com">lymasiargao.com</a> or contact us directly.</p>
-<p>Thank you again for choosing Lyma Siargao.</p>
-<p>Warm regards,<br/>The Lyma Team<br/><a href="https://lymasiargao.com">lymasiargao.com</a></p>
-HTML;
+        $body = "
+        <div style='font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;'>
+            <!-- Header -->
+            <div style='background-color: #f8f9fa; padding: 30px 20px; text-align: center; border-bottom: 1px solid #e9ecef;'>
+                <h1 style='color: #3D401E; font-size: 48px; font-weight: 300; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;'>LYMA</h1>
+                <p style='color: #6c757d; margin: 8px 0 0 0; font-size: 16px; font-weight: 400;'>Reservation Confirmed</p>
+            </div>
+            
+            <!-- Main Content -->
+            <div style='padding: 40px 30px; background-color: #ffffff;'>
+                <h2 style='color: #212529; margin-bottom: 24px; font-size: 20px; font-weight: 500;'>Hello {$data['guest_name']},</h2>
+                
+                <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
+                    Thank you for choosing Lyma Siargao. We are pleased to confirm your reservation as follows:
+                </p>
+                
+                <!-- Reservation Details Box -->
+                <div style='background-color: #f8f9fa; padding: 24px; margin-bottom: 32px; border-left: 4px solid #3D401E;'>
+                    <h3 style='color: #212529; margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 500;'>Reservation Details:</h3>
+                    <div style='display: grid; gap: 12px;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Name:</span>
+                            <span style='color: #212529; font-weight: 400;'>{$data['guest_name']}</span>
+                        </div>
+                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Email:</span>
+                            <span style='color: #212529; font-weight: 400;'>{$data['to']}</span>
+                        </div>
+                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Phone:</span>
+                            <span style='color: #212529; font-weight: 400;'>" . ($data['phone'] ?? 'N/A') . "</span>
+                        </div>
+                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Date:</span>
+                            <span style='color: #212529; font-weight: 400;'>{$data['date_formatted']}</span>
+                        </div>
+                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Time:</span>
+                            <span style='color: #212529; font-weight: 400;'>{$data['time_range']}</span>
+                        </div>
+                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0;'>
+                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Guests:</span>
+                            <span style='color: #212529; font-weight: 400;'>{$data['guest_count']}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
+                    We look forward to welcoming you and providing an exceptional dining experience. If you need to modify or cancel your reservation, please visit our website at <a href='https://lymasiargao.com' style='color: #3D401E; text-decoration: none; font-weight: 500;'>lymasiargao.com</a> or contact us directly.
+                </p>
+                
+                <p style='color: #495057; line-height: 1.7; margin-bottom: 0; font-size: 16px; font-weight: 400;'>
+                    Best regards,<br>
+                    <strong>The Lyma Siargao Team</strong>
+                </p>
+            </div>
+            
+            <!-- Footer -->
+            <div style='background-color: #f8f9fa; padding: 24px 20px; text-align: center; border-top: 1px solid #e9ecef;'>
+                <p style='color: #6c757d; margin: 0; font-size: 14px; font-weight: 400;'>
+                    For any questions, please contact us at <a href='mailto:pearl@lymaculinary.com' style='color: #3D401E; text-decoration: none; font-weight: 500;'>pearl@lymaculinary.com</a>
+                </p>
+            </div>
+        </div>";
 
         try {
             $response = Resend::emails()->send([
@@ -81,21 +129,66 @@ HTML;
 
             $timeSlot = $reservation->timeSlot ? $reservation->timeSlot->start_time_formatted : 'TBD';
 
-            $body = <<<HTML
-<p>Dear {$reservation->guest_first_name},</p>
-<p>This is a friendly reminder about your upcoming reservation at Lyma Siargao today!</p>
-<p><strong>Reservation Details:</strong></p>
-<ul>
-  <li><strong>Guest Name:</strong> {$reservation->guest_first_name} {$reservation->guest_last_name}</li>
-  <li><strong>Date:</strong> {$reservation->reservation_date->format('M d, Y')}</li>
-  <li><strong>Time:</strong> {$timeSlot}</li>
-  <li><strong>Number of Guests:</strong> {$reservation->guest_count}</li>
-</ul>
-<p>We're looking forward to seeing you today! Please arrive 5-10 minutes before your scheduled time.</p>
-<p>If you need to modify or cancel your reservation, please contact us immediately.</p>
-<p>See you soon!</p>
-<p>Warm regards,<br/>The Lyma Team<br/><a href="https://lymasiargao.com">lymasiargao.com</a></p>
-HTML;
+            $body = "
+            <div style='font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;'>
+                <!-- Header -->
+                <div style='background-color: #f8f9fa; padding: 30px 20px; text-align: center; border-bottom: 1px solid #e9ecef;'>
+                    <h1 style='color: #3D401E; font-size: 48px; font-weight: 300; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;'>LYMA</h1>
+                    <p style='color: #6c757d; margin: 8px 0 0 0; font-size: 16px; font-weight: 400;'>Reservation Reminder</p>
+                </div>
+                
+                <!-- Main Content -->
+                <div style='padding: 40px 30px; background-color: #ffffff;'>
+                    <h2 style='color: #212529; margin-bottom: 24px; font-size: 20px; font-weight: 500;'>Hello {$reservation->guest_first_name},</h2>
+                    
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
+                        This is a friendly reminder about your upcoming reservation at Lyma Siargao today!
+                    </p>
+                    
+                    <!-- Reservation Details Box -->
+                    <div style='background-color: #f8f9fa; padding: 24px; margin-bottom: 32px; border-left: 4px solid #3D401E;'>
+                        <h3 style='color: #212529; margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 500;'>Reservation Details:</h3>
+                        <div style='display: grid; gap: 12px;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Name:</span>
+                                <span style='color: #212529; font-weight: 400;'>{$reservation->guest_first_name} {$reservation->guest_last_name}</span>
+                            </div>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Date:</span>
+                                <span style='color: #212529; font-weight: 400;'>{$reservation->reservation_date->format('M d, Y')}</span>
+                            </div>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Time:</span>
+                                <span style='color: #212529; font-weight: 400;'>{$timeSlot}</span>
+                            </div>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Guests:</span>
+                                <span style='color: #212529; font-weight: 400;'>{$reservation->guest_count}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
+                        We're looking forward to seeing you today! Please arrive 5-10 minutes before your scheduled time.
+                    </p>
+                    
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
+                        If you need to modify or cancel your reservation, please contact us immediately.
+                    </p>
+                    
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 0; font-size: 16px; font-weight: 400;'>
+                        See you soon!<br>
+                        <strong>The Lyma Siargao Team</strong>
+                    </p>
+                </div>
+                
+                <!-- Footer -->
+                <div style='background-color: #f8f9fa; padding: 24px 20px; text-align: center; border-top: 1px solid #e9ecef;'>
+                    <p style='color: #6c757d; margin: 0; font-size: 14px; font-weight: 400;'>
+                        For any questions, please contact us at <a href='mailto:pearl@lymaculinary.com' style='color: #3D401E; text-decoration: none; font-weight: 500;'>pearl@lymaculinary.com</a>
+                    </p>
+                </div>
+            </div>";
 
             $response = Resend::emails()->send([
                 'from' => 'Lyma Siargao <reservations@lymasiargao.com>',
@@ -204,44 +297,62 @@ HTML;
             $subject = 'Reservation Cancelled - Lyma Siargao';
             
             $body = "
-            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
-                <div style='background-color: #f6f5c6; padding: 20px; text-align: center;'>
-                    <h1 style='color: #3f411a; margin: 0; font-size: 24px;'>Lyma Siargao</h1>
-                    <p style='color: #3f411a; margin: 5px 0; font-size: 16px;'>Reservation Cancelled</p>
+            <div style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;'>
+                <!-- Header -->
+                <div style='background-color: #f8f9fa; padding: 30px 20px; text-align: center; border-bottom: 1px solid #e9ecef;'>
+                    <h1 style='color: #3D401E; font-size: 48px; font-weight: 300; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;'>LYMA</h1>
+                    <p style='color: #6c757d; margin: 8px 0 0 0; font-size: 16px; font-weight: 400;'>Reservation Cancelled</p>
                 </div>
                 
-                <div style='padding: 20px; background-color: white;'>
-                    <h2 style='color: #3f411a; margin-bottom: 20px;'>Hello {$reservation->guest_first_name},</h2>
+                <!-- Main Content -->
+                <div style='padding: 40px 30px; background-color: #ffffff;'>
+                    <h2 style='color: #212529; margin-bottom: 24px; font-size: 20px; font-weight: 500;'>Hello {$reservation->guest_first_name},</h2>
                     
-                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
                         Your reservation has been cancelled. We understand that circumstances change, and we're here to help you reschedule when you're ready.
                     </p>
                     
-                    <div style='background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;'>
-                        <h3 style='color: #3f411a; margin-top: 0; margin-bottom: 15px;'>Cancelled Reservation Details:</h3>
-                        <p style='margin: 5px 0; color: #555;'><strong>Date:</strong> " . $reservation->reservation_date->format('F d, Y') . "</p>
-                        <p style='margin: 5px 0; color: #555;'><strong>Time:</strong> " . ($reservation->timeSlot ? $reservation->timeSlot->start_time_formatted . ' - ' . $reservation->timeSlot->end_time_formatted : 'TBD') . "</p>
-                        <p style='margin: 5px 0; color: #555;'><strong>Guests:</strong> {$reservation->guest_count}</p>
-                        <p style='margin: 5px 0; color: #555;'><strong>Name:</strong> {$reservation->guest_first_name} {$reservation->guest_last_name}</p>
+                    <!-- Reservation Details Box -->
+                    <div style='background-color: #f8f9fa; padding: 24px; margin-bottom: 32px; border-left: 4px solid #3D401E;'>
+                        <h3 style='color: #212529; margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 500;'>Cancelled Reservation Details:</h3>
+                        <div style='display: grid; gap: 12px;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Date:</span>
+                                <span style='color: #212529; font-weight: 400;'>" . $reservation->reservation_date->format('F d, Y') . "</span>
+                            </div>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Time:</span>
+                                <span style='color: #212529; font-weight: 400;'>" . ($reservation->timeSlot ? $reservation->timeSlot->start_time_formatted . ' - ' . $reservation->timeSlot->end_time_formatted : 'TBD') . "</span>
+                            </div>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Guests:</span>
+                                <span style='color: #212529; font-weight: 400;'>{$reservation->guest_count}</span>
+                            </div>
+                            <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0;'>
+                                <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Name:</span>
+                                <span style='color: #212529; font-weight: 400;'>{$reservation->guest_first_name} {$reservation->guest_last_name}</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
-                        If you'd like to make a new reservation, please visit our website at <a href='https://lymasiargao.com' style='color: #3f411a; text-decoration: none;'>lymasiargao.com</a> or contact us directly.
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
+                        If you'd like to make a new reservation, please visit our website at <a href='https://lymasiargao.com' style='color: #3D401E; text-decoration: none; font-weight: 500;'>lymasiargao.com</a> or contact us directly.
                     </p>
                     
-                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
                         We look forward to welcoming you to Lyma Siargao in the future!
                     </p>
                     
-                    <p style='color: #333; line-height: 1.6; margin-bottom: 20px;'>
+                    <p style='color: #495057; line-height: 1.7; margin-bottom: 0; font-size: 16px; font-weight: 400;'>
                         Best regards,<br>
-                        The Lyma Siargao Team
+                        <strong>The Lyma Siargao Team</strong>
                     </p>
                 </div>
                 
-                <div style='background-color: #f6f5c6; padding: 15px; text-align: center;'>
-                    <p style='color: #3f411a; margin: 0; font-size: 14px;'>
-                        For any questions, please contact us at pearl@lymaculinary.com
+                <!-- Footer -->
+                <div style='background-color: #f8f9fa; padding: 24px 20px; text-align: center; border-top: 1px solid #e9ecef;'>
+                    <p style='color: #6c757d; margin: 0; font-size: 14px; font-weight: 400;'>
+                        For any questions, please contact us at <a href='mailto:pearl@lymaculinary.com' style='color: #3D401E; text-decoration: none; font-weight: 500;'>pearl@lymaculinary.com</a>
                     </p>
                 </div>
             </div>";
@@ -271,4 +382,6 @@ HTML;
             return false;
         }
     }
+
+
 }

@@ -40,6 +40,7 @@ Route::post('/api/send-test-email', [EmailController::class, 'sendTestEmail']);
 Route::post('/api/send-reservation-confirmation', [EmailController::class, 'sendReservationConfirmation']);
 
 
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
