@@ -11,14 +11,12 @@ interface GalleryPageProps {
   };
 }
 
-const GalleryPage: React.FC<GalleryPageProps> = ({ footerData }) => {
+const Gallery: React.FC<GalleryPageProps> = ({ footerData }) => {
   return (
     <Layout footerData={footerData}>
-      <div className="pt-20">
-        <GallerySection />
-      </div>
+      <GallerySection />
     </Layout>
   );
 };
 
-export default GalleryPage;
+export default Gallery;

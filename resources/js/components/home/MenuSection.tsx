@@ -29,11 +29,15 @@ const MenuSection: React.FC = () => {
           {/* 3 images, full width row with small gaps and no side margins */}
           <div className="mt-6 sm:mt-8 md:mt-8 lg:mt-16 xl:mt-14 2xl:mt-[100px] w-full px-0 sm:px-0 md:px-0 lg:px-0 xl:px-0 2xl:px-0">
             <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-[64px]">
-              {[0, 1, 2].map((i) => (
+              {[
+                { src: "/assets/images/food1.webp", alt: "Food dish 1" },
+                { src: "/assets/images/food2.webp", alt: "Food dish 2" },
+                { src: "/assets/images/food3.webp", alt: "Food dish 3" }
+              ].map((image, i) => (
                 <div key={i} className="w-full h-24 sm:h-40 md:h-48 lg:h-56 xl:h-64 2xl:h-[360px] overflow-hidden">
                   <img
-                    src="/assets/images/about1.webp"
-                    alt="Menu placeholder"
+                    src={image.src}
+                    alt={image.alt}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -48,8 +52,8 @@ const MenuSection: React.FC = () => {
               Rooted in Filipino heritage and elevated by Western technique, it redefines island dining
               through a harmonious fusion of tradition and modernity.
             </p>
-            <a href="/menu" className="inline-block mt-3 sm:mt-3 md:mt-3 lg:mt-3 xl:mt-3 2xl:mt-4 text-olive hover:text-olive/80 text-[10px] sm:text-sm md:text-xs lg:text-sm xl:text-lg 2xl:text-xl">
-              Menu →
+            <a href="/menu" className="uppercase  inline-block mt-3 sm:mt-3 md:mt-3 lg:mt-3 xl:mt-3 2xl:mt-4 text-olive hover:text-olive/80 text-[10px] sm:text-sm md:text-xs lg:text-sm xl:text-lg 2xl:text-xl">
+            Experience the Flavors →
             </a>
           </div>
         </div>

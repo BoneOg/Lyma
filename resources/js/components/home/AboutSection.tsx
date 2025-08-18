@@ -114,10 +114,10 @@ const AboutSection: React.FC = () => {
         <div className="lg:hidden">
           {/* Heading */}
           <div className="mb-6 sm:mb-8 md:mb-10">
-            <p className="font-lexend tracking-[0.2rem] mb-4 sm:mb-6 -ml-1 uppercase leading-tight text-xs sm:text-sm font-light text-beige/60 m-0 p-0">
+            <p className="font-lexend tracking-[0.2rem] mb-4 sm:mb-6 -ml-1 uppercase leading-tight text-[10px] sm:text-sm font-light text-beige/60 m-0 p-0">
               Meet Chef
             </p>
-            <p className="font-lexend tracking-[0.2rem] uppercase text-2xl sm:text-3xl md:text-4xl font-extralight -ml-1 sm:-ml-2 md:-ml-3">
+            <p className="font-lexend tracking-[0.2rem] uppercase text-[23px] sm:text-3xl md:text-4xl font-extralight -ml-1 sm:-ml-2 md:-ml-3">
               Marc Silvestre
             </p>
           </div>
@@ -133,24 +133,22 @@ const AboutSection: React.FC = () => {
           </div>
 
           {/* Copy */}
-          <div className="max-w-xl font-lexend font-extralight text-beige">
-            <p className="text-sm leading-6 sm:text-base sm:leading-7 md:text-lg md:leading-8">
-              Rooted in Filipino heritage and elevated by Western technique, it
-              redefines island dining through a harmonious fusion of tradition
-              and modernity.
+          <div className="max-w-xl sm:max-w-xl md:max-w-3xl lg:max-w-xl xl:max-w-2xl font-lexend text-beige">
+            <p className="font-extralight text-sm leading-6 sm:text-base sm:leading-7 md:text-lg md:leading-8">
+            With over 14 years of international experience, Chef Marc brings his passion and vision to Siargao. At Lyma, he expresses his craft as a balance of tradition and innovation, turning the island into his canvas for creativity and storytelling.
             </p>
             <a
               href="/about"
-              className="mt-4 sm:mt-6 inline-flex items-center gap-2 font-lexend text-xs sm:text-sm md:text-base font-light tracking-widest hover:text-beige"
+              className="mt-4 sm:mt-6 uppercase inline-flex items-center gap-2 font-lexend text-xs sm:text-sm md:text-base font-regular tracking-widest hover:text-beige"
             >
-              ABOUT US 
+              Discover Marc’s Story 
               <span aria-hidden>→</span>
             </a>
           </div>
         </div>
 
         {/* Desktop Layout (lg and up) - Two column layout */}
-        <div className="hidden lg:grid grid-cols-2 gap-16 xl:gap-24 items-stretch">
+        <div className="hidden lg:grid grid-cols-[1.2fr_0.8fr] xl:grid-cols-[1.4fr_0.6fr] 2xl:grid-cols-[1.5fr_0.5fr] gap-16 xl:gap-24 items-stretch">
           {/* Left column: heading + media/text row */}
           <div className="flex flex-col h-full">
             {/* Heading */}
@@ -158,7 +156,7 @@ const AboutSection: React.FC = () => {
               <p className="font-lexend tracking-[0.2rem] mb-6 uppercase leading-tight text-sm font-light text-beige/60 m-0 p-0">
                 Meet Chef
               </p>
-              <p className="font-lexend tracking-[0.2rem] uppercase text-6xl xl:text-6xl 2xl:text-8xl font-extralight -ml-3">
+              <p className="font-lexend tracking-[0.2rem] uppercase text-6xl xl:text-7xl 2xl:text-8xl font-extralight -ml-1.5 xl:-ml-2">
                 Marc Silvestre
               </p>
             </div>
@@ -170,23 +168,21 @@ const AboutSection: React.FC = () => {
                 <img
                   src="/assets/images/about1.webp"
                   alt="Assorted olives and ingredients"
-                  className="h-48 w-full max-w-[20rem] xl:h-52 xl:max-w-[22rem] 2xl:h-56 2xl:max-w-[24rem] object-cover"
+                  className="h-48 w-full xl:h-68 xl:-ml-2 object-cover"
                   loading="lazy"
                 />
               </div>
 
               {/* Copy - positioned to the right of the image */}
-              <div className="max-w-xl font-lexend font-thin text-beige">
-                <p className="text-xl leading-5 lg:text-sm xl:text-lg xl:leading-7">
-                  Rooted in Filipino heritage and elevated by Western technique, it
-                  redefines island dining through a harmonious fusion of tradition
-                  and modernity.
+              <div className=" font-lexend text-beige ">
+                <p className="font-extralight text-xl leading-5 lg:text-xs xl:text-lg 2xl:text-xl 2xl:leading-8 xl:leading-7 2xl:-mt-60">
+                With over 14 years of international experience, Chef Marc brings his passion and vision to Siargao. At Lyma, he expresses his craft as a balance of tradition and innovation, turning the island into his canvas for creativity and storytelling.
                 </p>
                 <a
                   href="/about"
-                  className="mt-6 inline-flex items-center gap-2 font-lexend text-lg lg:text-sm xl:text-lg font-light tracking-widest hover:text-beige"
+                  className="mt-6 2xl:mt-18 uppercase inline-flex items-center gap-2 font-lexend text-lg lg:text-sm xl:text-lg 2xl:text-2xl font-regular tracking-widest hover:text-beige"
                 >
-                  ABOUT US 
+                  Discover Marc’s Story 
                   <span aria-hidden>→</span>
                 </a>
               </div>

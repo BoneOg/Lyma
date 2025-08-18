@@ -15,8 +15,6 @@ const NAV_LINKS = [
   { label: 'ABOUT US', href: '/about' },
   { label: 'MENU', href: '/menu' },
   { label: 'GALLERY', href: '/gallery' },
-  { label: 'JOURNAL', href: '/journal' },
-  { label: 'CONTACT', href: '/contact' },
   { label: 'RESERVATION', href: '/reservation' },
 ];
 

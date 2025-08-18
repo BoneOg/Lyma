@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
               <Link href="/" className="w-full h-full flex items-center justify-center hover:scale-110 transition-transform duration-300 ease-in-out">
                 <img
                   src={logoSrc}
-                  alt="Lyma by Chef Mar"
+                  alt="Lyma by Chef Marc"
                   className="h-12 w-auto object-contain object-center"
                   style={{
                     objectPosition: 'center',

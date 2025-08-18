@@ -109,72 +109,131 @@ const GallerySection: React.FC = () => {
         />
       </div>
 
-      <div className="mx-[100px] py-20 md:py-28 relative z-10">
+      {/* Mobile Layout: sm and md breakpoints */}
+      <div className="block lg:hidden px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20 relative z-10">
+        {/* Heading */}
+        <div className="text-center mb-8 sm:mb-10 md:mb-12">
+          <p className="font-lexend tracking-[0.1rem] sm:tracking-[0.15rem] md:tracking-[0.2rem] mb-4 sm:mb-6 uppercase leading-tight text-xs sm:text-sm md:text-sm font-light text-beige">
+            A GLIMPSE INTO
+          </p>
+          <p className="font-lexend tracking-[0.1rem] sm:tracking-[0.15rem] md:tracking-[0.2rem] uppercase text-2xl sm:text-3xl md:text-4xl font-extralight">
+            LYMA'S WORLD
+          </p>
+        </div>
+
+        {/* 3 Images Stacked Vertically */}
+        <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
+          {/* Image 1 */}
+          <div className="w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 overflow-hidden rounded-none shadow-lg">
+            <img
+              src="/assets/images/gallery1.webp"
+              alt="Gallery image 1"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          
+          {/* Image 2 */}
+          <div className="w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 overflow-hidden rounded-none shadow-lg">
+            <img
+              src="/assets/images/gallery2.webp"
+              alt="Gallery image 2"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          
+          {/* Image 3 */}
+          <div className="w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 overflow-hidden rounded-none shadow-lg">
+            <img
+              src="/assets/images/gallery3.webp"
+              alt="Gallery image 3"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        {/* Description */}
+        <div className="text-center max-w-lg mx-auto">
+          <p className="font-lexend text-sm sm:text-base md:text-lg leading-6 sm:leading-7 md:leading-8 font-light text-beige mb-6 sm:mb-8">
+          Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish
+          </p>
+          <a
+            href="/gallery"
+            className="inline-flex items-center gap-2 font-lexend text-xs sm:text-sm md:text-base font-extralight tracking-widest hover:text-beige"
+          >
+            GALLERY 
+            <span aria-hidden>→</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Desktop Layout: lg and up (original) */}
+      <div className="hidden lg:block mx-[100px] py-20 md:py-28 relative z-10">
         {/* Left + Right columns */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24 items-stretch">
           {/* Left column: heading + description + CTA */}
           <div className="flex flex-col h-full">
             {/* Heading */}
             <div className="mt-8 ml-100">
-              <p className="font-lexend tracking-[0.2rem] mb-6 uppercase leading-tight text-sm font-light text-beige m-0 p-0">
+              <p className="font-lexend lg:-ml-100 xl:-ml-25 2xl:ml-50 tracking-[0.2rem] mb-6 uppercase leading-tight text-sm font-light text-beige m-0 p-0">
                 A GLIMPSE INTO
               </p>
-              <p className="font-lexend tracking-[0.2rem] uppercase text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extralight -ml-3">
+              <p className="font-lexend lg:-ml-115 xl:-ml-55 2xl:ml-25 tracking-[0.2rem] uppercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extralight -ml-3">
                 LYMA'S WORLD
               </p>
-            </div>
-
-            {/* Description */}
-            <div className="max-w-xl font-lexend  text-center font-light text-beige mt-auto mb-8 ml-100">
-              <p className="text-base  leading-7 sm:text-lg md:text-lg md:leading-8">
-                Rooted in Filipino heritage and elevated by Western technique, it
-                redefines island dining through a harmonious fusion of tradition
-                and modernity.
-              </p>
-              <a
-                href="/gallery"
-                className="mt-6 inline-flex items-center gap-2 font-lexend text-sm sm:text-base md:text-lg font-extralight tracking-widest hover:text-beige"
-              >
-                GALLERY 
-                <span aria-hidden>→</span>
-              </a>
             </div>
           </div>
 
           {/* Right column: food image collage */}
           <div className="w-full flex justify-center items-center">
             <div className="relative w-[400px] h-[500px] lg:w-[480px] lg:h-[1000px]">
-              {/* Image 1 (Top Center) - Dark blue ceramic bowl with green olives */}
+              {/* Image 1 (Top Center) - Gallery image 1 */}
               <div className="absolute top-0 left-1/4 transform -translate-x-1/2 w-100 h-100 overflow-hidden rounded-none shadow-lg z-30">
                 <img
-                  src="/assets/images/about1.webp"
-                  alt="Dark blue ceramic bowl with green olives"
+                  src="/assets/images/gallery1.webp"
+                  alt="Gallery image 1"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
               </div>
               
-              {/* Image 2 (Middle Left) - Overlapping from left */}
+              {/* Image 2 (Middle Left) - Gallery image 2 */}
               <div className="absolute top-80 right-115 w-100 h-100 overflow-hidden rounded-none shadow-lg z-20">
                 <img
-                  src="/assets/images/about1.webp"
-                  alt="Food presentation with olives and bread"
+                  src="/assets/images/gallery2.webp"
+                  alt="Gallery image 2"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
               </div>
               
-              {/* Image 3 (Bottom Right) - Overlapping from right */}
+              {/* Image 3 (Bottom Right) - Gallery image 3 */}
               <div className="absolute bottom-0 left-1/4 transform -translate-x-1/2 w-100 h-100 overflow-hidden rounded-none shadow-lg z-10">
                 <img
-                  src="/assets/images/about1.webp"
-                  alt="Olive and bread arrangement"
+                  src="/assets/images/gallery3.webp"
+                  alt="Gallery image 3"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Description - Now positioned absolutely to break free from grid constraints */}
+        <div className="absolute font-lexend text-center font-light text-beige lg:left-[-60px] lg:bottom-[120px] xl:left-[200px] xl:bottom-[100px] 2xl:left-[525px] 2xl:bottom-[125px]">
+          <p className="text-base lg:text-sm lg:max-w-sm lg:-mb-0 xl:text-sm xl:leading-12 lg:leading-12">
+          Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish
+          </p>
+          <a
+            href="/gallery"
+            className="mt-6 inline-flex items-center gap-2 font-lexend lg:text-sm xl:text-lg font-extralight tracking-widest hover:text-beige"
+          >
+            GALLERY 
+            <span aria-hidden>→</span>
+          </a>
         </div>
       </div>
     </section>
