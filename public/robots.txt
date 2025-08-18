@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and staff areas
+Disallow: /admin/
+Disallow: /staff/
+Disallow: /login
+Disallow: /account
+
+# Allow important pages
+Allow: /menu
+Allow: /about
+Allow: /gallery
+Allow: /contact
+Allow: /journal
+Allow: /reservation
+Allow: /checkout
+Allow: /transaction
+
+# Allow favicon access - all favicon files
+Allow: /favicon/
+Allow: /favicon/favicon.ico
+Allow: /favicon/favicon-16x16.png
+Allow: /favicon/favicon-32x32.png
+Allow: /favicon/android-chrome-192x192.png
+Allow: /favicon/android-chrome-512x512.png
+Allow: /favicon/apple-touch-icon.png
+Allow: /favicon/site.webmanifest
+
+# Sitemap location
+Sitemap: https://www.lymasiargao.com/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1

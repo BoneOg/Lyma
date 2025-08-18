@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
               <Link href="/" className="hover:scale-110 transition-transform duration-300 ease-in-out">
                 <img
                   src={logoSrc}
-                  alt="Lyma by Chef Mar"
+                  alt="Lyma by Chef Marc"
                   className="h-8 w-auto object-contain object-center"
                   style={{
                     objectPosition: 'center',
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* Logo - Center (Desktop Only) */}
-            <div className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+            <div className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center justify-center">
               <Link href="/" className="w-full h-full flex items-center justify-center hover:scale-110 transition-transform duration-300 ease-in-out">
                 <img
                   src={logoSrc}

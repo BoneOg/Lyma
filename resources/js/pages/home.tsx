@@ -5,6 +5,7 @@ import { usePage } from '@inertiajs/react';
 import AboutSection from '../components/home/AboutSection';
 import MenuSection from '../components/home/MenuSection';
 import GallerySection from '../components/home/GallerySection';
+import SEO from '../components/SEO';
 
 interface Props {
   flash?: {
@@ -24,12 +25,21 @@ const Home: React.FC = () => {
   const { flash, footerData } = usePage<Props>().props;
 
   return (
-    <Layout footerData={footerData}>
-      <HeroSection />
-      <AboutSection />
-      <MenuSection />
-      <GallerySection />
-    </Layout>
+    <>
+      <SEO 
+        title="Fine Dining Restaurant in General Luna, Siargao | Chef Marc"
+        description="Experience exceptional fine dining at Lyma in General Luna, Siargao. Chef Marc's culinary masterpiece featuring local ingredients transformed through tradition and innovation. Reserve your table today."
+        keywords="Lyma, fine dining, Siargao, General Luna, Chef Marc, restaurant, Filipino cuisine, tropical dining, luxury restaurant, island dining, reservation"
+        image="/assets/images/hero.webp"
+        type="restaurant.restaurant"
+      />
+      <Layout footerData={footerData}>
+        <HeroSection />
+        <AboutSection />
+        <MenuSection />
+        <GallerySection />
+      </Layout>
+    </>
   );
 };
 

@@ -35,7 +35,7 @@ const StaffSidebar: React.FC = () => {
         <Link href="/staff/booking" className="block overflow-hidden">
           <img 
             src="/assets/logo/lymabeige.webp" 
-            alt="Lyma by Chef Mar" 
+            alt="Lyma by Chef Marc" 
             className="w-full h-16 object-contain object-center"
             style={{
               objectPosition: 'center',

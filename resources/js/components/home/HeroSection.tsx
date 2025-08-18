@@ -10,7 +10,7 @@ const HeroSection: React.FC = () => {
       <div className="absolute inset-0">
         <img 
           src="/assets/images/hero.webp" 
-          alt="Lyma Restaurant Hero" 
+          alt="Lyma Restaurant Hero - Fine Dining in General Luna, Siargao" 
           className="w-full h-full object-cover object-[85%_center] sm:object-[85%_center]  md:object-[85%_center]  lg:object-cover"
         />
         {/* Overlay for better text readability */}
@@ -20,7 +20,10 @@ const HeroSection: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 flex items-center h-full">
         <div className="ml-4 sm:ml-8 md:ml-[30px] lg:ml-[30px] xl:ml-[100px] text-white -mt-10 text-center md:text-left">
-          <TextEffect per='word' preset='slide' delay={0.2} speedReveal={0.5} as="h1" className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-lexend font-extralight text-beige mb-4 -ml-2 leading-tight">
+          {/* Main H1 with Lyma brand name */}
+          <h1 className="sr-only">Lyma - Fine Dining Restaurant in General Luna, Siargao</h1>
+          
+          <TextEffect per='word' preset='slide' delay={0.2} speedReveal={0.5} as="h2" className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-lexend font-extralight text-beige mb-4 -ml-2 leading-tight">
             FIVE PILLARS. ONE VISION.
           </TextEffect>
           <div className="mb-8">

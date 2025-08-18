@@ -40,7 +40,7 @@ const AdminSidebar: React.FC = () => {
         <Link href="/admin/dashboard" className="block overflow-hidden">
           <img 
             src="/assets/logo/lymabeige.webp" 
-            alt="Lyma by Chef Mar" 
+            alt="Lyma by Chef Marc" 
             className="w-full h-16 object-contain object-center"
             style={{
               objectPosition: 'center',
