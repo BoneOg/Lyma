@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Reservation;
 use App\Models\DisabledTimeSlot;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -261,26 +262,28 @@ class AdminController extends Controller
         $request->validate([
             'guest_first_name' => 'required|string|max:255',
             'guest_last_name' => 'required|string|max:255',
-            'guest_email' => 'required|email|max:255',
+            'guest_email' => 'nullable|email|max:255',
             'guest_phone' => 'required|string|max:20',
             'special_requests' => 'nullable|string|max:500',
             'reservation_date' => 'required|date|after_or_equal:today',
-            'time_slot_id' => 'required|exists:time_slots,id',
+            'time_slot_id' => 'nullable|exists:time_slots,id',
             'guest_count' => 'required|integer|min:1|max:100',
+            'is_special_hours' => 'boolean',
         ]);
 
         try {
             $reservation = Reservation::create([
                 'guest_first_name' => $request->guest_first_name,
                 'guest_last_name' => $request->guest_last_name,
-                'guest_email' => $request->guest_email,
+                'guest_email' => $request->guest_email ?: null,
                 'guest_phone' => $request->guest_phone,
                 'special_requests' => $request->special_requests,
                 'reservation_date' => $request->reservation_date,
-                'time_slot_id' => $request->time_slot_id,
+                'time_slot_id' => $request->is_special_hours ? null : $request->time_slot_id,
                 'guest_count' => $request->guest_count,
                 'status' => 'confirmed',
                 'user_id' => auth()->id(),
+                'is_special_hours' => $request->is_special_hours ?? false,
             ]);
 
             return response()->json([
@@ -836,5 +839,39 @@ class AdminController extends Controller
                 'message' => 'Failed to get recent activity'
             ], 500);
         }
+    }
+
+    // Download PDF reservations by date
+    public function downloadReservationsPDF(Request $request)
+    {
+        $request->validate([
+            'date' => 'required|date',
+        ]);
+
+        $date = $request->date;
+        $reservations = Reservation::whereDate('reservation_date', $date)
+            ->with(['timeSlot'])
+            ->orderBy('time_slot_id')
+            ->get();
+
+        // Get restaurant information
+        $restaurantName = \App\Models\SystemSetting::getRestaurantName();
+        $restaurantAddress = \App\Models\SystemSetting::getRestaurantAddress();
+        $restaurantPhone = \App\Models\SystemSetting::getRestaurantPhone();
+        $restaurantEmail = \App\Models\SystemSetting::getRestaurantEmail();
+
+        // Generate PDF using DomPDF
+        $pdf = Pdf::loadView('pdfs.reservations', [
+            'reservations' => $reservations,
+            'date' => $date,
+            'restaurantName' => $restaurantName,
+            'restaurantAddress' => $restaurantAddress,
+            'restaurantPhone' => $restaurantPhone,
+            'restaurantEmail' => $restaurantEmail,
+        ]);
+
+        $filename = 'reservations_' . date('Y-m-d', strtotime($date)) . '.pdf';
+        
+        return $pdf->download($filename);
     }
 } 

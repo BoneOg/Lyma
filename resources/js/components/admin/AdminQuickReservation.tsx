@@ -316,10 +316,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
       (selectedTimeSlot === 'special-hours' || (!occupiedTimeSlots.includes(selectedTimeSlot as number) && !disabledTimeSlots.includes(selectedTimeSlot as number))) &&
       firstName.trim() &&
       lastName.trim() &&
-      email.trim() &&
-      phone.trim() &&
-      email.includes('@') &&
-      email.includes('.');
+      phone.trim();
   };
 
   const handleNameInput = (value: string, setter: (value: string) => void) => {
@@ -375,7 +372,10 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
 
       if (data.success) {
         showNotification('Reservation created successfully!', 'success');
-        try { await sendConfirmationEmail(data.reservation ?? formData as any); } catch {}
+        // Only send confirmation email if email is provided
+        if (email.trim()) {
+          try { await sendConfirmationEmail(data.reservation ?? formData as any); } catch {}
+        }
         if (onReservationCreated) {
           onReservationCreated();
         }
@@ -686,14 +686,13 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-base font-light font-lexend mb-2 text-white/60">Email</label>
+                  <label className="block text-base font-light font-lexend mb-2 text-white/60">Email (Optional)</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => handleEmailInput(e.target.value)}
                     className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
-                    placeholder="Enter your email"
-                    required
+                    placeholder="Enter your email (optional)"
                   />
                 </div>
                 

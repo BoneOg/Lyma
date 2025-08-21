@@ -16,8 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
-        $schedule->command('reservations:cleanup-expired')->everyMinute();
-        $schedule->command('email:send-reminders')->everyFiveMinutes();
+        // Cleanup expired reservations once per day at 2 AM (low traffic time)
+        $schedule->command('reservations:cleanup-expired')->dailyAt('02:00');
+        
+        // Send email reminders every hour for timely notifications
+        $schedule->command('email:send-reminders')->hourly();
     })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);

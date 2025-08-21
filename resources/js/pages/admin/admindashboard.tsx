@@ -298,27 +298,27 @@ const Dashboard: React.FC = () => {
   
   return (
     <AdminLayout>
-      <div className="px-12 py-10 space-y-8 font-lexend">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-12 py-6 sm:py-8 md:py-10 lg:py-10 xl:py-10 2xl:py-10 space-y-6 sm:space-y-6 md:space-y-8 lg:space-y-8 xl:space-y-8 2xl:space-y-8 font-lexend">
         {/* Header */}
         <div className="text-center">
-          <div className="mb-4">
-            <h1 className="text-6xl font-thin font-lexend text-olive">
+          <div className="mb-4 sm:mb-4 md:mb-4 lg:mb-4 xl:mb-4 2xl:mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-6xl font-thin font-lexend text-olive">
               ADMIN DASHBOARD
             </h1>
           </div>
-          <div className="w-32 h-[1px] bg-olive mx-auto" style={{ opacity: 0.5 }} />
+          <div className="w-20 sm:w-24 md:w-28 lg:w-32 xl:w-32 2xl:w-32 h-[1px] bg-olive mx-auto" style={{ opacity: 0.5 }} />
         </div>
 
         {/* Error Display */}
         {error && (
           <div 
-            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-none font-lexend"
+            className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 py-3 rounded-none font-lexend"
           >
             <div className="flex items-center gap-2">
-              <span className="text-sm font-light">⚠️ {error}</span>
+              <span className="text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-light">⚠️ {error}</span>
               <button 
                 onClick={fetchDashboardData}
-                className="text-red-600 hover:text-red-800 underline text-sm font-medium"
+                className="text-red-600 hover:text-red-800 underline text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm 2xl:text-sm font-medium"
               >
                 Retry
               </button>
@@ -327,7 +327,7 @@ const Dashboard: React.FC = () => {
         )}
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-4 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-6 2xl:gap-6 items-stretch">
           <StatCard
             icon={Users}
             title="Total Reservations"
@@ -358,8 +358,8 @@ const Dashboard: React.FC = () => {
           />
         </div>
 
-        {/* Booking Status & Today's Activity - Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        {/* Booking Status & Today's Activity - Responsive Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-4 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-6 2xl:gap-6 items-stretch">
           <BookingStatus
             completedReservations={stats.completedReservations}
             cancelledReservations={stats.cancelledReservations}

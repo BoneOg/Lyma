@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 
-const AdminSidebar: React.FC = () => {
+interface AdminSidebarProps {
+  onClose?: () => void;
+}
+
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   console.log('AdminSidebar: Rendering...');
   const { url } = usePage();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -16,6 +20,13 @@ const AdminSidebar: React.FC = () => {
 
   const handleLogoutCancel = () => {
     setShowLogoutModal(false);
+  };
+
+  const handleNavigation = (href: string) => {
+    // Close mobile sidebar if onClose function exists
+    if (onClose) {
+      onClose();
+    }
   };
 
   const menuItems = [
@@ -34,10 +45,10 @@ const AdminSidebar: React.FC = () => {
   const currentPage = getCurrentPage();
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-olive text-white flex flex-col shadow-xl z-20 border-r border-olive-light">
-      {/* Logo */}
-      <div className="p-6 border-b border-olive-light">
-        <Link href="/admin/dashboard" className="block overflow-hidden">
+    <div className="h-screen w-64 bg-olive text-white flex flex-col shadow-xl border-r border-olive-light">
+      {/* Logo and Close Button */}
+      <div className="p-6 border-b border-olive-light flex items-center justify-between">
+        <Link href="/admin/dashboard" className="block overflow-hidden flex-1" onClick={() => handleNavigation('/admin/dashboard')}>
           <img 
             src="/assets/logo/lymabeige.webp" 
             alt="Lyma by Chef Marc" 
@@ -50,6 +61,17 @@ const AdminSidebar: React.FC = () => {
             }}
           />
         </Link>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-olive-light rounded-full transition-colors duration-200 ml-2"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -58,6 +80,7 @@ const AdminSidebar: React.FC = () => {
           <Link
             key={item.id}
             href={item.href}
+            onClick={() => handleNavigation(item.href)}
             className={`w-full flex items-center px-6 py-5 text-left font-lexend font-extralight transition-all duration-200 ease-in-out ${
               currentPage === item.id
                 ? "bg-[#5a5d2a] text-[#f6f5c6]"

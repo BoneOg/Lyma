@@ -3,6 +3,29 @@ import { Check, X } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip';
 
+// Helper function to format time slots in abbreviated format (e.g., "5-10 PM")
+const formatTimeSlotAbbreviated = (timeSlot: string): string => {
+  // Handle common time formats and convert to abbreviated
+  // Example: "5:00 PM - 10:00 PM" -> "5-10 PM"
+  const timeMatch = timeSlot.match(/(\d{1,2}):?\d{0,2}\s*(AM|PM)\s*-\s*(\d{1,2}):?\d{0,2}\s*(AM|PM)/i);
+  if (timeMatch) {
+    const startHour = timeMatch[1];
+    const startPeriod = timeMatch[2];
+    const endHour = timeMatch[3];
+    const endPeriod = timeMatch[4];
+    
+    // If both times are in the same period, show abbreviated format
+    if (startPeriod === endPeriod) {
+      return `${startHour}-${endHour} ${startPeriod}`;
+    }
+    // If different periods, show both
+    return `${startHour} ${startPeriod}-${endHour} ${endPeriod}`;
+  }
+  
+  // Fallback to original format if pattern doesn't match
+  return timeSlot;
+};
+
 const statusColors: Record<string, string> = {
   confirmed: 'bg-[hsl(var(--primary))] text-white border-none ',
   completed: 'bg-[hsl(var(--secondary))] text-black border-none',
@@ -48,8 +71,15 @@ const ReservationTableRow: React.FC<ReservationTableRowProps> = ({ reservation, 
               {reservation.guest_first_name}
             </span>
           </TooltipTrigger>
-          <TooltipContent>
-            <p>{reservation.guest_first_name}</p>
+          <TooltipContent className="max-w-xs">
+            <div className="text-center">
+              <p className="font-semibold">First Name</p>
+              <p className="text-sm">{reservation.guest_first_name}</p>
+              <div className="hidden 2xl:block">
+                <p className="text-xs text-gray-400 mt-1">Email: {reservation.email}</p>
+                <p className="text-xs text-gray-400">Phone: {reservation.phone}</p>
+              </div>
+            </div>
           </TooltipContent>
         </Tooltip>
       </td>
@@ -60,33 +90,121 @@ const ReservationTableRow: React.FC<ReservationTableRowProps> = ({ reservation, 
               {reservation.guest_last_name}
             </span>
           </TooltipTrigger>
-          <TooltipContent>
-            <p>{reservation.guest_last_name}</p>
+          <TooltipContent className="max-w-xs">
+            <div className="text-center">
+              <p className="font-semibold">Last Name</p>
+              <p className="text-sm">{reservation.guest_last_name}</p>
+              <div className="hidden 2xl:block">
+                <p className="text-xs text-gray-400 mt-1">Guest Count: {reservation.guest_count}</p>
+                <p className="text-xs text-gray-400">Status: {reservation.status}</p>
+              </div>
+            </div>
           </TooltipContent>
         </Tooltip>
       </td>
-      <td className="py-5 px-2 font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>{formatDate(reservation.reservation_date)}</td>
-      <td className="py-5 px-1 font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>
+      <td className="py-5 px-2 font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="cursor-default">{formatDate(reservation.reservation_date)}</span>
+          </TooltipTrigger>
+          <TooltipContent className="max-w-xs">
+            <div className="text-center">
+              <p className="font-semibold">Reservation Date</p>
+              <p className="text-sm">{formatDate(reservation.reservation_date)}</p>
+              <div className="hidden 2xl:block">
+                <p className="text-xs text-gray-400 mt-1">Time: {reservation.time_slot || 'No time slot'}</p>
+                <p className="text-xs text-gray-400">Guest: {reservation.guest_first_name} {reservation.guest_last_name}</p>
+              </div>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </td>
+      <td className="py-5 px-1 text-[14px] font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>
         {reservation.special_hours_data 
           ? (
-            <div className="flex flex-col items-center">
-              <span>Special Hours</span>
-              <span className="text-xs text-gray-500">
-                {reservation.special_hours_data.special_start} - {reservation.special_hours_data.special_end}
-              </span>
-            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex flex-col items-center cursor-default">
+                  <span>Special Hours</span>
+                  <span className="text-xs text-gray-500">
+                    {reservation.special_hours_data.special_start} - {reservation.special_hours_data.special_end}
+                  </span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <div className="text-center">
+                  <p className="font-semibold">Special Hours</p>
+                  <p className="text-sm">{reservation.special_hours_data.special_start} - {reservation.special_hours_data.special_end}</p>
+                  <p className="text-xs text-gray-400 mt-1">Custom operating hours for this date</p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
           )
-          : reservation.time_slot || '-'
+          : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="cursor-default">
+                  {/* Abbreviated time format for xl, full format for 2xl */}
+                  <span className="hidden xl:block 2xl:hidden">
+                    {reservation.time_slot ? formatTimeSlotAbbreviated(reservation.time_slot) : '-'}
+                  </span>
+                  <span className="hidden 2xl:block">
+                    {reservation.time_slot || '-'}
+                  </span>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <div className="text-center">
+                  <p className="font-semibold">Time Slot</p>
+                  <p className="text-sm">{reservation.time_slot || 'No time slot'}</p>
+                  <p className="text-xs text-gray-400 mt-1">Reservation time</p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          )
         }
       </td>
-      <td className="py-5 px-1 font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>{reservation.guest_count}</td>
+      <td className="py-5 px-1 font-regular text-olive truncate align-top text-center" style={{ wordBreak: 'break-word' }}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="cursor-default">{reservation.guest_count}</span>
+          </TooltipTrigger>
+          <TooltipContent className="max-w-xs">
+            <div className="text-center">
+              <p className="font-semibold">Guest Count</p>
+              <p className="text-sm">{reservation.guest_count} {reservation.guest_count === 1 ? 'Guest' : 'Guests'}</p>
+              <div className="hidden 2xl:block">
+                <p className="text-xs text-gray-400 mt-1">Reservation: {reservation.guest_first_name} {reservation.guest_last_name}</p>
+                <p className="text-xs text-gray-400">Date: {formatDate(reservation.reservation_date)}</p>
+              </div>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </td>
       <td className="py-4 px-1 text-center align-top">
-        <span
-          className={`inline-flex items-center justify-center border text-xs font-extralight capitalize tracking-wider ${statusColors[reservation.status] || 'bg-gray-200 text-gray-700 border-gray-300'}`}
-          style={{ width: '100px', height: '32px', borderRadius: '16px', fontWeight: 400 }}
-        >
-          {reservation.status}
-        </span>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span
+              className={`inline-flex items-center justify-center border text-xs font-extralight capitalize tracking-wider ${statusColors[reservation.status] || 'bg-gray-200 text-gray-700 border-gray-300'}`}
+              style={{ width: '100px', height: '32px', borderRadius: '16px', fontWeight: 400 }}
+            >
+              {reservation.status}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent className="max-w-xs">
+            <div className="text-center">
+              <p className="font-semibold">Status</p>
+              <p className="text-sm capitalize">{reservation.status}</p>
+              <div className="hidden 2xl:block">
+                <p className="text-xs text-gray-400 mt-1">Reservation ID: {reservation.id}</p>
+                <p className="text-xs text-gray-400">Created: {formatDate(reservation.created_at)}</p>
+                {reservation.special_requests && (
+                  <p className="text-xs text-gray-400">Requests: {reservation.special_requests}</p>
+                )}
+              </div>
+            </div>
+          </TooltipContent>
+        </Tooltip>
       </td>
       <td className="py-4 px-1 text-center align-top" style={{ minWidth: '70px' }}>
         <div style={{ minHeight: '34px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -52,13 +52,13 @@ const AdminSetting: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="flex flex-col items-center px-12 py-10">
-        <p className="text-olive text-7xl font-thin font-lexend text-center">SETTINGS</p>
-        <div className="w-50 h-[1px] bg-olive mt-6" style={{ opacity: 0.5 }} />
+      <div className="flex flex-col items-center px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-12 py-6 sm:py-8 md:py-10 lg:py-10 xl:py-10 2xl:py-10">
+        <p className="text-olive text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl 2xl:text-7xl font-thin font-lexend text-center">SETTINGS</p>
+        <div className="w-32 sm:w-40 md:w-44 lg:w-48 xl:w-50 2xl:w-50 h-[1px] bg-olive mt-4 sm:mt-5 md:mt-6 lg:mt-6 xl:mt-6 2xl:mt-6" style={{ opacity: 0.5 }} />
       </div>
-      {/* Full Screen Bento Layout */}
-      <div className="px-12 pb-6">
-        <div className="grid grid-cols-4 grid-rows-3 gap-6 h-[calc(100vh-240px)]">
+      {/* Responsive Bento Layout */}
+      <div className="px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-12 pb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-6 2xl:gap-6 auto-rows-auto min-h-[calc(100vh-240px)]">
           <RestaurantInfoCard />
           <AvailableTimeSlotsCard />
           <CalendarScheduleCard />

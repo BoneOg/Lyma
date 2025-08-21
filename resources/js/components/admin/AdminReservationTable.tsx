@@ -8,6 +8,7 @@ import SearchInput from '../ui/SearchInput';
 import DateButton from '../ui/DateButton';
 import SortDropdown from '../ui/SortDropdown';
 import ReservationTableRow from '../ui/ReservationTableRow';
+import ReservationCard from '../ui/ReservationCard';
 import { TooltipProvider } from '../ui/tooltip';
 import type { Reservation, TimeSlot, SystemSettings } from '../../types/reservation';
 import { sortOptions } from '../../constants/reservationTable';
@@ -202,77 +203,67 @@ const ReservationTable: React.FC<Props> = ({ status, onReservationUpdate, endpoi
   };
 
   return (
-    <div className="bg-white border border-primary-light h-[520px] shadow p-6 flex flex-col">
-      <div className="flex gap-4 mb-2">
-        {/* Search with icon, short height */}
-        <SearchInput
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search by guest name, email, or number..."
-          className="basis-[35%]"
-        />
-        {/* Date with icon, short height */}
-        <DateButton
-          onClick={() => setShowCalendar(true)}
-          label={getButtonText()}
-          className="basis-[15%]"
-        />
-        {/* Sort dropdown with icon, short height */}
-        <SortDropdown
-          value={sort}
-          onChange={setSort}
-          options={sortOptions}
-          className="basis-[30%]"
-        />
-        <button
-          onClick={() => setShowQuickReservation(true)}
-          className="basis-[20%] flex items-center justify-center gap-3 h-10 border-primary-light border bg-primary-light text-olive font-lexend font-light px-2 py-1 transition-all duration-300 hover:scale-[1.02] focus:ring-1 focus:ring-olive focus:outline-none"
-        >
-          <Plus size={18} /> New Reservation
-        </button>
+    <div className="bg-white border border-primary-light h-auto min-h-[520px] shadow p-3 sm:p-4 md:p-5 lg:p-6 xl:p-6 2xl:p-6 flex flex-col">
+      <div className="space-y-3 mb-4">
+        {/* Row 1: Search - Full width */}
+        <div className="w-full">
+          <SearchInput
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search by guest name, email, or number..."
+            className="w-full"
+          />
+        </div>
+        
+        {/* Row 2: Date, Sort, and New Reservation - Custom width layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3">
+          {/* Date with icon - Least space (2 columns) */}
+          <div className="sm:col-span-3">
+            <DateButton
+              onClick={() => setShowCalendar(true)}
+              label={getButtonText()}
+              className="w-full"
+            />
+          </div>
+          {/* Sort dropdown - Most space (6 columns) */}
+          <div className="sm:col-span-6">
+            <SortDropdown
+              value={sort}
+              onChange={setSort}
+              options={sortOptions}
+              className="w-full"
+            />
+          </div>
+          {/* New Reservation button - Second most space (4 columns) */}
+          <div className="sm:col-span-3">
+            <button
+              onClick={() => setShowQuickReservation(true)}
+              className="w-full flex items-center justify-center gap-2 h-10 border-primary-light border bg-primary-light text-olive font-lexend font-light px-3 py-2 transition-all duration-300 hover:scale-[1.02] focus:ring-1 focus:ring-olive focus:outline-none text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm"
+            >
+              <Plus size={16} className="w-4 h-4" /> 
+              <span className="hidden sm:hidden md:inline lg:inline xl:inline 2xl:inline">New Reservation</span>
+              <span className="md:hidden lg:hidden xl:hidden 2xl:hidden">New</span>
+            </button>
+          </div>
+        </div>
       </div>
       {loading ? (
         <div className="text-center py-8 font-lexend font-light text-gray-500">Loading...</div>
       ) : sorted.length === 0 ? (
         <div className="text-center py-8 font-lexend text-gray-500">No reservations found.</div>
       ) : (
-        <div className="w-full flex-1 min-h-0 overflow-y-auto">
-          <TooltipProvider>
-            <table className="w-full text-left font-lexend table-fixed">
-              <colgroup>
-                <col style={{ width: '170px' }} />
-                <col style={{ width: '90px' }} />
-                <col style={{ width: '105px' }} />
-                <col style={{ width: '80px' }} />
-                <col style={{ width: '70px' }} />
-                <col style={{ width: '95px' }} />
-                <col style={{ width: '95px' }} />
-              </colgroup>
-              <thead>
-                <tr className="border-b border-gray-200 bg-white sticky top-0 z-0">
-                  <th className="py-3 px-5 font-semibold tracking-tighter truncate">First Name</th>
-                  <th className="py-3 px-2 font-semibold tracking-tighter truncate">Last Name</th>
-                  <th className="py-3 px-2 font-semibold tracking-tighter truncate text-center">Reservation Date</th>
-                  <th className="py-3 px-1 font-semibold tracking-tighter truncate text-center">Time Slot</th>
-                  <th className="py-3 px-1 font-semibold tracking-tighter truncate text-center">Guests</th>
-                  <th className="py-3 px-1 font-semibold tracking-tighter text-center truncate">Status</th>
-                  <th className="py-3 px-1 font-semibold tracking-tighter text-center truncate">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sorted.map((r) => (
-                  <ReservationTableRow
-                    key={r.id}
-                    reservation={r}
-                    expanded={expanded === r.id}
-                    onExpand={() => handleExpand(r.id)}
-                    onComplete={() => handleComplete(r.id, r.guest_first_name, r.guest_last_name)}
-                    onCancel={() => handleCancel(r.id, r.guest_first_name, r.guest_last_name)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </TooltipProvider>
+        <div className="w-full flex-1 min-h-0 overflow-visible">
+          {/* Card Layout for all screen sizes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 md:gap-4 lg:gap-4 xl:gap-4 2xl:gap-4 pb-4">
+            {sorted.map((r) => (
+              <ReservationCard
+                key={r.id}
+                reservation={r}
+                onComplete={() => handleComplete(r.id, r.guest_first_name, r.guest_last_name)}
+                onCancel={() => handleCancel(r.id, r.guest_first_name, r.guest_last_name)}
+              />
+            ))}
+          </div>
         </div>
       )}
       <CalendarSearch

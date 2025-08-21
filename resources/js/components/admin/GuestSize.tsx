@@ -116,7 +116,7 @@ const GuestSize: React.FC = () => {
   };
 
   return (
-    <div className="col-span-1 row-span-1 bg-white text-olive rounded p-6 shadow-sm border-gray-300 border">
+    <div className="sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 2xl:col-span-1 sm:row-span-1 md:row-span-1 lg:row-span-1 xl:row-span-1 2xl:row-span-1 bg-white text-olive rounded p-3 sm:p-4 md:p-5 lg:p-6 xl:p-6 2xl:p-6 shadow-sm border-gray-300 border">
       <div className="flex items-center mb-3">
         <span className="inline-flex items-center justify-center w-8 h-8 rounded bg-gray-100/50 text-olive mr-3">
           <Users size={20} />

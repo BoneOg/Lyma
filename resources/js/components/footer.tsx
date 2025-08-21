@@ -104,7 +104,7 @@ const Footer: React.FC<FooterProps> = ({ footerData }) => {
 
           {/* Hours & Reservations */}
           <div>
-            <h4 className="text-lg sm:text-xl lg:text-xl font-lexend font-light text-[#3D401E] mb-6 sm:mb-8 lg:mb-8 relative">
+            <h4 className="text-lg sm:text-xl lg:text-xl font-lexend font-light text-[#3D401E] mb-4 sm:mb-6 lg:mb-4 relative">
             Your Table Awaits
               <div className="absolute -bottom-2 left-0 w-6 sm:w-7 lg:w-8 h-px bg-[#3D401E]/30"></div>
             </h4>
@@ -112,6 +112,9 @@ const Footer: React.FC<FooterProps> = ({ footerData }) => {
               <div className="pb-2 sm:pb-3 lg:pb-3">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-xs sm:text-sm lg:text-sm uppercase tracking-wide">Mon - Sun</span>
+                </div>
+                <div className="">
+                  <span className="text-xs sm:text-sm lg:text-sm uppercase tracking-wide">2pm - 10pm</span>
                 </div>
               </div>
             </div>

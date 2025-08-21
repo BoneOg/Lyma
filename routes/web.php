@@ -109,6 +109,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/api/dashboard/popular-time-slots', [AdminController::class, 'getPopularTimeSlots']);
         Route::get('/admin/api/dashboard/recent-activity', [AdminController::class, 'getRecentActivity']);
 
+        // PDF Download API
+        Route::post('/admin/api/download-reservations-pdf', [AdminController::class, 'downloadReservationsPDF']);
+
         // --- Time Slot API ---
         Route::get('/admin/api/time-slots', [AdminController::class, 'getTimeSlots']);
         Route::post('/admin/api/time-slots', [AdminController::class, 'storeTimeSlot']);
@@ -124,6 +127,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/staff/api/reservations/{id}/complete', [StaffController::class, 'completeReservation']);
         Route::patch('/staff/api/reservations/{id}/cancel', [StaffController::class, 'cancelReservation']);
         Route::post('/staff/api/quick-reservations', [StaffController::class, 'quickReservation']);
+        Route::post('/staff/api/download-reservations-pdf', [StaffController::class, 'downloadReservationsPDF']);
     });
 
 });

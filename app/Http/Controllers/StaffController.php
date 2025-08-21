@@ -6,6 +6,7 @@ use App\Models\Reservation;
 use App\Models\DisabledTimeSlot;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StaffController extends Controller
 {
@@ -192,7 +193,7 @@ class StaffController extends Controller
         $validated = $request->validate([
             'guest_first_name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
             'guest_last_name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
-            'guest_email' => ['required', 'email', 'max:100'],
+            'guest_email' => ['nullable', 'email', 'max:100'],
             'guest_phone' => ['required', 'string', 'max:20', 'regex:/^[\d\s\-\+]+$/'],
             'special_requests' => ['nullable', 'string', 'max:500'],
             'reservation_date' => ['required', 'date', 'after_or_equal:today'],
@@ -205,17 +206,47 @@ class StaffController extends Controller
             $reservation = \App\Models\Reservation::create([
                 'guest_first_name' => $validated['guest_first_name'],
                 'guest_last_name' => $validated['guest_last_name'],
-                'guest_email' => $validated['guest_email'],
+                'guest_email' => $validated['guest_email'] ?: null,
                 'guest_phone' => $validated['guest_phone'],
                 'special_requests' => $validated['special_requests'] ?? null,
                 'reservation_date' => $validated['reservation_date'],
-                'time_slot_id' => $validated['time_slot_id'],
+                'time_slot_id' => $validated['is_special_hours'] ? null : $validated['time_slot_id'],
                 'guest_count' => $validated['guest_count'],
                 'status' => 'confirmed',
+                'is_special_hours' => $validated['is_special_hours'] ?? false,
             ]);
             return response()->json(['success' => true, 'reservation' => $reservation]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to create reservation: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function downloadReservationsPDF(Request $request)
+    {
+        $request->validate(['date' => 'required|date']);
+        $date = $request->date;
+        
+        $reservations = Reservation::whereDate('reservation_date', $date)
+            ->with(['timeSlot'])
+            ->orderBy('time_slot_id')
+            ->get();
+
+        // Get restaurant information
+        $restaurantName = 'Lyma Restaurant';
+        $restaurantAddress = '123 Main Street, City, Country';
+        $restaurantPhone = '+1 234 567 8900';
+        $restaurantEmail = 'info@lyma.com';
+
+        $pdf = Pdf::loadView('pdfs.reservations', [
+            'reservations' => $reservations,
+            'date' => $date,
+            'restaurantName' => $restaurantName,
+            'restaurantAddress' => $restaurantAddress,
+            'restaurantPhone' => $restaurantPhone,
+            'restaurantEmail' => $restaurantEmail,
+        ]);
+
+        $filename = 'reservations_' . $date . '.pdf';
+        return $pdf->download($filename);
     }
 } 

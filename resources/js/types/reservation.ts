@@ -23,6 +23,7 @@ export interface TimeSlot {
   end_time: string;
   formatted_time: string;
   start_time_formatted: string;
+  end_time_formatted: string;
 }
 
 export interface SystemSettings {
