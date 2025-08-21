@@ -415,28 +415,28 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50 p-2 sm:p-3 md:p-4 lg:p-4 xl:p-4 2xl:p-4">
       <div className="bg-[#3f411a] rounded shadow-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-10">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl text-beige font-lexend font-extralight">QUICK RESERVATION</h2>
+        <div className="p-4 sm:p-6 md:p-8 lg:p-8 xl:p-10 2xl:p-10">
+          <div className="flex justify-between items-center mb-4 sm:mb-5 md:mb-6 lg:mb-6 xl:mb-6 2xl:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-3xl text-beige font-lexend font-extralight">QUICK RESERVATION</h2>
             <button
               onClick={handleClose}
-              className="text-white cursor-pointer text-3xl font-bold hover:text-beige transition-colors"
+              className="text-white cursor-pointer text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-3xl font-bold hover:text-beige transition-colors"
             >
               ×
             </button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-6 lg:gap-8 xl:gap-8 2xl:gap-8">
             {/* Left Content Container */}
             <div className="flex flex-col justify-start h-full">
               {/* Dropdowns + Calendar */}
               <div className="flex flex-col justify-start h-full">
-                <div className="flex space-x-4 mb-10">
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-4 2xl:space-x-4 mb-6 sm:mb-8 md:mb-8 lg:mb-10 xl:mb-10 2xl:mb-10">
                   {/* Month */}
-                  <div className="relative w-40">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Month</label>
+                  <div className="relative w-full sm:w-32 md:w-36 lg:w-40 xl:w-40 2xl:w-40">
+                    <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-beige">Month</label>
                     <Select 
                       value={selectedMonth.toString()}
                       onValueChange={(value) => {
@@ -444,7 +444,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                         setSelectedDate(null)
                       }}
                     >
-                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
+                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white max-h-none overflow-y-visible">
@@ -462,13 +462,13 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                   </div>
 
                   {/* Year */}
-                  <div className="relative w-28">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Year</label>
+                  <div className="relative w-full sm:w-24 md:w-26 lg:w-28 xl:w-28 2xl:w-28">
+                    <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-beige">Year</label>
                     <Select
                       value={selectedYear.toString()}
                       onValueChange={(value) => setSelectedYear(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
+                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white">
@@ -486,8 +486,8 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                   </div>
 
                   {/* Time */}
-                  <div className="relative w-40">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Time</label>
+                  <div className="relative w-full sm:w-32 md:w-36 lg:w-40 xl:w-40 2xl:w-40">
+                    <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-beige">Time</label>
                     <Select 
                       value={selectedTimeSlot?.toString() || ''}
                       onValueChange={(value) => {
@@ -499,7 +499,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                       }}
                     >
                       <SelectTrigger className={`bg-transparent border-b border-white text-white w-full font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto text-left ${
-                        selectedTimeSlot === 'special-hours' ? 'py-3 text-xs' : 'py-2 text-base'
+                        selectedTimeSlot === 'special-hours' ? 'py-3 text-xs' : 'py-2 text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base'
                       }`}>
                         <SelectValue>
                           {(() => {
@@ -561,13 +561,13 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                   </div>
 
                   {/* Guests */}
-                  <div className="relative w-24">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-beige">Guests</label>
+                  <div className="relative w-full sm:w-20 md:w-22 lg:w-24 xl:w-24 2xl:w-24">
+                    <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-beige">Guests</label>
                     <Select 
                       value={guestCount.toString()}
                       onValueChange={(value) => setGuestCount(parseInt(value))}
                     >
-                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
+                      <SelectTrigger className="bg-transparent border-b border-white text-white w-full pr-8 py-2 text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto">
                         <SelectValue>{guestCount}</SelectValue>
                       </SelectTrigger>
                       <SelectContent className="bg-[#3f411a] border-white text-white">
@@ -606,10 +606,10 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                   isDateClosed={isDateClosed}
                   isDateSpecialHours={isDateSpecialHours}
                   months={months}
-					className="grid grid-cols-7 text-center gap-y-7 text-white text-lg"
-					weekdayClassName={() => 'h-8 flex items-center justify-center font-lexend text-beige font-medium tracking-wide opacity-80'}
+					className="grid grid-cols-7 text-center gap-y-4 sm:gap-y-5 md:gap-y-6 lg:gap-y-7 xl:gap-y-7 2xl:gap-y-7 text-white text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-lg"
+					weekdayClassName={() => 'h-6 sm:h-7 md:h-7 lg:h-8 xl:h-8 2xl:h-8 flex items-center justify-center font-lexend text-beige font-medium tracking-wide opacity-80 text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm 2xl:text-sm'}
 					dayClassName={(day, { isDisabled, isFullyBooked, isSelected, isClosed, isSpecialHours }) => {
-						let className = 'transition-colors h-8 w-full flex items-center justify-center font-lexend font-light relative';
+						let className = 'transition-colors h-6 sm:h-7 md:h-7 lg:h-8 xl:h-8 2xl:h-8 w-full flex items-center justify-center font-lexend font-light relative';
                     
                     if (isClosed) {
                       className += ' text-[#D4847C] cursor-not-allowed';
@@ -632,53 +632,53 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                 />
 
                 {/* Legend */}
-                <div className="flex justify-center items-center space-x-6 mt-6">
+                <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-5 lg:space-x-6 xl:space-x-6 2xl:space-x-6 mt-4 sm:mt-5 md:mt-5 lg:mt-6 xl:mt-6 2xl:mt-6">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#6B7A5E]"></div>
-                    <span className="text-white/80 font-light font-lexend text-sm">Fully Booked</span>
+                    <div className="w-2 sm:w-2.5 md:w-3 lg:w-3 xl:w-3 2xl:w-3 h-2 sm:h-2.5 md:h-3 lg:h-3 xl:h-3 2xl:h-3 rounded-full bg-[#6B7A5E]"></div>
+                    <span className="text-white/80 font-light font-lexend text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">Fully Booked</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#C5A572]"></div>
-                    <span className="text-white/80 font-light font-lexend text-sm">Special Hours</span>
+                    <div className="w-2 sm:w-2.5 md:w-3 lg:w-3 xl:w-3 2xl:w-3 h-2 sm:h-2.5 md:h-3 lg:h-3 xl:h-3 2xl:h-3 rounded-full bg-[#C5A572]"></div>
+                    <span className="text-white/80 font-light font-lexend text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">Special Hours</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-[#D4847C]"></div>
-                    <span className="text-white/80 font-light font-lexend text-sm">Closed</span>
+                    <div className="w-2 sm:w-2.5 md:w-3 lg:w-3 xl:w-3 2xl:w-3 h-2 sm:h-2.5 md:h-3 lg:h-3 xl:h-3 2xl:h-3 rounded-full bg-[#D4847C]"></div>
+                    <span className="text-white/80 font-light font-lexend text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">Closed</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right Form */}
-            <div className="flex flex-col justify-between h-full self-stretch w-full max-w-md ml-auto">
-              <div className="space-y-8">
+            <div className="flex flex-col justify-between h-full self-stretch w-full max-w-md lg:ml-auto md:mx-auto">
+              <div className="space-y-6 sm:space-y-6 md:space-y-7 lg:space-y-8 xl:space-y-8 2xl:space-y-8">
                 <div>
-                  <label className="block text-base font-extralight font-lexend mb-3 text-white">When</label>
-                  <div className="border-b border-white pb-2 text-lg font-extralight font-lexend text-white">
+                  <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-3 text-white">When</label>
+                  <div className="border-b border-white pb-2 text-base sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-lg font-extralight font-lexend text-white">
                     {formatSelectedDateTime()}
                   </div>
                 </div>
                 
                 {/* First Name and Last Name */}
-                <div className="flex space-x-6">
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-5 lg:space-x-6 xl:space-x-6 2xl:space-x-6">
                   <div className="flex-1">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">First Name</label>
+                    <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-white">First Name</label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={(e) => handleNameInput(e.target.value, setFirstName)}
-                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend"
                       placeholder="First name"
                       required
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">Last Name</label>
+                    <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-white">Last Name</label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={(e) => handleNameInput(e.target.value, setLastName)}
-                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend"
                       placeholder="Last name"
                       required
                     />
@@ -686,36 +686,36 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-base font-extralight font-lexend mb-2 text-white">Email (Optional)</label>
+                  <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-white">Email (Optional)</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => handleEmailInput(e.target.value)}
-                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
+                    className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend"
                     placeholder="Enter your email (optional)"
                   />
                 </div>
                 
                 {/* Phone Number and Special Requests */}
-                <div className="flex space-x-6">
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-5 lg:space-x-6 xl:space-x-6 2xl:space-x-6">
                   <div className="flex-1">
-                  <label className="block text-base font-extralight font-lexend mb-2 text-white">Phone Number</label>
+                  <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-white">Phone Number</label>
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => handlePhoneInput(e.target.value)}
-                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend"
                     placeholder="+639543846071"
                       required
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-base font-extralight font-lexend mb-2 text-white">Special Requests</label>
+                    <label className="block text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend mb-2 text-white">Special Requests</label>
                     <input
                       type="text"
                       value={specialRequests}
                       onChange={(e) => setSpecialRequests(e.target.value)}
-                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-base font-extralight font-lexend"
+                      className="w-full bg-transparent border-b border-white text-white pb-2 outline-none text-sm sm:text-sm md:text-base lg:text-base xl:text-base 2xl:text-base font-extralight font-lexend"
                       placeholder="ex. Food Allergies"
                     />
                   </div>
@@ -725,7 +725,7 @@ const QuickReservation: React.FC<QuickReservationProps> = ({
               <button
                 onClick={handleSubmit}
                 disabled={!isFormValid() || isSubmitting}
-                className={`block w-full text-center font-light font-lexend py-4 mt-8 text-lg transition duration-200 uppercase ${
+                className={`block w-full text-center font-light font-lexend py-3 sm:py-3 md:py-3 lg:py-4 xl:py-4 2xl:py-4 mt-6 sm:mt-6 md:mt-7 lg:mt-8 xl:mt-8 2xl:mt-8 text-base sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-lg transition duration-200 uppercase ${
                   isFormValid() && !isSubmitting
                     ? 'bg-beige-dark active:bg-beige text-[#3f411a] hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg cursor-pointer tracking-wider'
                     : 'bg-gray-400 text-gray-600 cursor-not-allowed tracking-wider'
