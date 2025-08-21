@@ -11,7 +11,7 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = "Lyma - Fine Dining Restaurant in General Luna, Siargao | Chef Marc",
+  title = "Lyma",
   description = "Experience exceptional fine dining at Lyma in General Luna, Siargao. Chef Marc's culinary masterpiece featuring local ingredients transformed through tradition and innovation.",
   keywords = "Lyma, fine dining, Siargao, General Luna, Chef Marc, restaurant, Filipino cuisine, tropical dining, luxury restaurant, island dining",
   image = "/assets/images/hero.webp",

@@ -28,7 +28,7 @@
         <!-- Theme color for mobile browsers -->
         <meta name="theme-color" content="#3D401E">
         
-        <title>Lyma - Fine Dining Restaurant in General Luna, Siargao | Chef Marc</title>
+        <title>Lyma</title>
         
         @routes
         @viteReactRefresh

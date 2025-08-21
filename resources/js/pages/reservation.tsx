@@ -404,18 +404,18 @@ export default function Reservation() {
                   />
 
                   {/* Legend */}
-                  <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6 mt-4 sm:mt-6">
+                  <div className="flex flex-row sm:flex-row justify-center items-center space-x-6 space-y-0 sm:space-y-0 sm:space-x-4 md:space-x-6 mt-4 sm:mt-6">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#6B7A5E]"></div>
-                      <span className="text-white/80 font-light font-lexend text-xs sm:text-sm">Fully Booked</span>
+                      <span className="text-white/80 font-light font-lexend text-[10px] sm:text-sm">Fully Booked</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#C5A572]"></div>
-                      <span className="text-white/80 font-light font-lexend text-xs sm:text-sm">Special Hours</span>
+                      <span className="text-white/80 font-light font-lexend text-[10px] sm:text-sm">Special Hours</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#D4847C]"></div>
-                      <span className="text-white/80 font-light font-lexend text-xs sm:text-sm">Closed</span>
+                      <span className="text-white/80 font-light font-lexend text-[10px] sm:text-sm">Closed</span>
                     </div>
                   </div>
                 </div>

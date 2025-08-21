@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const iconColor = sidebarOpen ? '#3D401E' : '#FAF7CA';
   const reservationTextClass = sidebarOpen ? 'text-[#3D401E]' : 'text-beige';
-  const logoSrc = sidebarOpen ? '/assets/logo/lymaolive.webp' : '/assets/logo/lymaonly_beige.webp';
+  const logoSrc = sidebarOpen ? '/assets/logo/lymaonly_olive.webp' : '/assets/logo/lymaonly_beige.webp';
   const underlineColor = sidebarOpen ? '#3D401E' : 'beige';
   return (
     <>
