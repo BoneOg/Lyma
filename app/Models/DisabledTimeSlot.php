@@ -12,6 +12,7 @@ class DisabledTimeSlot extends Model
     protected $fillable = [
         'date',
         'time_slot_id',
+        'is_fully_booked',
         'is_closed',
         'special_start',
         'special_end',

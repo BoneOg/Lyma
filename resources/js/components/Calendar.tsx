@@ -97,13 +97,13 @@ const Calendar: React.FC<CalendarProps> = ({
           )}
           <span className="relative z-10">{day}</span>
           {isFullyBooked && !isDisabled && !isClosed && (
-            <div className="absolute -top-1 right-1/2 translate-x-3 w-2.5 h-2.5 bg-[#6B7A5E] rounded-full pointer-events-none"></div>
+            <div className="absolute -top-1 right-5 translate-x-3 xl:w-2.5 xl:h-2.5 w-2 h-2 bg-[#6B7A5E] rounded-full pointer-events-none"></div>
           )}
           {isSpecialHours && !isDisabled && !isClosed && !isFullyBooked && (
-            <div className="absolute -top-1 right-1/2 translate-x-3 w-2.5 h-2.5 bg-[#C5A572] rounded-full pointer-events-none"></div>
+            <div className="absolute -top-1 right-5 translate-x-3 xl:w-2.5 xl:h-2.5 w-2 h-2 bg-[#C5A572] rounded-full pointer-events-none"></div> 
           )}
           {isClosed && (
-            <div className="absolute -top-1 right-1/2 translate-x-3 w-2.5 h-2.5 bg-[#D4847C] rounded-full pointer-events-none"></div>
+            <div className="absolute -top-1 right-5 translate-x-3 xl:w-2.5 xl:h-2.5 w-2 h-2 bg-[#D4847C] rounded-full pointer-events-none"></div>
           )}
         </div>
       );

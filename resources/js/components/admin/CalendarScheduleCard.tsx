@@ -6,16 +6,19 @@ const CalendarScheduleCard: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
   const [calendarOption, setCalendarOption] = useState('Normal Day');
+  const [fullyBookedSlots, setFullyBookedSlots] = useState<number[]>([]);
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [disableSlotPage, setDisableSlotPage] = useState(0);
   const [disabledSlots, setDisabledSlots] = useState<number[]>([]);
   const [dateSettings, setDateSettings] = useState<{[key: string]: {
-    type: 'Normal Day' | 'Close Completely' | 'Special Hours' | 'Disable Specific Time Slots',
+    type: 'Normal Day' | 'Close Completely' | 'Special Hours' | 'Disable Specific Time Slots' | 'Fully Booked',
     specialHours?: { start: string, end: string },
-    disabledSlots?: number[]
+    disabledSlots?: number[],
+    fullyBookedSlots?: number[]
   }}>({});
   const [timeSlots, setTimeSlots] = useState<any[]>([]);
   const [disabledTimeSlots, setDisabledTimeSlots] = useState<{date: string, time_slot_id: number}[]>([]);
+  const [fullyBookedTimeSlots, setFullyBookedTimeSlots] = useState<{date: string, time_slot_id: number}[]>([]);
   const [specials, setSpecials] = useState<any[]>([]);
   const [specialStart, setSpecialStart] = useState('11:00');
   const [specialEnd, setSpecialEnd] = useState('15:00');
@@ -39,7 +42,57 @@ const CalendarScheduleCard: React.FC = () => {
       .then(res => res.json())
       .then(data => {
         setDisabledTimeSlots(data.disabled || []);
+        setFullyBookedTimeSlots(data.fullyBooked || []);
         setSpecials(data.specials || []);
+        
+        // Initialize dateSettings with existing data
+        const newSettings: {[key: string]: any} = {};
+        
+        // Process specials (closed dates and special hours)
+        (data.specials || []).forEach((special: any) => {
+          const dateKey = special.date;
+          if (special.is_closed) {
+            newSettings[dateKey] = { type: 'Close Completely' };
+          } else if (special.special_start && special.special_end) {
+            newSettings[dateKey] = { 
+              type: 'Special Hours', 
+              specialHours: { 
+                start: special.special_start.slice(0,5), 
+                end: special.special_end.slice(0,5) 
+              } 
+            };
+          }
+        });
+        
+        // Process disabled time slots
+        (data.disabled || []).forEach((disabled: any) => {
+          const dateKey = disabled.date;
+          if (!newSettings[dateKey]) {
+            newSettings[dateKey] = { 
+              type: 'Disable Specific Time Slots',
+              disabledSlots: []
+            };
+          }
+          if (newSettings[dateKey].type === 'Disable Specific Time Slots') {
+            newSettings[dateKey].disabledSlots.push(disabled.time_slot_id);
+          }
+        });
+        
+        // Process fully booked time slots
+        (data.fullyBooked || []).forEach((fullyBooked: any) => {
+          const dateKey = fullyBooked.date;
+          if (!newSettings[dateKey]) {
+            newSettings[dateKey] = { 
+              type: 'Fully Booked',
+              fullyBookedSlots: []
+            };
+          }
+          if (newSettings[dateKey].type === 'Fully Booked') {
+            newSettings[dateKey].fullyBookedSlots.push(fullyBooked.time_slot_id);
+          }
+        });
+        
+        setDateSettings(newSettings);
       })
       .catch(err => console.error('Failed to fetch disabled time slots:', err));
   }, [currentDate]);
@@ -96,6 +149,14 @@ const CalendarScheduleCard: React.FC = () => {
     );
   };
 
+  const toggleSlotFullyBooked = (slotId: number) => {
+    setFullyBookedSlots(prev => 
+      prev.includes(slotId)
+        ? prev.filter(s => s !== slotId)
+        : [...prev, slotId]
+    );
+  };
+
   const getDateIndicator = (date: number) => {
     const dateStr = getDateStr(date);
     const special = specials.find(s => s.date === dateStr);
@@ -105,6 +166,9 @@ const CalendarScheduleCard: React.FC = () => {
     }
     if (disabledTimeSlots.some(d => d.date === dateStr)) {
       return 'bg-blue-500';
+    }
+    if (fullyBookedTimeSlots.some(d => d.date === dateStr)) {
+      return 'bg-green-500';
     }
     return null;
   };
@@ -277,6 +341,65 @@ const CalendarScheduleCard: React.FC = () => {
         } else {
           delete newSettings[dateKey];
         }
+      } else if (calendarOption === 'Fully Booked') {
+        const prevFullyBooked = fullyBookedTimeSlots.filter(d => d.date === dateStr).map(d => d.time_slot_id);
+        const toMarkFullyBooked = fullyBookedSlots.filter(id => !prevFullyBooked.includes(id));
+        const toUnmarkFullyBooked = prevFullyBooked.filter(id => !fullyBookedSlots.includes(id));
+
+        // Mark new slots as fully booked
+        for (const slotId of toMarkFullyBooked) {
+          const res = await fetch('/admin/api/mark-fully-booked', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfToken,
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({ 
+              time_slot_id: slotId, 
+              date: dateStr, 
+              mark: true 
+            })
+          });
+
+          if (!res.ok) {
+            const errorData = await res.text();
+            console.error('Mark fully booked error:', errorData);
+            throw new Error(`Failed to mark time slot ${slotId} as fully booked: ${res.status} ${res.statusText}`);
+          }
+        }
+
+        // Unmark removed slots
+        for (const slotId of toUnmarkFullyBooked) {
+          const res = await fetch('/admin/api/mark-fully-booked', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfToken,
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({ 
+              time_slot_id: slotId, 
+              date: dateStr, 
+              mark: false 
+            })
+          });
+
+          if (!res.ok) {
+            const errorData = await res.text();
+            console.error('Unmark fully booked error:', errorData);
+            throw new Error(`Failed to unmark time slot ${slotId}: ${res.status} ${res.statusText}`);
+          }
+        }
+
+        if (fullyBookedSlots.length > 0) {
+          newSettings[dateKey] = { 
+            type: 'Fully Booked',
+            fullyBookedSlots: [...fullyBookedSlots]
+          };
+        } else {
+          delete newSettings[dateKey];
+        }
       }
 
       // Refetch data after successful save
@@ -284,12 +407,14 @@ const CalendarScheduleCard: React.FC = () => {
       if (refreshRes.ok) {
         const data = await refreshRes.json();
         setDisabledTimeSlots(data.disabled || []);
+        setFullyBookedTimeSlots(data.fullyBooked || []);
         setSpecials(data.specials || []);
       }
 
       setDateSettings(newSettings);
       setSelectedDate(null);
       setDisabledSlots([]);
+      setFullyBookedSlots([]);
       setCalendarOption('Normal Day');
       showNotification && showNotification('Changes saved successfully!', 'success');
 
@@ -313,6 +438,10 @@ const CalendarScheduleCard: React.FC = () => {
     const disabledForDate = disabledTimeSlots.filter(d => d.date === dateStr && d.time_slot_id !== null).map(d => d.time_slot_id);
     setDisabledSlots(disabledForDate);
     
+    // Find all slots fully booked for this date
+    const fullyBookedForDate = fullyBookedTimeSlots.filter(d => d.date === dateStr && d.time_slot_id !== null).map(d => d.time_slot_id);
+    setFullyBookedSlots(fullyBookedForDate);
+    
     // Set calendar option and special hours if present
     const special = specials.find(s => s.date === dateStr);
     if (special) {
@@ -325,11 +454,40 @@ const CalendarScheduleCard: React.FC = () => {
       } else {
         setCalendarOption('Normal Day');
       }
+    } else if (fullyBookedForDate.length > 0) {
+      setCalendarOption('Fully Booked');
     } else if (disabledForDate.length > 0) {
       setCalendarOption('Disable Specific Time Slots');
     } else {
       setCalendarOption('Normal Day');
     }
+    
+    // Update dateSettings to reflect current state
+    const newSettings = { ...dateSettings };
+    if (special) {
+      if (special.is_closed) {
+        newSettings[dateKey] = { type: 'Close Completely' };
+      } else if (special.special_start && special.special_end) {
+        newSettings[dateKey] = { 
+          type: 'Special Hours', 
+          specialHours: { 
+            start: special.special_start.slice(0,5), 
+            end: special.special_end.slice(0,5) 
+          } 
+        };
+      }
+    } else if (fullyBookedForDate.length > 0) {
+      newSettings[dateKey] = { 
+        type: 'Fully Booked',
+        fullyBookedSlots: [...fullyBookedForDate]
+      };
+    } else if (disabledForDate.length > 0) {
+      newSettings[dateKey] = { 
+        type: 'Disable Specific Time Slots',
+        disabledSlots: [...disabledForDate]
+      };
+    }
+    setDateSettings(newSettings);
   };
 
   const renderCalendarGrid = () => {
@@ -483,6 +641,7 @@ const CalendarScheduleCard: React.FC = () => {
             <option>Close Completely</option>
             <option>Special Hours</option>
             <option>Disable Specific Time Slots</option>
+            <option>Fully Booked</option>
           </select>
         </div>
         
@@ -555,6 +714,53 @@ const CalendarScheduleCard: React.FC = () => {
               </div>
             </div>
           )}
+          
+          {calendarOption === 'Fully Booked' && (
+            <div className="flex flex-col h-full">
+              <div className="flex-1 flex items-center justify-center">
+                <div className="grid grid-cols-2 grid-rows-2 gap-3 w-full">
+                  {currentSlots.map((slot) => (
+                    <div
+                      key={slot.id}
+                      className={`flex items-center justify-between px-3 py-2 rounded-md text-xs cursor-pointer transition-colors w-full font-lexend ${
+                        fullyBookedSlots.includes(slot.id)
+                          ? 'bg-green-100 border border-green-300 text-green-700'
+                          : 'bg-gray-50 border border-gray-300 text-olive hover:bg-gray-100'
+                      }`}
+                      onClick={() => toggleSlotFullyBooked(slot.id)}
+                    >
+                      <span className="font-lexend font-light">{slot.start_time_formatted} - {slot.end_time_formatted}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-200">
+                <button
+                  type="button"
+                  className={`flex items-center gap-1 px-2 py-1 rounded text-xs border border-gray-300 bg-gray-50 text-olive font-lexend font-light transition-colors duration-150 ${
+                    disableSlotPage === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
+                  }`}
+                  onClick={() => setDisableSlotPage(p => Math.max(0, p - 1))}
+                  disabled={disableSlotPage === 0}
+                >
+                  <ChevronLeft size={12} /> Back
+                </button>
+                <span className="text-xs text-gray-500 font-lexend">
+                  {disableSlotPage + 1} of {totalPages}
+                </span>
+                <button
+                  type="button"
+                  className={`flex items-center gap-1 px-2 py-1 rounded text-xs border border-gray-300 bg-gray-50 text-olive font-lexend font-light transition-colors duration-150 ${
+                    disableSlotPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
+                  }`}
+                  onClick={() => setDisableSlotPage(p => Math.min(totalPages - 1, p + 1))}
+                  disabled={disableSlotPage === totalPages - 1}
+                >
+                  Next <ChevronRight size={12} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="mt-2 p-2 bg-gray-50 rounded border border-gray-200">
@@ -571,6 +777,10 @@ const CalendarScheduleCard: React.FC = () => {
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span className="font-lexend">Disabled Time Slots</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="font-lexend">Fully Booked</span>
             </div>
           </div>
         </div>

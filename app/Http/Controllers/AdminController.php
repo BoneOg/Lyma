@@ -367,6 +367,31 @@ class AdminController extends Controller
         return response()->json(['success' => true, 'date' => $validated['date'], 'time_slot_id' => $validated['time_slot_id']]);
     }
 
+    // Mark a time slot as fully booked for a specific date
+    public function markTimeSlotAsFullyBooked(Request $request)
+    {
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'time_slot_id' => 'required|exists:time_slots,id',
+            'mark' => 'sometimes|boolean',
+        ]);
+        if ($request->boolean('mark', false)) {
+            // Mark as fully booked: create if not exists
+            DisabledTimeSlot::firstOrCreate([
+                'date' => $validated['date'],
+                'time_slot_id' => $validated['time_slot_id'],
+                'is_fully_booked' => true,
+            ]);
+        } else {
+            // Unmark: delete the row if exists
+            DisabledTimeSlot::where('date', $validated['date'])
+                ->where('time_slot_id', $validated['time_slot_id'])
+                ->where('is_fully_booked', true)
+                ->delete();
+        }
+        return response()->json(['success' => true, 'date' => $validated['date'], 'time_slot_id' => $validated['time_slot_id']]);
+    }
+
     // Set special hours for a date
     public function setSpecialHoursForDate(Request $request)
     {
@@ -436,7 +461,13 @@ class AdminController extends Controller
                 'special_end' => $row->special_end,
             ];
         })->values();
-        $disabledSlots = $disabled->where('time_slot_id', '!=', 0)->map(function ($row) {
+        $disabledSlots = $disabled->where('time_slot_id', '!=', 0)->where('is_fully_booked', '!=', true)->map(function ($row) {
+            return [
+                'date' => $row->date,
+                'time_slot_id' => $row->time_slot_id,
+            ];
+        })->values();
+        $fullyBookedSlots = $disabled->where('time_slot_id', '!=', 0)->where('is_fully_booked', true)->map(function ($row) {
             return [
                 'date' => $row->date,
                 'time_slot_id' => $row->time_slot_id,
@@ -445,6 +476,7 @@ class AdminController extends Controller
         return response()->json([
             'specials' => $specials,
             'disabled' => $disabledSlots,
+            'fullyBooked' => $fullyBookedSlots,
         ]);
     }
 

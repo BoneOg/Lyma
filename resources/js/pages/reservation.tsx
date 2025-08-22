@@ -60,6 +60,7 @@ export default function Reservation() {
     isDateSpecialHours,
     getSpecialHoursForDate,
     isTimeSlotAdminDisabled,
+    isTimeSlotFullyBooked,
     handleDateSelect,
     formatSelectedDateTime,
     isFormValid,
@@ -304,24 +305,28 @@ export default function Reservation() {
                               // Show regular time slots
                               return timeSlots.map((slot) => {
                                 const isOccupied = occupiedTimeSlots.includes(slot.id)
-                                const isAdminDisabled = disabledTimeSlots.includes(slot.id)
-                                const isDisabled = isOccupied || isAdminDisabled
+                                const isAdminDisabled = isTimeSlotAdminDisabled(slot.id)
+                                const isFullyBooked = isTimeSlotFullyBooked(slot.id)
+                                const isDisabled = isOccupied || isAdminDisabled || isFullyBooked
                                 
                                 return (
                                   <SelectItem 
                                     key={slot.id} 
                                     value={slot.id.toString()} 
-                                    className={`bg-[#3f411a] font-extralight font-lexend focus:bg-[#5a5d2a] relative ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-[#5a5d2a]'} ${isOccupied ? '!opacity-100' : ''} ${isAdminDisabled ? '!opacity-100' : ''}`}
+                                    className={`bg-[#3f411a] font-extralight font-lexend focus:bg-[#5a5d2a] relative ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-[#5a5d2a]'} ${isOccupied ? '!opacity-100' : ''} ${isAdminDisabled ? '!opacity-100' : ''} ${isFullyBooked ? '!opacity-100' : ''}`}
                                     disabled={isDisabled}
                                   >
-                                    <span className={isOccupied ? 'text-[#D4847C]' : isAdminDisabled ? 'text-[#D4847C]' : 'text-white'}>
+                                    <span className={isOccupied ? 'text-[#D4847C]' : isAdminDisabled ? 'text-[#D4847C]' : isFullyBooked ? 'text-[#6B7A5E]' : 'text-white'}>
                                       {slot.start_time_formatted} - {slot.end_time_formatted}
                                     </span>
                                     {isOccupied && (
-                                      <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
+                                      <div className="absolute left-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
                                     )}
                                     {isAdminDisabled && !isOccupied && (
-                                      <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
+                                      <div className="absolute left-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#D4847C] rounded-full opacity-100"></div>
+                                    )}
+                                    {isFullyBooked && !isOccupied && !isAdminDisabled && (
+                                      <div className="absolute left-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#6B7A5E] rounded-full opacity-100"></div>
                                     )}
                                   </SelectItem>
                                 )

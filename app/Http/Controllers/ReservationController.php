@@ -45,7 +45,7 @@ class ReservationController extends Controller
     public function getOccupiedTimeSlots(Request $request)
     {
         $request->validate([
-            'date' => 'required|date|after:today',
+            'date' => 'required|date|after_or_equal:today',
         ]);
 
         $date = $request->date;
@@ -62,12 +62,21 @@ class ReservationController extends Controller
         // Get disabled time slots for this date
         $disabledTimeSlots = \App\Models\DisabledTimeSlot::where('date', $date)
             ->whereNotNull('time_slot_id')
+            ->where('is_fully_booked', '!=', true)
+            ->pluck('time_slot_id')
+            ->toArray();
+
+        // Get fully booked time slots for this date
+        $fullyBookedTimeSlots = \App\Models\DisabledTimeSlot::where('date', $date)
+            ->whereNotNull('time_slot_id')
+            ->where('is_fully_booked', true)
             ->pluck('time_slot_id')
             ->toArray();
 
         return response()->json([
             'occupied_time_slots' => $occupiedTimeSlots,
-            'disabled_time_slots' => $disabledTimeSlots
+            'disabled_time_slots' => $disabledTimeSlots,
+            'fully_booked_time_slots' => $fullyBookedTimeSlots
         ]);
     }
 

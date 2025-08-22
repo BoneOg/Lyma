@@ -72,10 +72,11 @@ Route::middleware('auth')->group(function () {
         Route::patch('/admin/api/reservations/{id}/cancel', [AdminController::class, 'cancelReservation']);
         Route::post('/admin/api/quick-reservations', [AdminController::class, 'quickReservation']);
         Route::post('/admin/api/disable-time-slot', [AdminController::class, 'disableTimeSlotForDate']);
-        Route::get('/admin/api/disabled-time-slots', [AdminController::class, 'getDisabledTimeSlots']);
-        Route::post('/admin/api/special-hours', [AdminController::class, 'setSpecialHoursForDate']);
-        Route::post('/admin/api/close-date', [AdminController::class, 'setClosedForDate']);
-        Route::post('/admin/api/clear-date', [AdminController::class, 'clearSpecialOrClosedForDate']);
+Route::post('/admin/api/mark-fully-booked', [AdminController::class, 'markTimeSlotAsFullyBooked']);
+Route::get('/admin/api/disabled-time-slots', [AdminController::class, 'getDisabledTimeSlots']);
+Route::post('/admin/api/special-hours', [AdminController::class, 'setSpecialHoursForDate']);
+Route::post('/admin/api/close-date', [AdminController::class, 'setClosedForDate']);
+Route::post('/admin/api/clear-date', [AdminController::class, 'clearSpecialOrClosedForDate']);
 
         Route::get('/admin/api/total-revenue', [AdminController::class, 'totalRevenue'])->name('admin.total-revenue');
 

@@ -38,7 +38,9 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
   const [specialRequests, setSpecialRequests] = useState('');
   const [occupiedTimeSlots, setOccupiedTimeSlots] = useState<number[]>([]);
   const [disabledTimeSlots, setDisabledTimeSlots] = useState<number[]>([]);
+  const [fullyBookedTimeSlots, setFullyBookedTimeSlots] = useState<number[]>([]);
   const [fullyBookedDates, setFullyBookedDates] = useState<number[]>([]);
+  const [datesWithFullyBookedSlots, setDatesWithFullyBookedSlots] = useState<Set<string>>(new Set());
   const [closedDates, setClosedDates] = useState<number[]>([]);
   const [specialHoursData, setSpecialHoursData] = useState<{[key: number]: {special_start: string, special_end: string}}>({});
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -78,11 +80,17 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     }
   }, []);
 
+  // Fetch initial data when component loads
+  useEffect(() => {
+    fetchMonthDisabledAndFullyBookedSlots();
+  }, []);
+
   // Fetch fully booked dates, closed dates, and special hours dates when month changes
   useEffect(() => {
     fetchFullyBookedDates();
     fetchClosedDates();
     fetchSpecialHoursDates();
+    fetchMonthDisabledAndFullyBookedSlots();
   }, [selectedMonth, selectedYear]);
 
   // Date calculations
@@ -133,6 +141,42 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     }
   };
 
+  const fetchMonthDisabledAndFullyBookedSlots = async () => {
+    try {
+      // Fetch all disabled and fully booked time slots for the current month
+      const response = await fetch(`/admin/api/disabled-time-slots?month=${selectedMonth + 1}&year=${selectedYear}`);
+      const data = await response.json();
+      
+      // Process the data to track which dates have fully booked slots
+      const newDatesWithFullyBookedSlots = new Set<string>();
+      
+      if (data.fullyBooked && data.fullyBooked.length > 0) {
+        // Group fully booked slots by date
+        const fullyBookedByDate: { [key: string]: number[] } = {};
+        
+        data.fullyBooked.forEach((item: any) => {
+          if (!fullyBookedByDate[item.date]) {
+            fullyBookedByDate[item.date] = [];
+          }
+          fullyBookedByDate[item.date].push(item.time_slot_id);
+        });
+        
+        // Check which dates have ALL time slots marked as fully booked
+        Object.keys(fullyBookedByDate).forEach(dateStr => {
+          const fullyBookedCount = fullyBookedByDate[dateStr].length;
+          if (fullyBookedCount === timeSlots.length) {
+            newDatesWithFullyBookedSlots.add(dateStr);
+          }
+        });
+      }
+      
+      setDatesWithFullyBookedSlots(newDatesWithFullyBookedSlots);
+    } catch (error) {
+      console.error('Error fetching month disabled and fully booked slots:', error);
+      setDatesWithFullyBookedSlots(new Set());
+    }
+  };
+
   const isDateDisabled = (day: number) => {
     const dateToCheck = new Date(selectedYear, selectedMonth, day);
 
@@ -164,8 +208,19 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
 
   // New function to check if a date is fully booked (for red color and strikethrough)
   const isDateFullyBooked = (day: number) => {
-    return fullyBookedDates.includes(day);
+    // Check if ALL time slots for this date are fully booked (either by capacity or admin-marked)
+    
+    // First check if the date is capacity-based fully booked (all slots reach capacity)
+    if (fullyBookedDates.includes(day)) {
+      return true;
+    }
+    
+    // Check if admin has marked ALL time slots as fully booked for this specific date
+    const dateStr = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return datesWithFullyBookedSlots.has(dateStr);
   };
+
+
 
   // New function to check if a date is closed (for grey color)
   const isDateClosed = (day: number) => {
@@ -205,16 +260,49 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     return disabledTimeSlots.includes(timeSlotId);
   };
 
+  // Helper function to check if a time slot is fully booked for the selected date
+  const isTimeSlotFullyBooked = (timeSlotId: number) => {
+    return fullyBookedTimeSlots.includes(timeSlotId);
+  };
+
+  // Helper function to check if a date has some (but not all) fully booked time slots
+  const hasPartiallyFullyBookedSlots = (day: number) => {
+    // This function will be called when we need to show indicators for dates with some fully booked slots
+    // For now, we'll implement this based on the selected date's data
+    if (selectedDate === day) {
+      return fullyBookedTimeSlots.length > 0 && fullyBookedTimeSlots.length < timeSlots.length;
+    }
+    return false;
+  };
+
   const fetchOccupiedTimeSlots = async (date: string) => {
     try {
       const response = await fetch(`/reservations/occupied-time-slots?date=${date}`);
       const data = await response.json();
       setOccupiedTimeSlots(data.occupied_time_slots || []);
       setDisabledTimeSlots(data.disabled_time_slots || []);
+      setFullyBookedTimeSlots(data.fully_booked_time_slots || []);
+      
+      // Track which dates have fully booked slots only if ALL time slots are fully booked
+      const fullyBookedCount = (data.fully_booked_time_slots || []).length;
+      const totalTimeSlots = timeSlots.length;
+      
+      if (fullyBookedCount > 0 && fullyBookedCount === totalTimeSlots) {
+        // Only mark date as fully booked if ALL time slots are marked as fully booked
+        setDatesWithFullyBookedSlots(prev => new Set([...prev, date]));
+      } else {
+        // Remove from fully booked dates if not all slots are marked
+        setDatesWithFullyBookedSlots(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(date);
+          return newSet;
+        });
+      }
     } catch (error) {
       console.error('Error fetching occupied time slots:', error);
       setOccupiedTimeSlots([]);
       setDisabledTimeSlots([]);
+      setFullyBookedTimeSlots([]);
     }
   };
 
@@ -229,7 +317,7 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     } else {
       // Reset to first available time slot for regular dates
       const firstAvailableSlot = timeSlots.find(slot => 
-        !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id)
+        !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id) && !fullyBookedTimeSlots.includes(slot.id)
       );
       setSelectedTimeSlot(firstAvailableSlot?.id || null);
     }
@@ -238,13 +326,13 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
   // Reset time slot if it becomes occupied or disabled
   useEffect(() => {
     if (selectedTimeSlot && typeof selectedTimeSlot === 'number' && 
-        (occupiedTimeSlots.includes(selectedTimeSlot) || disabledTimeSlots.includes(selectedTimeSlot))) {
+        (occupiedTimeSlots.includes(selectedTimeSlot) || disabledTimeSlots.includes(selectedTimeSlot) || fullyBookedTimeSlots.includes(selectedTimeSlot))) {
       const firstAvailableSlot = timeSlots.find(slot => 
-        !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id)
+        !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id) && !fullyBookedTimeSlots.includes(slot.id)
       );
       setSelectedTimeSlot(firstAvailableSlot?.id || null);
     }
-  }, [occupiedTimeSlots, disabledTimeSlots, selectedTimeSlot, timeSlots]);
+  }, [occupiedTimeSlots, disabledTimeSlots, fullyBookedTimeSlots, selectedTimeSlot, timeSlots]);
 
   const formatSelectedDateTime = () => {
     const parts = [];
@@ -429,6 +517,8 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     getSpecialHoursForDate,
     convertTo24HourFormat,
     isTimeSlotAdminDisabled,
+    isTimeSlotFullyBooked,
+    hasPartiallyFullyBookedSlots,
     handleDateSelect,
     formatSelectedDateTime,
     isFormValid,
