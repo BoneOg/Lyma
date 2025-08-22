@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
+import { X } from 'lucide-react';
 
-const StaffSidebar: React.FC = () => {
+interface StaffSidebarProps {
+  onClose: () => void;
+}
+
+const StaffSidebar: React.FC<StaffSidebarProps> = ({ onClose }) => {
   const { url } = usePage();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 

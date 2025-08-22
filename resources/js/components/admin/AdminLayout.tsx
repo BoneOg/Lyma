@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AdminSidebar from './AdminSidebar';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface AdminLayoutProps {
@@ -21,39 +21,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Menu Button - Visible on all screen sizes */}
-      <div className="fixed top-4 left-4 z-30">
-        <motion.button
-          onClick={toggleSidebar}
-          className="p-2 bg-olive text-beige rounded-lg shadow-lg"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <AnimatePresence mode="wait">
-            {sidebarOpen ? (
-              <motion.div
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <X className="w-6 h-6" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="menu"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Menu className="w-6 h-6" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.button>
-      </div>
+      {/* Menu Button - Only visible when sidebar is closed */}
+      {!sidebarOpen && (
+        <div className="fixed top-4 left-4 z-30">
+          <button
+            onClick={toggleSidebar}
+            className="p-2 bg-olive text-beige rounded-lg shadow-lg hover:bg-olive-dark transition-colors duration-200"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+      )}
 
       {/* Sidebar - Always collapsible */}
       <AnimatePresence>

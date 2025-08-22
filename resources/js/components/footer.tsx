@@ -140,7 +140,7 @@ const Footer: React.FC<FooterProps> = ({ footerData }) => {
               &copy; {new Date().getFullYear()} {restaurantName}. All rights reserved. Crafted with passion in Siargao.
             </p>
             <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-4 mt-3 sm:mt-4 lg:mt-0 text-xs sm:text-sm lg:text-sm text-[#3D401E]/60">
-            <a href="#" className="text-[#3D401E]/60 hover:text-[#3D401E] transition-all duration-300 transform hover:scale-110">
+            <a href="https://www.facebook.com/p/Lyma-Siargao-61577774335441" className="text-[#3D401E]/60 hover:text-[#3D401E] transition-all duration-300 transform hover:scale-110">
                   <span className="sr-only">Facebook</span>
                   <svg className="h-5 w-5 sm:h-6 sm:w-6 lg:h-6 lg:w-6" fill="currentColor" viewBox="0 0 24 24">
                     <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />

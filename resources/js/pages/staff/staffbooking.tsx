@@ -181,10 +181,10 @@ const StaffBooking: React.FC = () => {
           systemSettings={systemSettings}
         />
 
-        {/* Floating Download Button - fixed to viewport */}
+        {/* Floating Download Button - fixed to viewport, right side */}
         <button
           onClick={handleDownload}
-          className="fixed bottom-4 sm:bottom-6 md:bottom-6 lg:bottom-4 xl:bottom-4 2xl:bottom-4 left-4 sm:left-6 md:left-6 lg:left-4 xl:left-4 2xl:left-4 w-12 h-12 sm:w-14 sm:h-14 md:w-15 md:h-15 lg:w-16 lg:h-16 xl:w-16 xl:h-16 2xl:w-16 2xl:h-16 bg-olive text-beige rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center z-50"
+          className="fixed bottom-4 sm:bottom-6 md:bottom-6 lg:bottom-4 xl:bottom-4 2xl:bottom-4 right-4 sm:right-6 md:right-6 lg:right-4 xl:right-4 2xl:right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-15 md:h-15 lg:w-16 lg:h-16 xl:w-16 xl:h-16 2xl:w-16 2xl:h-16 bg-olive text-beige rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center z-50"
           title="Download Reservations PDF"
         >
           <Download className="w-6 h-6 sm:w-7 sm:h-7 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-8 xl:h-8 2xl:w-8 2xl:h-8" />

@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { NotificationProvider } from './contexts/NotificationContext';
 
 
-const appName = import.meta.env.VITE_APP_NAME || 'Lyma';
+const appName = import.meta.env.VITE_APP_NAME || 'Lyma By Chef Marc - Where Tropical Dreams Meet Culinary Excellence';
 
 createInertiaApp({
     title: () => `${appName}`,

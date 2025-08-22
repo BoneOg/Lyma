@@ -46,9 +46,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
 
   return (
     <div className="h-screen w-64 bg-olive text-white flex flex-col shadow-xl border-r border-olive-light">
-      {/* Logo and Close Button */}
-      <div className="p-6 border-b border-olive-light flex items-center justify-between">
-        <Link href="/admin/dashboard" className="block overflow-hidden flex-1" onClick={() => handleNavigation('/admin/dashboard')}>
+      {/* Logo */}
+      <div className="p-6 border-b border-olive-light">
+        <Link href="/admin/dashboard" className="block overflow-hidden" onClick={() => handleNavigation('/admin/dashboard')}>
           <img 
             src="/assets/logo/lymabeige.webp" 
             alt="Lyma by Chef Marc" 
@@ -61,17 +61,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
             }}
           />
         </Link>
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-olive-light rounded-full transition-colors duration-200 ml-2"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        )}
       </div>
 
       {/* Navigation */}
