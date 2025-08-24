@@ -35,16 +35,16 @@
         <meta name="robots" content="index, follow">
         
         <!-- Open Graph Meta Tags -->
-        <meta property="og:title" content="Lyma By Chef Marc - Where Tropical Dreams Meet Culinary Excellence">
+        <meta property="og:title" content="Lyma">
         <meta property="og:description" content="Nestled in the pristine shores of Siargao Island, Lyma By Chef Marc represents the essence of tropical fine dining. Every dish tells a story of local ingredients transformed through innovative techniques, creating an unforgettable culinary journey. Where tropical dreams meet culinary excellence with craft cocktails and premium wine cellar.">
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://www.lymasiargao.com">
         <meta property="og:image" content="https://www.lymasiargao.com/assets/images/hero.webp">
-        <meta property="og:site_name" content="Lyma By Chef Marc - Siargao Island">
+        <meta property="og:site_name" content="Lyma">
         
         <!-- Twitter Meta Tags -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Lyma By Chef Marc - Where Tropical Dreams Meet Culinary Excellence">
+        <meta name="twitter:title" content="Lyma">
         <meta name="twitter:description" content="Nestled in the pristine shores of Siargao Island, Lyma By Chef Marc represents the essence of tropical fine dining. Every dish tells a story of local ingredients transformed through innovative techniques, creating an unforgettable culinary journey. Where tropical dreams meet culinary excellence with craft cocktails and premium wine cellar.">
         <meta name="twitter:image" content="https://www.lymasiargao.com/assets/images/hero.webp">
         
@@ -52,7 +52,7 @@
         <link rel="canonical" href="https://www.lymasiargao.com">
         
         <!-- Dynamic title that will be overridden by Inertia -->
-        <title>Lyma By Chef Marc - Where Tropical Dreams Meet Culinary Excellence | Siargao Island Fine Dining</title>
+        <title>Lyma</title>
         
         @routes
         @viteReactRefresh
