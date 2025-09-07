@@ -763,15 +763,15 @@ class AdminController extends Controller
             $totalCount = Reservation::whereNotIn('status', ['pending'])->count();
 
             // Get popular time slots
-            $timeSlotStats = Reservation::selectRaw('time_slots.start_time, COUNT(*) as booking_count')
-                ->join('time_slots', 'reservations.time_slot_id', '=', 'time_slots.id')
-                ->groupBy('time_slots.start_time')
+            $timeSlotStats = Reservation::selectRaw('reserved_time, COUNT(*) as booking_count')
+                ->whereNotNull('reserved_time')
+                ->groupBy('reserved_time')
                 ->orderByDesc('booking_count')
                 ->limit(5)
                 ->get()
                 ->map(function ($item) {
                     return [
-                        'time' => \Carbon\Carbon::parse($item->start_time)->format('g:i A'),
+                        'time' => \Carbon\Carbon::parse($item->reserved_time)->format('g:i A'),
                         'bookings' => $item->booking_count
                     ];
                 });
@@ -823,15 +823,15 @@ class AdminController extends Controller
     public function getPopularTimeSlots()
     {
         try {
-            $popularTimeSlots = Reservation::selectRaw('time_slots.start_time, COUNT(*) as booking_count')
-                ->join('time_slots', 'reservations.time_slot_id', '=', 'time_slots.id')
-                ->groupBy('time_slots.start_time')
+            $popularTimeSlots = Reservation::selectRaw('reserved_time, COUNT(*) as booking_count')
+                ->whereNotNull('reserved_time')
+                ->groupBy('reserved_time')
                 ->orderByDesc('booking_count')
                 ->limit(10)
                 ->get()
                 ->map(function ($item) {
                     return [
-                        'time' => \Carbon\Carbon::parse($item->start_time)->format('g:i A'),
+                        'time' => \Carbon\Carbon::parse($item->reserved_time)->format('g:i A'),
                         'bookings' => $item->booking_count
                     ];
                 });

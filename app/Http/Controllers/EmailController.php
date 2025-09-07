@@ -22,73 +22,122 @@ class EmailController extends Controller
         ]);
 
         $subject = "Your Reservation at Lyma Siargao is Confirmed — {$data['date_formatted']}";
+        $logoPath = public_path('assets/logo/lymalogo_email.png');
+        $signaturePath = public_path('assets/images/signature.png');
+        $logoCid = 'lyma-logo';
+        $signatureCid = 'lyma-signature';
 
         $body = "
-        <div style='font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;'>
-            <!-- Header -->
-            <div style='background-color: #f8f9fa; padding: 30px 20px; text-align: center; border-bottom: 1px solid #e9ecef;'>
-                <h1 style='color: #3D401E; font-size: 48px; font-weight: 300; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;'>LYMA</h1>
-                <p style='color: #6c757d; margin: 8px 0 0 0; font-size: 16px; font-weight: 400;'>Reservation Confirmed</p>
+        <div style='font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; max-width: 520px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);'>
+            <!-- Header with Logo -->
+            <div style='padding: 48px 40px 32px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;'>
+                <div style='display: inline-block; margin-bottom: 24px;'>
+                    <img src='cid:" . $logoCid . "' alt='Lyma Siargao' style='height: 60px; width: auto;' />
+                </div>
+                <p style='color: #666666; margin: 0; font-size: 15px; font-weight: 400; letter-spacing: 0.5px;'>
+                    Reservation Confirmed
+                </p>
             </div>
             
             <!-- Main Content -->
-            <div style='padding: 40px 30px; background-color: #ffffff;'>
-                <h2 style='color: #212529; margin-bottom: 24px; font-size: 20px; font-weight: 500;'>Hello {$data['guest_name']},</h2>
-                
-                <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
-                    Thank you for choosing Lyma Siargao. We are pleased to confirm your reservation as follows:
+            <div style='padding: 40px 40px 32px 40px;'>
+                <p style='color: #2c3e20; margin: 0 0 32px 0; font-size: 16px; font-weight: 400; line-height: 1.6;'>
+                    Dear {$data['guest_name']},
                 </p>
-                
-                <!-- Reservation Details Box -->
-                <div style='background-color: #f8f9fa; padding: 24px; margin-bottom: 32px; border-left: 4px solid #3D401E;'>
-                    <h3 style='color: #212529; margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 500;'>Reservation Details:</h3>
-                    <div style='display: grid; gap: 12px;'>
-                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
-                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Name:</span>
-                            <span style='color: #212529; font-weight: 400;'>{$data['guest_name']}</span>
+
+                <p style='color: #444444; line-height: 1.7; margin: 0 0 40px 0; font-size: 15px; font-weight: 400;'>
+                    We are delighted to confirm your reservation at Lyma Siargao. Our team looks forward to creating an exceptional culinary experience for you.
+                </p>
+
+                <!-- Reservation Details -->
+                <div style='background-color: #fbfbfb; padding: 32px; border-radius: 8px; border: 1px solid #f0f0f0; margin-bottom: 40px;'>
+                    <h3 style='color: #2c3e20; margin: 0 0 20px 0; font-size: 16px; font-weight: 500;'>Reservation Details:</h3>
+                    <div style='display: grid; gap: 16px;'>
+                        <div style='display: grid; grid-template-columns: 120px 1fr; column-gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;'>
+                            <span style='color: #888888; font-size: 14px; font-weight: 500; letter-spacing: 0.3px;'>Name: </span>
+                            <span style='color: #2c3e20; font-size: 15px; font-weight: 400;'>{$data['guest_name']}</span>
                         </div>
-                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
-                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Email:</span>
-                            <span style='color: #212529; font-weight: 400;'>{$data['to']}</span>
+                        <div style='display: grid; grid-template-columns: 120px 1fr; column-gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;'>
+                            <span style='color: #888888; font-size: 14px; font-weight: 500; letter-spacing: 0.3px;'>Email: </span>
+                            <span style='color: #2c3e20; font-size: 15px; font-weight: 400;'>{$data['to']}</span>
                         </div>
-                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
-                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Phone:</span>
-                            <span style='color: #212529; font-weight: 400;'>" . ($data['phone'] ?? 'N/A') . "</span>
+                        <div style='display: grid; grid-template-columns: 120px 1fr; column-gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;'>
+                            <span style='color: #888888; font-size: 14px; font-weight: 500; letter-spacing: 0.3px;'>Phone: </span>
+                            <span style='color: #2c3e20; font-size: 15px; font-weight: 400;'>" . ($data['phone'] ?? 'N/A') . "</span>
                         </div>
-                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
-                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Date:</span>
-                            <span style='color: #212529; font-weight: 400;'>{$data['date_formatted']}</span>
+                        <div style='display: grid; grid-template-columns: 120px 1fr; column-gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;'>
+                            <span style='color: #888888; font-size: 14px; font-weight: 500; letter-spacing: 0.3px;'>Date: </span>
+                            <span style='color: #2c3e20; font-size: 15px; font-weight: 400;'>{$data['date_formatted']}</span>
                         </div>
-                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e9ecef;'>
-                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Time:</span>
-                            <span style='color: #212529; font-weight: 400;'>{$data['time_range']}</span>
+                        <div style='display: grid; grid-template-columns: 120px 1fr; column-gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;'>
+                            <span style='color: #888888; font-size: 14px; font-weight: 500; letter-spacing: 0.3px;'>Time: </span>
+                            <span style='color: #2c3e20; font-size: 15px; font-weight: 400;'>{$data['time_range']}</span>
                         </div>
-                        <div style='display: flex; justify-content: space-between; align-items: center; padding: 8px 0;'>
-                            <span style='color: #6c757d; font-weight: 500; min-width: 80px;'>Guests:</span>
-                            <span style='color: #212529; font-weight: 400;'>{$data['guest_count']}</span>
+                        <div style='display: grid; grid-template-columns: 120px 1fr; column-gap: 12px; align-items: center; padding: 8px 0;'>
+                            <span style='color: #888888; font-size: 14px; font-weight: 500; letter-spacing: 0.3px;'>Guests: </span>
+                            <span style='color: #2c3e20; font-size: 15px; font-weight: 400;'>{$data['guest_count']}</span>
                         </div>
                     </div>
                 </div>
                 
-                <p style='color: #495057; line-height: 1.7; margin-bottom: 24px; font-size: 16px; font-weight: 400;'>
-                    We look forward to welcoming you and providing an exceptional dining experience. If you need to modify or cancel your reservation, please visit our website at <a href='https://lymasiargao.com' style='color: #3D401E; text-decoration: none; font-weight: 500;'>lymasiargao.com</a> or contact us directly.
+                <!-- Group Reservations & Celebrations -->
+                <div style='background-color: #fbfbfb; padding: 24px; border-radius: 8px; border: 1px solid #f0f0f0; margin-bottom: 32px;'>
+                    <h3 style='color: #2c3e20; margin: 0 0 16px 0; font-size: 16px; font-weight: 500;'>Group Reservations & Celebrations 🎉</h3>
+                    <p style='color: #444444; line-height: 1.7; font-size: 14px; font-weight: 400; margin: 0 0 16px 0;'>
+                        Planning a special gathering, milestone celebration, or large group dinner at Lyma? 🌿<br />
+                        We'd love to make it memorable for you.
+                    </p>
+                    <p style='color: #444444; line-height: 1.7; font-size: 14px; font-weight: 400; margin: 0;'>
+                        For groups of 13 guests or more, or for private events, please contact us directly so we can tailor the experience to your needs:
+                    </p>
+                </div>
+
+                <p style='color: #444444; line-height: 1.7; font-size: 15px; font-weight: 400; margin: 0 0 16px 0;'>
+                    Should you need to modify your reservation, please visit 
+                    <a href='https://lymasiargao.com' style='color: #2c3e20; text-decoration: underline; text-decoration-color: #2c3e20; text-underline-offset: 2px;'>
+                        lymasiargao.com
+                    </a> or contact our team directly.
                 </p>
-                
-                <p style='color: #495057; line-height: 1.7; margin-bottom: 0; font-size: 16px; font-weight: 400;'>
-                    Best regards,<br>
-                    <strong>The Lyma Siargao Team</strong>
+                <p style='color: #444444; line-height: 1.7; font-size: 15px; font-weight: 400; margin: 0 0 4px 0;'>
+                    📞 Call or WhatsApp: <a href='tel:+639297561379' style='color: #2c3e20; text-decoration: none;'>+639297561379</a>
+                </p>
+                <p style='color: #444444; line-height: 1.7; font-size: 15px; font-weight: 400; margin: 0 0 32px 0;'>
+                    📸 Instagram DM: <a href='https://instagram.com/lymasiargao' style='color: #2c3e20; text-decoration: none;'>@lymasiargao</a>
+                </p>
+
+                <p style='color: #444444; font-size: 15px; font-weight: 400; margin: 0; line-height: 1.7;'>
+                    With warm regards,
+                </p>
+                <p style='color: #2c3e20; font-size: 15px; font-weight: 500; margin: 8px 0 0 0;'>
+                    The Lyma Siargao Team
                 </p>
             </div>
             
-            <!-- Footer -->
-            <div style='background-color: #f8f9fa; padding: 24px 20px; text-align: center; border-top: 1px solid #e9ecef;'>
-                <p style='color: #6c757d; margin: 0; font-size: 14px; font-weight: 400;'>
-                    For any questions, please contact us at <a href='mailto:pearl@lymaculinary.com' style='color: #3D401E; text-decoration: none; font-weight: 500;'>pearl@lymaculinary.com</a>
-                </p>
+            <!-- Footer as Full Image -->
+            <div style='padding: 0; margin: 0; border-top: 1px solid #f0f0f0;'>
+                <img src='cid:" . $signatureCid . "' alt='Marc Silvestre - Executive Chef' style='width: 100%; height: auto; display: block; margin: 0;' />
             </div>
         </div>";
 
         try {
+            $attachments = [];
+            if (is_readable($logoPath)) {
+                $attachments[] = [
+                    'content' => base64_encode(file_get_contents($logoPath)),
+                    'filename' => 'lymalogo_email.png',
+                    'content_type' => 'image/png',
+                    'content_id' => $logoCid,
+                ];
+            }
+            if (is_readable($signaturePath)) {
+                $attachments[] = [
+                    'content' => base64_encode(file_get_contents($signaturePath)),
+                    'filename' => 'signature.png',
+                    'content_type' => 'image/png',
+                    'content_id' => $signatureCid,
+                ];
+            }
+
             $response = Resend::emails()->send([
                 'from' => 'Lyma Siargao <reservations@lymasiargao.com>',
                 'to' => [$data['to']],
@@ -96,6 +145,7 @@ class EmailController extends Controller
                 'subject' => $subject,
                 'text' => strip_tags(str_replace(['<br/>', '<br>'], "\n", $body)),
                 'html' => $body,
+                'attachments' => $attachments,
             ]);
 
             return response()->json([
