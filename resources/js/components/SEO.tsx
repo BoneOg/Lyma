@@ -18,7 +18,10 @@ const SEO: React.FC<SEOProps> = ({
   url = "https://www.lymasiargao.com",
   type = "website"
 }) => {
-  const fullTitle = title.includes('Lyma') ? title : `Lyma - ${title}`;
+  // For Google search results - enhanced title
+  const searchTitle = title.includes('Lyma') ? title : `Lyma - ${title}`;
+  // For browser tab - keep it simple
+  const tabTitle = title.includes('Lyma') ? 'Lyma' : `Lyma - ${title}`;
   const fullDescription = description.includes('Lyma') ? description : `${description} | Lyma Restaurant in Siargao`;
   
   // Enhanced structured data for better search engine understanding and sitelinks
@@ -124,24 +127,23 @@ const SEO: React.FC<SEOProps> = ({
   
   return (
     <Head>
-      <title>{fullTitle}</title>
-      <meta name="title" content={fullTitle} />
+      <title>{tabTitle}</title>
+      <meta name="title" content={searchTitle} />
       <meta name="description" content={fullDescription} />
       <meta name="keywords" content={keywords} />
       
       {/* Enhanced Open Graph for better social sharing */}
-      <meta property="og:title" content={fullTitle} />
+      <meta property="og:title" content={searchTitle} />
       <meta property="og:description" content={fullDescription} />
       <meta property="og:image" content={`${url}${image}`} />
       <meta property="og:url" content={url} />
       <meta property="og:type" content={type} />
-      <meta property="og:site_name" content="LYMA Restaurant Siargao" />
+      <meta property="og:site_name" content="Lyma By Chef Marc - Siargao Island" />
       <meta property="og:locale" content="en_US" />
       
       {/* Enhanced Twitter Meta Tags */}
-      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:title" content={searchTitle} />
       <meta name="twitter:description" content={fullDescription} />
-      <meta name="twitter:image" content={`${url}${image}`} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@lymasiargao" />
       

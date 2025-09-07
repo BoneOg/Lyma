@@ -6,10 +6,10 @@ import { createRoot } from 'react-dom/client';
 import { NotificationProvider } from './contexts/NotificationContext';
 
 
-const appName = import.meta.env.VITE_APP_NAME || 'Lyma By Chef Marc - Where Tropical Dreams Meet Culinary Excellence';
+const appName = import.meta.env.VITE_APP_NAME || 'Lyma';
 
 createInertiaApp({
-    title: () => `${appName}`,
+    title: (title) => title ? `${title} | ${appName}` : appName,
     resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);

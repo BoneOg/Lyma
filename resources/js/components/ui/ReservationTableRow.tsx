@@ -146,17 +146,17 @@ const ReservationTableRow: React.FC<ReservationTableRowProps> = ({ reservation, 
                 <span className="cursor-default">
                   {/* Abbreviated time format for xl, full format for 2xl */}
                   <span className="hidden xl:block 2xl:hidden">
-                    {reservation.time_slot ? formatTimeSlotAbbreviated(reservation.time_slot) : '-'}
+                    {reservation.reserved_label ? formatTimeSlotAbbreviated(reservation.reserved_label) : (reservation.time_slot ? formatTimeSlotAbbreviated(reservation.time_slot) : '-')}
                   </span>
                   <span className="hidden 2xl:block">
-                    {reservation.time_slot || '-'}
+                    {reservation.reserved_label || reservation.time_slot || '-'}
                   </span>
                 </span>
               </TooltipTrigger>
               <TooltipContent className="max-w-xs">
                 <div className="text-center">
                   <p className="font-semibold">Time Slot</p>
-                  <p className="text-sm">{reservation.time_slot || 'No time slot'}</p>
+                  <p className="text-sm">{reservation.reserved_label || reservation.time_slot || 'No time slot'}</p>
                   <p className="text-xs text-gray-400 mt-1">Reservation time</p>
                 </div>
               </TooltipContent>

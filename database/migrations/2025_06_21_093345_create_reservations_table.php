@@ -18,7 +18,7 @@ return new class extends Migration
             
             // Reservation details
             $table->date('reservation_date');
-            $table->foreignId('time_slot_id')->nullable()->constrained('time_slots')->onDelete('cascade');
+            $table->foreignId('time_slot_id')->nullable()->constrained('time_slots')->onDelete('set null');
             $table->integer('guest_count');
             
             // Special hours fields

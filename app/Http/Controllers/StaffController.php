@@ -74,6 +74,8 @@ class StaffController extends Controller
                 'guest_last_name' => $r->guest_last_name,
                 'reservation_date' => $r->reservation_date->format('Y-m-d'),
                 'time_slot' => $r->timeSlot ? $r->timeSlot->start_time_formatted . ' - ' . $r->timeSlot->end_time_formatted : null,
+                'reserved_time' => $r->reserved_time,
+                'reserved_label' => $r->reserved_label,
                 'guest_count' => $r->guest_count,
                 'status' => $r->status,
                 'email' => $r->guest_email,
@@ -215,6 +217,13 @@ class StaffController extends Controller
                 'status' => 'confirmed',
                 'is_special_hours' => $validated['is_special_hours'] ?? false,
             ]);
+
+            // Populate reserved time snapshot from the time slot for non-special hours
+            if (!$validated['is_special_hours'] && $validated['time_slot_id']) {
+                $reservation->populateReservedTimeFromTimeSlotId($validated['time_slot_id']);
+                $reservation->save();
+            }
+
             return response()->json(['success' => true, 'reservation' => $reservation]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to create reservation: ' . $e->getMessage()], 500);

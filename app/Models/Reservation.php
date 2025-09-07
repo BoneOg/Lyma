@@ -20,6 +20,8 @@ class Reservation extends Model
         'guest_phone',
         'reservation_date',
         'time_slot_id',
+        'reserved_time',
+        'reserved_label',
         'guest_count',
         'status',
         'special_requests',
@@ -33,6 +35,7 @@ class Reservation extends Model
     {
         return [
             'reservation_date' => 'date',
+            'reserved_time' => 'datetime:H:i:s',
             'guest_count' => 'integer',
             'status' => 'string',
             'expires_at' => 'datetime',
@@ -189,6 +192,59 @@ class Reservation extends Model
             $q->whereNull('expires_at')
               ->orWhere('expires_at', '>', now());
         });
+    }
+
+    // Methods for handling reserved time snapshots
+    public function populateReservedTimeFromTimeSlot(): void
+    {
+        if ($this->timeSlot) {
+            $this->reserved_time = $this->timeSlot->start_time;
+            $this->reserved_label = $this->timeSlot->formatted_time;
+        }
+    }
+
+    public function populateReservedTimeFromTimeSlotId(int $timeSlotId): void
+    {
+        $timeSlot = TimeSlot::find($timeSlotId);
+        if ($timeSlot) {
+            $this->reserved_time = $timeSlot->start_time;
+            $this->reserved_label = $timeSlot->formatted_time;
+        }
+    }
+
+    public function getReservedTimeFormatted(): string
+    {
+        if ($this->reserved_time) {
+            return Carbon::parse($this->reserved_time)->format('g:i A');
+        }
+        return $this->timeSlot?->start_time_formatted ?? 'N/A';
+    }
+
+    public function getReservedLabel(): string
+    {
+        return $this->reserved_label ?? $this->timeSlot?->formatted_time ?? 'N/A';
+    }
+
+    public function hasReservedTimeSnapshot(): bool
+    {
+        return !empty($this->reserved_time) && !empty($this->reserved_label);
+    }
+
+    public function ensureReservedTimeSnapshot(): void
+    {
+        // If we don't have a snapshot but we have a time_slot_id, try to populate it
+        if (!$this->hasReservedTimeSnapshot() && $this->time_slot_id) {
+            $this->populateReservedTimeFromTimeSlotId($this->time_slot_id);
+            $this->save();
+        }
+    }
+
+    // Override the update method to prevent modification of reserved time fields
+    public function update(array $attributes = [], array $options = [])
+    {
+        // Remove reserved time fields from updates to keep them immutable
+        unset($attributes['reserved_time'], $attributes['reserved_label']);
+        return parent::update($attributes, $options);
     }
 
 }

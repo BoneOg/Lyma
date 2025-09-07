@@ -261,6 +261,10 @@ class ReservationController extends Controller
                     'status' => 'pending', // Pending until reviewed in checkout
                     'is_special_hours' => false,
                 ]);
+
+                // Populate reserved time snapshot from the time slot
+                $reservation->populateReservedTimeFromTimeSlotId($validated['time_slot_id']);
+                $reservation->save();
             }
 
             // Set expiration time (15 minutes from now)

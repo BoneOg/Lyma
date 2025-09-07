@@ -4,6 +4,8 @@ export interface Reservation {
   guest_last_name: string;
   reservation_date: string;
   time_slot: string | null;
+  reserved_time?: string | null;
+  reserved_label?: string | null;
   guest_count: number;
   status: string;
   email: string;

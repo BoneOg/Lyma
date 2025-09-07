@@ -139,7 +139,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
         {/* Time Slot */}
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Clock size={14} className="text-gray-500 flex-shrink-0" />
-          <span>{formatTimeSlot(reservation.time_slot || '')}</span>
+          <span>{formatTimeSlot(reservation.reserved_label || reservation.time_slot || '')}</span>
         </div>
 
         {/* Guest Count */}
