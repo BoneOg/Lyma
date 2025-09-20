@@ -10,6 +10,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\JournalController;
 
 
 // Home
@@ -19,6 +20,7 @@ Route::get('/about', [App\Http\Controllers\PageController::class, 'about'])->nam
 Route::get('/contact', [App\Http\Controllers\PageController::class, 'contact'])->name('contact');
 Route::get('/gallery', [App\Http\Controllers\PageController::class, 'gallery'])->name('gallery');
 Route::get('/journal', [App\Http\Controllers\PageController::class, 'journal'])->name('journal');
+Route::get('/journal/{journalEntry}', [App\Http\Controllers\PageController::class, 'journalEntry'])->name('journal.entry');
 
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
@@ -118,6 +120,21 @@ Route::post('/admin/api/clear-date', [AdminController::class, 'clearSpecialOrClo
         Route::post('/admin/api/time-slots', [AdminController::class, 'storeTimeSlot']);
         Route::delete('/admin/api/time-slots/{id}', [AdminController::class, 'deleteTimeSlot']);
         Route::patch('/admin/api/time-slots/{id}', [AdminController::class, 'updateTimeSlot']);
+
+        // --- Journal API ---
+        Route::get('/admin/journal', [AdminController::class, 'journal'])->name('admin.journal');
+        Route::get('/admin/journal/new', [AdminController::class, 'journalEditor'])->name('admin.journal.new');
+        Route::get('/admin/journal/edit/{id}', [AdminController::class, 'journalEditor'])->name('admin.journal.edit');
+        // Accept accidental PUTs to the edit page URL by forwarding to update handler
+        Route::put('/admin/journal/edit/{id}', [JournalController::class, 'update']);
+        Route::get('/admin/api/journal-entries', [JournalController::class, 'index']);
+        Route::post('/admin/api/journal-entries', [JournalController::class, 'store']);
+        // Place specific routes BEFORE the {id} route to avoid conflicts
+        Route::get('/admin/api/journal-entries/next-sort', [JournalController::class, 'nextSortOrder']);
+        Route::get('/admin/api/journal-entries/{id}', [JournalController::class, 'show']);
+        Route::put('/admin/api/journal-entries/{id}', [JournalController::class, 'update']);
+        Route::delete('/admin/api/journal-entries/{id}', [JournalController::class, 'destroy']);
+        Route::post('/admin/api/journal-entries/upload-image', [JournalController::class, 'uploadImage']);
     });
 
     Route::middleware('can:staff')->group(function () {

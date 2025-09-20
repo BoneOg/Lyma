@@ -63,6 +63,16 @@ class AdminController extends Controller
         ]);
     }
 
+    public function journal()
+    {
+        return Inertia::render('admin/adminjournal');
+    }
+
+    public function journalEditor()
+    {
+        return Inertia::render('admin/adminjournal_edit');
+    }
+
     public function updateRestaurantName(Request $request)
     {
         $request->validate([

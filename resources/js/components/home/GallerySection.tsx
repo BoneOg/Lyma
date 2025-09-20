@@ -1,130 +1,32 @@
 import React from "react";
+import PatternBackground from '@/components/PatternBackground';
+import Arrow from '../Arrow';
 
 const GallerySection: React.FC = () => {
   return (
     <section className="w-full bg-olive text-beige relative overflow-hidden">
-      {/* Subtle background icons - visible yet subtle */}
-      <div className="pointer-events-none select-none absolute inset-0 z-0" aria-hidden="true">
-        {/* Primary focal element - Carabao (left side, main anchor) */}
-        <img
-          src="/assets/images/carabao_beige.webp"
-          alt=""
-          className="absolute top-1/2 -translate-y-1/2 left-6 lg:left-12 w-32 lg:w-52 rotate-[-10deg]"
-          style={{ opacity: 0.08 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
+      <PatternBackground />
 
-        {/* Secondary accent - Fish (upper right) */}
-        <img
-          src="/assets/images/fish_beige.webp"
-          alt=""
-          className="absolute top-[35%] right-4 lg:right-8 w-26 lg:w-64 rotate-[5deg] translate-x-32"
-          style={{ opacity: 0.07 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        {/* Ground element - Grapes (bottom left) */}
-        <img
-          src="/assets/images/grapes_beige.webp"
-          alt=""
-          className="absolute bottom-0 left-2 lg:left-6 w-22 lg:w-36 rotate-[-1deg] -translate-x-4"
-          style={{ opacity: 0.06 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        {/* Delicate accents - strategically placed */}
-        <img
-          src="/assets/images/shell_beige.webp"
-          alt=""
-          className="hidden lg:block absolute top-12 left-[28%] w-14 rotate-[6deg]"
-          style={{ opacity: 0.05 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        <img
-          src="/assets/images/lime_beige.webp"
-          alt=""
-          className="hidden md:block absolute bottom-[15%] right- lg:right-75 w-12 lg:w-24 rotate-[10deg]"
-          style={{ opacity: 0.07 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        {/* Complementary elements - spaced for balance */}
-        <img
-          src="/assets/images/jar_beige.webp"
-          alt=""
-          className="hidden lg:block absolute top-[8%] right-[20%] w-14 xl:w-18 rotate-[-5deg]"
-          style={{ opacity: 0.045 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        <img
-          src="/assets/images/bamboo_beige.webp"
-          alt=""
-          className="hidden xl:block absolute right-[25%] top-99 translate-x-12 w-22 rotate-[2deg]"
-          style={{ opacity: 0.045 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        <img
-          src="/assets/images/coconut_beige.webp"
-          alt=""
-          className="hidden lg:block absolute bottom-[2%] right-[40%] w-14 lg:w-18 rotate-[3deg]"
-          style={{ opacity: 0.04 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        {/* Whisper elements - filling gaps without crowding */}
-        <img
-          src="/assets/images/scallop_beige.webp"
-          alt=""
-          className="hidden md:block absolute bottom-[25%] left-[15%] w-11 lg:w-20 rotate-[-7deg]"
-          style={{ opacity: 0.035 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        <img
-          src="/assets/images/leaf_beige.webp"
-          alt=""
-          className="hidden xl:block absolute top-20 right-[40%] w-18 -rotate-2"
-          style={{ opacity: 0.035 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        <img
-          src="/assets/images/sugarcane_beige.webp"
-          alt=""
-          className="hidden md:block absolute top-40 left-0 w-14 lg:w-26 -rotate-5 translate-x-50"
-          style={{ opacity: 0.04 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-
-        {/* Brand watermark - subtle but visible */}
-        <img
-          src="/assets/logo/lymaonly_beige.webp"
-          alt=""
-          className="absolute bottom-5 right-0 w-36 lg:w-52 rotate-[-6deg] translate-x-3 translate-y-3"
-          style={{ opacity: 0.035 }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
-      </div>
-
-      {/* Mobile Layout: sm and md breakpoints */}
+      {/* Mobile Layout: Stacked overlapping images */}
       <div className="block lg:hidden px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20 relative z-10">
-        {/* Heading */}
-        <div className="text-center mb-8 sm:mb-10 md:mb-12">
-          <p className="font-lexend tracking-[0.1rem] sm:tracking-[0.15rem] md:tracking-[0.2rem] mb-4 sm:mb-6 uppercase leading-tight text-xs sm:text-sm md:text-sm font-light text-beige">
-            A GLIMPSE INTO
-          </p>
-          <p className="font-lexend tracking-[0.1rem] sm:tracking-[0.15rem] md:tracking-[0.2rem] uppercase text-2xl sm:text-3xl md:text-4xl font-extralight">
-            LYMA'S WORLD
-          </p>
-        </div>
+        
+        {/* Added spacing to compensate for removed heading section */}
+        <div className="mb-8 sm:mb-10 md:mb-12"></div>
 
-        {/* 3 Images Stacked Vertically */}
-        <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
-          {/* Image 1 */}
-          <div className="w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 overflow-hidden rounded-none shadow-lg">
+        {/* Stacked Images with Overlapping Layout */}
+        <div className="relative w-full h-[400px] sm:h-[480px] md:h-[540px] mb-8 sm:mb-10 md:mb-12 flex justify-center">
+          
+          {/* A GLIMPSE INTO and LYMA'S WORLD text positioned to the left of first image */}
+          <div className="absolute top-6 left-4 sm:left-12 md:left-16 z-40">
+            <p className="font-lexend text-center tracking-[0.1rem] sm:tracking-[0.15rem] md:tracking-[0.2rem] uppercase text-[8px] sm:text-sm font-light text-beige mb-2">
+              A GLIMPSE INTO
+            </p>
+            <p className="font-lexend tracking-[0.1rem] sm:tracking-[0.15rem] md:tracking-[0.2rem] uppercase text-3xl sm:text-3xl md:text-4xl font-extralight leading-tight text-beige">
+              LYMA'S<br />WORLD
+            </p>
+          </div>
+          {/* Image 1 (Top Right) */}
+          <div className="absolute top-0 right-3 sm:right-12 md:right-16 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-30">
             <img
               src="/assets/images/gallery1.webp"
               alt="Gallery image 1"
@@ -133,8 +35,8 @@ const GallerySection: React.FC = () => {
             />
           </div>
           
-          {/* Image 2 */}
-          <div className="w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 overflow-hidden rounded-none shadow-lg">
+          {/* Image 2 (Middle Left) */}
+          <div className="absolute top-[40%] sm:top-20 md:top-24 left-3 sm:left-12 md:left-16 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-20">
             <img
               src="/assets/images/gallery2.webp"
               alt="Gallery image 2"
@@ -143,8 +45,8 @@ const GallerySection: React.FC = () => {
             />
           </div>
           
-          {/* Image 3 */}
-          <div className="w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 overflow-hidden rounded-none shadow-lg">
+          {/* Image 3 (Bottom Right) */}
+          <div className="absolute top-[80%] right-3 sm:right-16 md:right-20 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-10">
             <img
               src="/assets/images/gallery3.webp"
               alt="Gallery image 3"
@@ -152,21 +54,24 @@ const GallerySection: React.FC = () => {
               loading="lazy"
             />
           </div>
+
+          {/* Mobile-only description and CTA positioned to the left of 3rd image */}
+          <div className="absolute top-[90%] text-center left-3 sm:left-12 md:left-16 z-40 max-w-[150px] sm:max-w-[250px]">
+            <p className="font-lexend text-[10px]  leading-4 sm:leading-4 font-extralight text-beige mb-3 sm:mb-4">
+              Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish
+            </p>
+            <a
+              href="/gallery"
+              className="inline-flex items-center gap-1 -mr-2 font-lexend font-semibold tracking-[0.25em] text-beige uppercase text-[10px]"
+            >
+              GALLERY 
+              <Arrow color="beige" size="sm" />
+            </a>
+          </div>
         </div>
 
-        {/* Description */}
-        <div className="text-center max-w-lg mx-auto">
-          <p className="font-lexend text-sm sm:text-base md:text-lg leading-6 sm:leading-7 md:leading-8 font-light text-beige mb-6 sm:mb-8">
-          Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish
-          </p>
-          <a
-            href="/gallery"
-            className="inline-flex items-center gap-2 font-lexend text-xs sm:text-sm md:text-base font-extralight tracking-widest hover:text-beige"
-          >
-            GALLERY 
-            <span aria-hidden>→</span>
-          </a>
-        </div>
+        {/* Added bottom spacing to compensate for moved description and CTA */}
+        <div className="mb-28 sm:mb-28 md:mb-28"></div>
       </div>
 
       {/* Desktop Layout: lg and up (original) */}
@@ -223,16 +128,16 @@ const GallerySection: React.FC = () => {
         </div>
 
         {/* Description - Now positioned absolutely to break free from grid constraints */}
-        <div className="absolute font-lexend text-center font-light text-beige lg:left-[-60px] lg:bottom-[120px] xl:left-[200px] xl:bottom-[100px] 2xl:left-[525px] 2xl:bottom-[125px]">
+        <div className="absolute font-lexend text-center font-light text-beige lg:left-[-60px] lg:bottom-[120px] xl:left-[200px] xl:bottom-[150px] 2xl:left-[525px] 2xl:bottom-[125px]">
           <p className="text-base lg:text-sm lg:max-w-sm lg:-mb-0 xl:text-sm xl:leading-12 lg:leading-12">
           Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish
           </p>
           <a
             href="/gallery"
-            className="mt-6 inline-flex items-center gap-2 font-lexend lg:text-sm xl:text-lg font-extralight tracking-widest hover:text-beige"
+            className="mt-6 inline-flex items-center gap-2 font-lexend font-semibold tracking-[0.25em] text-beige uppercase lg:text-sm xl:text-lg"
           >
             GALLERY 
-            <span aria-hidden>→</span>
+            <Arrow color="beige" size="md" />
           </a>
         </div>
       </div>

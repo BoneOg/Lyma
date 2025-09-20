@@ -1,4 +1,5 @@
 import Layout from '@/components/layout'
+import PatternBackground from '@/components/PatternBackground'
 import { usePage } from '@inertiajs/react'
 import {
   Select,
@@ -13,6 +14,7 @@ import { useReservation } from '@/hooks/useReservation'
 import { useNotification } from '@/contexts/NotificationContext'
 import { useEffect } from 'react'
 import SEO from '@/components/SEO'
+import { Phone, Instagram } from 'lucide-react'
 
 interface Props {
   timeSlots: any[]
@@ -93,111 +95,7 @@ export default function Reservation() {
       />
       <Layout>
         <div className="min-h-screen bg-[#3f411a] relative overflow-hidden flex justify-center text-white px-4 pt-10">
-          {/* Balanced minimalist background - visible yet subtle */}
-          <div className="pointer-events-none select-none absolute inset-0 z-0" aria-hidden="true">
-            {/* Primary focal element - Carabao (left side, main anchor) */}
-            <img
-              src="/assets/images/carabao_beige.webp"
-              alt=""
-              className="absolute top-1/2 -translate-y-1/2 left-6 lg:left-12 w-32 lg:w-52 rotate-[-10deg]"
-              style={{ opacity: 0.08 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            {/* Secondary accent - Fish (upper right) */}
-            <img
-              src="/assets/images/fish_beige.webp"
-              alt=""
-              className="absolute top-[35%] right-4 lg:right-8 w-26 lg:w-64 rotate-[5deg] translate-x-32"
-              style={{ opacity: 0.07 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            {/* Ground element - Grapes (bottom left) */}
-            <img
-              src="/assets/images/grapes_beige.webp"
-              alt=""
-              className="absolute -bottom-10 left-2 lg:left-6 w-22 lg:w-36 rotate-[-1deg] -translate-x-4"
-              style={{ opacity: 0.06 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            {/* Delicate accents - strategically placed */}
-            <img
-              src="/assets/images/shell_beige.webp"
-              alt=""
-              className="hidden lg:block absolute top-12 left-[28%] w-14 rotate-[6deg]"
-              style={{ opacity: 0.05 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            <img
-              src="/assets/images/lime_beige.webp"
-              alt=""
-              className="hidden md:block absolute bottom-[15%] right- lg:right-75 w-12 lg:w-24 rotate-[10deg]"
-              style={{ opacity: 0.07 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            {/* Complementary elements - spaced for balance */}
-            <img
-              src="/assets/images/jar_beige.webp"
-              alt=""
-              className="hidden lg:block absolute top-[8%] right-[20%] w-14 rotate-[-5deg]"
-              style={{ opacity: 0.045 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            <img
-              src="/assets/images/bamboo_beige.webp"
-              alt=""
-              className="hidden lg:block absolute right-[25%] top-99 translate-x-12 w-22 rotate-[2deg]"
-              style={{ opacity: 0.045 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            <img
-              src="/assets/images/coconut_beige.webp"
-              alt=""
-              className="hidden lg:block absolute bottom-[2%] right-[40%] w-14 lg:w-18 rotate-[3deg]"
-              style={{ opacity: 0.04 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            {/* Whisper elements - filling gaps without crowding */}
-            <img
-              src="/assets/images/scallop_beige.webp"
-              alt=""
-              className="hidden md:block absolute bottom-[25%] left-[15%] w-11 lg:w-20 rotate-[-7deg]"
-              style={{ opacity: 0.035 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            <img
-              src="/assets/images/leaf_beige.webp"
-              alt=""
-              className="hidden lg:block absolute top-20 right-[40%] w-18 -rotate-2"
-              style={{ opacity: 0.035 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            <img
-              src="/assets/images/sugarcane_beige.webp"
-              alt=""
-              className="hidden md:block absolute top-40 left-0 w-14 lg:w-26 -rotate-5 translate-x-50"
-              style={{ opacity: 0.04 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-
-            {/* Brand watermark - subtle but visible */}
-            <img
-              src="/assets/logo/lymaonly_beige.webp"
-              alt=""
-              className="absolute bottom-0 right-0 w-36 lg:w-52 rotate-[-6deg] translate-x-3 translate-y-3"
-              style={{ opacity: 0.035 }}
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-            />
-          </div>
+          <PatternBackground overrides={{ grapes: 'absolute -bottom-10 left-2 lg:left-6 w-22 lg:w-36 rotate-[-1deg] -translate-x-4' }} />
           <div className="max-w-5xl w-full py-6 sm:py-8 md:py-12 mt-16 sm:mt-18 md:mt-20 lg:mt-2 px-4 sm:px-6">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-thin tracking-wider font-lexend text-beige mb-6 sm:mb-8 md:mb-12 -ml-[1px] md:-ml-[8px]">RESERVATION</h1>
 
@@ -453,6 +351,49 @@ export default function Reservation() {
                 >
                   {isBooking ? 'Booking...' : 'BOOK A TABLE'}
                 </button>
+              </div>
+            </div>
+
+            {/* Additional Information Section */}
+            <div className="mt-6 sm:mt-16 md:mt-8 max-w-4xl mx-auto text-center">
+              <div className="p-6 sm:p-8 md:p-10">
+                {/* Heading with underline */}
+                <div className="mb-8">
+                  <h2 className="text-beige font-lexend font-light text-lg sm:text-xl md:text-2xl tracking-wide uppercase relative inline-block">
+                    Special Reservations
+                    <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-px bg-beige"></div>
+                  </h2>
+                </div>
+
+                {/* Body content */}
+                <div className="space-y-6">
+                  <p className="text-beige font-lexend font-extralight text-sm sm:text-base leading-relaxed">
+                    For intimate dinners, family gatherings, or group celebrations, our team ensures every visit is memorable.
+                  </p>
+                  
+                  <p className="text-beige font-lexend font-extralight text-sm sm:text-base leading-relaxed">
+                    To modify or cancel a booking — or if your party exceeds 12 guests — please reach us directly:
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-8">
+                    <div className="flex items-center space-x-2">
+                      <Phone className="w-4 h-4 text-beige" />
+                      <span className="text-beige font-lexend font-extralight text-sm sm:text-base">
+                        +63 929 756 1379
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Instagram className="w-4 h-4 text-beige" />
+                      <span className="text-beige font-lexend font-extralight text-sm sm:text-base">
+                        @lymasiargao
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-beige font-lexend font-extralight text-sm sm:text-base leading-relaxed">
+                    Advance reservations are highly recommended so we may prepare the best dining experience for you.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

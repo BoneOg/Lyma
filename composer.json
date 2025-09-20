@@ -14,6 +14,7 @@
         "doctrine/dbal": "^4.3",
         "guzzlehttp/guzzle": "^7.9",
         "inertiajs/inertia-laravel": "^2.0",
+        "intervention/image": "^3.11",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "resend/resend-laravel": "^0.20.0",

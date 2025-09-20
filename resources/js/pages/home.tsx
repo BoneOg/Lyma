@@ -5,7 +5,10 @@ import { usePage } from '@inertiajs/react';
 import AboutSection from '../components/home/AboutSection';
 import MenuSection from '../components/home/MenuSection';
 import GallerySection from '../components/home/GallerySection';
+import JournalSection from '../components/home/JournalSection';
+import ContactSection from '../components/home/ContactSection';
 import SEO from '../components/SEO';
+import ChefSection from '@/components/home/ChefSection';
 
 interface Props {
   flash?: {
@@ -36,8 +39,11 @@ const Home: React.FC = () => {
       <Layout footerData={footerData}>
         <HeroSection />
         <AboutSection />
+        <ChefSection />
         <MenuSection />
         <GallerySection />
+        <JournalSection />
+        <ContactSection />
       </Layout>
     </>
   );

@@ -32,12 +32,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', href: '/admin/dashboard' },
     { id: 'booking', label: 'Booking', href: '/admin/booking' },
+    { id: 'journal', label: 'Journal', href: '/admin/journal' },
     { id: 'settings', label: 'Settings', href: '/admin/settings' },
   ];
 
   const getCurrentPage = () => {
     if (url.startsWith('/admin/dashboard')) return 'dashboard';
     if (url.startsWith('/admin/booking')) return 'booking';
+    if (url.startsWith('/admin/journal')) return 'journal';
     if (url.startsWith('/admin/settings')) return 'settings';
     return 'settings';
   };
@@ -92,6 +94,15 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
                   <g fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.212S2 17.771 2 14z" />
                     <path stroke-linecap="round" d="M7 4V2.5M17 4V2.5M2.5 9h19" />
+                  </g>
+                </svg>
+              )}
+              {/* Journal Icon */}
+              {item.id === 'journal' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
+                  <g fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2" />
+                    <path d="M8 3v4M16 3v4M4 11h16M8 15h8" />
                   </g>
                 </svg>
               )}
