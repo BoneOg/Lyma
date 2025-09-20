@@ -15,14 +15,14 @@ interface MenuPageProps {
 const Menu: React.FC<MenuPageProps> = ({ footerData }) => {
   return (
     <>
-      <SEO 
-        title="Fine Dining Menu | Lyma Restaurant Siargao"
-        description="Discover our exceptional fine dining menu featuring Chef Marc's culinary creations. Fresh local ingredients, innovative techniques, and unforgettable flavors in Siargao. Experience where tropical dreams meet culinary excellence."
-        keywords="Lyma menu, fine dining menu, Siargao restaurant menu, Chef Marc, Filipino cuisine, tropical dining, luxury restaurant menu, local ingredients, innovative techniques, culinary excellence, Siargao Island"
-        image="/assets/images/food1.webp"
-        type="restaurant.menu"
-        url="https://www.lymasiargao.com/menu"
-      />
+        <SEO
+          title="A Journey Through Flavors | Lyma Restaurant Menu - Siargao Fine Dining"
+          description="Experience our à la carte menu showcasing international fine dining in General Luna while honoring local Filipino ingredients. From seafood crudos to creative vegan options, every dish reflects sustainability, craftsmanship, and innovation. A journey through flavors that celebrates French techniques, Spanish influences, and Asian creativity."
+          keywords="Lyma menu, journey through flavors, à la carte menu, international fine dining, seafood crudos, vegan options, sustainable dining, craftsmanship, innovation, French techniques, Spanish influences, Asian creativity, Filipino ingredients, General Luna menu, Siargao restaurant menu, Chef Marc, luxury restaurant menu, local ingredients, culinary excellence, Siargao Island"
+          image="/assets/images/food1.webp"
+          type="restaurant.menu"
+          url="https://www.lymasiargao.com/menu"
+        />
       <Layout footerData={footerData}>
         <MenuSection />
       </Layout>

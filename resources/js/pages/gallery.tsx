@@ -15,14 +15,14 @@ interface GalleryPageProps {
 const Gallery: React.FC<GalleryPageProps> = ({ footerData }) => {
   return (
     <>
-      <SEO 
-        title="Gallery | Lyma Restaurant Siargao - Visual Feast of Fine Dining"
-        description="Explore our gallery showcasing the beautiful ambiance, exquisite dishes, and memorable moments at Lyma Restaurant in General Luna, Siargao. Where tropical dreams meet culinary excellence in every frame."
-        keywords="Lyma gallery, restaurant photos, Siargao dining photos, fine dining gallery, restaurant ambiance, food photography, Siargao restaurant images, tropical fine dining, culinary excellence, visual experience"
-        image="/assets/images/gallery1.webp"
-        type="restaurant.gallery"
-        url="https://www.lymasiargao.com/gallery"
-      />
+        <SEO
+          title="A Glimpse Into Lyma's World | Gallery - Siargao Fine Dining Experience"
+          description="Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish. A glimpse into Lyma's world where sustainability meets culinary excellence, featuring our journey through flavors and five values, one vision philosophy in General Luna, Siargao."
+          keywords="Lyma gallery, glimpse into Lyma's world, restaurant photos, Siargao dining photos, fine dining gallery, food photography, flavors textures details, sustainable dining, journey through flavors, five values one vision, French techniques, Spanish influences, Asian creativity, Filipino ingredients, Siargao restaurant images, culinary excellence, visual experience, General Luna"
+          image="/assets/images/gallery1.webp"
+          type="restaurant.gallery"
+          url="https://www.lymasiargao.com/gallery"
+        />
       <Layout footerData={footerData}>
         <GallerySection />
       </Layout>

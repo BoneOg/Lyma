@@ -12,8 +12,8 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
   title = "Lyma",
-  description = "Nestled in the pristine shores of Siargao Island, Lyma By Chef Marc represents the essence of tropical fine dining. Every dish tells a story of local ingredients transformed through innovative techniques, creating an unforgettable culinary journey.",
-  keywords = "LYMA, Lyma By Chef Marc, Siargao, Siargao Philippines, Siargao Island, General Luna, best dinner spot, best dinner place, best dinner, best food for dinner, best dinner restaurant, fine dining, luxury dining, upscale dining, romantic dinner, date night restaurant, best restaurant in Siargao, top restaurant Siargao, aesthetic restaurant, instagrammable restaurant, hidden gem restaurant, local favorite, chef's table, tasting menu, degustation, farm to table, organic dining, sustainable dining, wine pairing, craft cocktails, mixology, tropical fine dining, Filipino cuisine, island dining, luxury restaurant, world-class dining, Chef Marc, local ingredients, innovative techniques, culinary journey",
+  description = "Nestled in the pristine shores of Siargao Island, Lyma By Chef Marc represents the essence of sustainable fine dining. Where French techniques, Spanish influences, Asian creativity, and Filipino ingredients unite in a journey through flavors that honors sustainability at the heart of every dish.",
+  keywords = "LYMA, Lyma By Chef Marc, Siargao, Siargao Philippines, Siargao Island, General Luna, sustainability, sustainable dining, French techniques, Spanish influences, Asian creativity, Filipino ingredients, journey through flavors, five values one vision, international fine dining, craftsmanship, innovation, seafood crudos, vegan options, à la carte menu, best dinner spot, best dinner place, best dinner, best food for dinner, best dinner restaurant, fine dining, luxury dining, upscale dining, romantic dinner, date night restaurant, best restaurant in Siargao, top restaurant Siargao, aesthetic restaurant, instagrammable restaurant, hidden gem restaurant, local favorite, chef's table, tasting menu, degustation, farm to table, organic dining, wine pairing, craft cocktails, mixology, tropical fine dining, island dining, luxury restaurant, world-class dining, Chef Marc, local ingredients, innovative techniques, culinary journey",
   image = "/assets/images/hero.webp",
   url = "https://www.lymasiargao.com",
   type = "website"
@@ -30,7 +30,7 @@ const SEO: React.FC<SEOProps> = ({
     "@type": "Restaurant",
     "name": "LYMA",
     "alternateName": "Lyma By Chef Marc",
-    "description": "Nestled in the pristine shores of Siargao Island, Lyma By Chef Marc represents the essence of tropical fine dining. Every dish tells a story of local ingredients transformed through innovative techniques, creating an unforgettable culinary journey. Where tropical dreams meet culinary excellence with craft cocktails and premium wine cellar.",
+    "description": "Nestled in the pristine shores of Siargao Island, Lyma By Chef Marc represents the essence of sustainable fine dining. Where French techniques, Spanish influences, Asian creativity, and Filipino ingredients unite in a journey through flavors that honors sustainability at the heart of every dish. Five values, one vision - crafting international fine dining with local soul.",
     "url": "https://www.lymasiargao.com",
     "logo": "https://www.lymasiargao.com/assets/logo/lymabeige.webp",
     "image": "https://www.lymasiargao.com/assets/images/hero.webp",
@@ -42,7 +42,7 @@ const SEO: React.FC<SEOProps> = ({
     },
     "telephone": "+639543846071",
     "email": "pearl@lymaculinary.com",
-    "servesCuisine": ["Filipino", "Fine Dining", "Tropical Cuisine", "Island Cuisine"],
+    "servesCuisine": ["Filipino", "French", "Spanish", "Asian", "International Fine Dining", "Sustainable Cuisine", "Tropical Cuisine", "Island Cuisine"],
     "priceRange": "$$$",
     "openingHours": "Mo-Su 14:00-22:00",
     "hasMenu": "https://www.lymasiargao.com/menu",
