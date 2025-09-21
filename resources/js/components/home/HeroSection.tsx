@@ -35,10 +35,10 @@ const HeroSection: React.FC = () => {
           <div className="flex justify-center">
               <a 
                 href="/reservation" 
-                className="inline-flex items-center gap-3 font-lexend font-bold tracking-[0.25em] text-beige uppercase text-[10px] sm:text-base md:text-lg px-4 py-2 xl:px-8 xl:py-4 transition-colors"
+                className="inline-flex items-center gap-3 font-lexend font-extralight tracking-[0.25em] text-beige uppercase text-[10px] sm:text-base md:text-lg px-4 py-2 xl:px-8 xl:py-4 transition-colors"
               >
                 Reserve Now
-                <Arrow color="beige" size="md" className="xl:!w-6 xl:!h-6"/>
+                <Arrow color="beige" size="sm" className="xl:!w-6 xl:!h-6"/>
               </a>
           </div>
         </div>

@@ -65,9 +65,11 @@ const AboutSection: React.FC = () => {
 
       {/* Centered copy - top layer */}
       <div className="relative z-20 flex items-center justify-center py-28 sm:py-32 md:py-36 lg:py-36">
-        <div className="text-center max-w-6xl mx-6 sm:mx-8 md:mx-[30px] lg:mx-[30px] xl:mx-[100px]">
-          <h2 className="font-lexend text-beige tracking-[0.25em] uppercase text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-5xl font-light mb-12">
-            FIVE VALUES, ONE VISION
+        <div className="text-center max-w-6xl mx-6 sm:mx-8 md:mx-[30px] lg:mx-[100px] xl:mx-[100px]">
+          <h2 className="font-lexend text-beige tracking-[0.25em] uppercase text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight font-light mb-12">
+            FIVE VALUES
+            <br />
+            ONE VISION
           </h2>
           <p className="font-lexend text-beige font-extralight text-sm sm:text-base md:text-lg lg:text-xl leading-7 sm:leading-8 md:leading-8 lg:leading-9">
           Lyma Siargao brings together French techniques, Spanish influences, Asian creativity, and the richness of Filipino ingredients.

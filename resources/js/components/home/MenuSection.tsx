@@ -4,11 +4,11 @@ import Arrow from "../Arrow";
 const MenuSection: React.FC = () => {
   return (
     <section className="w-full bg-olive font-lexend overflow-hidden pt-16 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-32 2xl:pt-[100px] pb-10 relative">
-      <div className="relative w-full z-10">
+      <div className="relative w-full xl:mt-20 z-10">
         <svg
           viewBox="0 0 1540 350"
           preserveAspectRatio="none"
-          className="block w-full h-[480px] sm:h-[520px] md:h-[580px] lg:h-[700px] xl:h-[800px] 2xl:h-[1100px] scale-[1.2] origin-center"
+          className="block w-full h-[480px] sm:h-[520px] md:h-[580px] lg:h-[800px] xl:h-[800px] 2xl:h-[1100px] scale-[1.2] origin-center"
           aria-hidden="true"
         >
           {/* Base beige fill below the arch - extended height for mobile content */}
@@ -28,7 +28,6 @@ const MenuSection: React.FC = () => {
               <span className="lg:hidden">
                 <span className="block text-lg sm:text-xl md:text-2xl relative">
                   A Journey
-                  <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-px bg-olive/30 hidden sm:block"></span>
                 </span>
                 <span className="block text-lg sm:text-xl md:text-2xl mt-2 sm:mt-4">
                   Through Flavors
@@ -64,13 +63,13 @@ const MenuSection: React.FC = () => {
           {/* Refined description with chef section styling */}
           <div className="mt-3 sm:mt-4 md:mt-6 lg:mt-8 xl:mt-10 max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl xl:max-w-4xl mx-auto text-center px-2 sm:px-4 pb-4 sm:pb-6">
             <div className="space-y-3 sm:space-y-4 md:space-y-5 mb-4 sm:mb-6 md:mb-8">
-              <p className="font-lexend text-olive font-light text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
+              <p className="font-lexend text-olive font-light text-xs sm:text-sm md:text-base lg:text-base leading-relaxed">
                 At Lyma Siargao, our à la carte menu showcases international fine dining in General Luna while honoring local Filipino ingredients.
               </p>
               
-              <div className="w-8 h-px bg-olive/20 mx-auto hidden sm:block"></div>
+              <div className="w-8 h-px bg-olive mx-auto hidden sm:block"></div>
               
-              <p className="font-lexend text-olive font-light text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
+              <p className="font-lexend text-olive font-light text-xs sm:text-sm md:text-base lg:text-base leading-relaxed">
                 From seafood crudos to creative vegan options, every dish reflects sustainability, craftsmanship, and innovation.
               </p>
             </div>

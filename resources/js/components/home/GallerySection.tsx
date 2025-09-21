@@ -81,11 +81,11 @@ const GallerySection: React.FC = () => {
           {/* Left column: heading + description + CTA */}
           <div className="flex flex-col h-full">
             {/* Heading */}
-            <div className="mt-8 ml-100">
-              <p className="font-lexend lg:-ml-100 xl:-ml-25 2xl:ml-50 tracking-[0.2rem] mb-6 uppercase leading-tight text-sm font-light text-beige m-0 p-0">
+            <div className="mt-8 xl:ml-55 2xl:ml-55 text-center">
+              <p className="font-lexend tracking-[0.2rem] mb-6 uppercase leading-tight text-sm font-light text-beige m-0 p-0">
                 A GLIMPSE INTO
               </p>
-              <p className="font-lexend lg:-ml-115 xl:-ml-55 2xl:ml-25 tracking-[0.2rem] uppercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extralight -ml-3">
+              <p className="font-lexend tracking-[0.2rem] uppercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extralight">
                 LYMA'S WORLD
               </p>
             </div>
@@ -128,7 +128,7 @@ const GallerySection: React.FC = () => {
         </div>
 
         {/* Description - Now positioned absolutely to break free from grid constraints */}
-        <div className="absolute font-lexend text-center font-light text-beige lg:left-[-60px] lg:bottom-[120px] xl:left-[200px] xl:bottom-[150px] 2xl:left-[525px] 2xl:bottom-[125px]">
+        <div className="absolute font-lexend text-center font-light text-beige xl:ml-65 2xl:ml-65 lg:bottom-[120px] xl:bottom-[150px] 2xl:bottom-[125px]">
           <p className="text-base lg:text-sm lg:max-w-sm lg:-mb-0 xl:text-sm xl:leading-12 lg:leading-12">
           Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish
           </p>

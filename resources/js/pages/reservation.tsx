@@ -168,13 +168,16 @@ export default function Reservation() {
                             setSelectedTimeSlot(parseInt(value));
                           }
                         }}
+                        disabled={!selectedDate}
                       >
                         <SelectTrigger className={`bg-transparent border-b border-white text-white w-full font-extralight font-lexend rounded-none border-t-0 border-l-0 border-r-0 focus:ring-0 focus:ring-offset-0 px-0 h-auto text-left ${
                           selectedTimeSlot === 'special-hours' ? 'py-3 text-xs' : 'py-2 text-sm sm:text-base'
-                        }`} style={{ minHeight: '2.5rem' }}>
+                        } ${!selectedDate ? 'opacity-50 cursor-not-allowed' : ''}`} style={{ minHeight: '2.5rem' }}>
                           <SelectValue>
                             {(() => {
-                              if (selectedTimeSlot === 'special-hours') {
+                              if (!selectedDate) {
+                                return 'Select a date first';
+                              } else if (selectedTimeSlot === 'special-hours') {
                                 return 'Special Hours';
                               } else if (selectedTimeSlot && typeof selectedTimeSlot === 'number') {
                                 const selectedTime = timeSlots.find(slot => slot.id === selectedTimeSlot);

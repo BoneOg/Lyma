@@ -315,11 +315,9 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
     if (isDateSpecialHours(day)) {
       setSelectedTimeSlot('special-hours');
     } else {
-      // Reset to first available time slot for regular dates
-      const firstAvailableSlot = timeSlots.find(slot => 
-        !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id) && !fullyBookedTimeSlots.includes(slot.id)
-      );
-      setSelectedTimeSlot(firstAvailableSlot?.id || null);
+      // Try to keep the currently selected time slot if it's available on the new date
+      // We'll check this after the occupied time slots are fetched
+      // For now, keep the current selection and let the useEffect handle validation
     }
   };
 
@@ -327,10 +325,21 @@ export const useReservation = ({ timeSlots, systemSettings, errors }: UseReserva
   useEffect(() => {
     if (selectedTimeSlot && typeof selectedTimeSlot === 'number' && 
         (occupiedTimeSlots.includes(selectedTimeSlot) || disabledTimeSlots.includes(selectedTimeSlot) || fullyBookedTimeSlots.includes(selectedTimeSlot))) {
+      // Only reset if the current selection is actually unavailable
       const firstAvailableSlot = timeSlots.find(slot => 
         !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id) && !fullyBookedTimeSlots.includes(slot.id)
       );
       setSelectedTimeSlot(firstAvailableSlot?.id || null);
+    } else if (selectedTimeSlot && typeof selectedTimeSlot === 'number') {
+      // If we have a valid selection, keep it (this preserves the user's choice when changing dates)
+      const slotExists = timeSlots.find(slot => slot.id === selectedTimeSlot);
+      if (!slotExists) {
+        // If the slot doesn't exist in the current time slots, reset to first available
+        const firstAvailableSlot = timeSlots.find(slot => 
+          !occupiedTimeSlots.includes(slot.id) && !disabledTimeSlots.includes(slot.id) && !fullyBookedTimeSlots.includes(slot.id)
+        );
+        setSelectedTimeSlot(firstAvailableSlot?.id || null);
+      }
     }
   }, [occupiedTimeSlots, disabledTimeSlots, fullyBookedTimeSlots, selectedTimeSlot, timeSlots]);
 
