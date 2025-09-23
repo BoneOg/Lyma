@@ -39,6 +39,13 @@ class PageController extends Controller
         ]);
     }
 
+    public function chef()
+    {
+        return Inertia::render('chef', [
+            'footerData' => $this->getFooterData(),
+        ]);
+    }
+
     public function contact()
     {
         return Inertia::render('contact', [
@@ -66,12 +73,15 @@ class PageController extends Controller
 
     public function journalEntry(JournalEntry $journalEntry)
     {
-        // Hide inactive or not-yet-published entries from the public
-        if (!$journalEntry->is_active || ($journalEntry->published_at && $journalEntry->published_at->isFuture())) {
-            abort(404);
+        // Only check if the entry is active - ignore published_at for now
+        if (!$journalEntry->is_active) {
+            return Inertia::render('404', [
+                'footerData' => $this->getFooterData(),
+            ]);
         }
-        // Get related entries (excluding current one)
-        $relatedEntries = JournalEntry::published()
+        
+        // Get related entries (excluding current one) - only active ones
+        $relatedEntries = JournalEntry::active()
             ->where('id', '!=', $journalEntry->id)
             ->ordered()
             ->limit(3)

@@ -53,7 +53,7 @@ const SidebarSlide: React.FC<SidebarSlideProps> = ({ isOpen, children }) => {
         >
           <motion.div className="flex items-center justify-center h-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
             <motion.nav>
-              <motion.ul className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12 2xl:space-y-16 text-center">
+              <motion.ul className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5 xl:space-y-7 2xl:space-y-7 text-center">
                 {React.Children.map(children, (child, index) => (
                   <motion.li
                     key={index}

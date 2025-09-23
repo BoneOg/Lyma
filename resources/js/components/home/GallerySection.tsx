@@ -1,8 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PatternBackground from '@/components/PatternBackground';
 import Arrow from '../Arrow';
 
+interface GalleryImage {
+  id: number;
+  image_path: string;
+  alt_text?: string;
+  sort_order: number;
+  is_featured: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 const GallerySection: React.FC = () => {
+  const [featuredImages, setFeaturedImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFeaturedImages();
+  }, []);
+
+  const fetchFeaturedImages = async () => {
+    try {
+      const response = await fetch('/api/gallery-images');
+      if (response.ok) {
+        const data = await response.json();
+        // Get only featured images, limit to 3
+        const featured = data.filter((img: GalleryImage) => img.is_featured).slice(0, 3);
+        setFeaturedImages(featured);
+      }
+    } catch (error) {
+      console.error('Error fetching featured images:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fallback images if no featured images are available
+  const fallbackImages = [
+    { src: "/assets/images/gallery1.webp", alt: "Gallery image 1" },
+    { src: "/assets/images/gallery2.webp", alt: "Gallery image 2" },
+    { src: "/assets/images/gallery3.webp", alt: "Gallery image 3" }
+  ];
+
+  // Use featured images if available, otherwise use fallback
+  const displayImages = featuredImages.length >= 3 ? featuredImages : fallbackImages;
+
   return (
     <section className="w-full bg-olive text-beige relative overflow-hidden">
       <PatternBackground />
@@ -28,8 +71,12 @@ const GallerySection: React.FC = () => {
           {/* Image 1 (Top Right) */}
           <div className="absolute top-0 right-3 sm:right-12 md:right-16 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-30">
             <img
-              src="/assets/images/gallery1.webp"
-              alt="Gallery image 1"
+              src={typeof displayImages[0] === 'object' && 'image_path' in displayImages[0] 
+                ? (displayImages[0].image_path.startsWith('/storage/') ? displayImages[0].image_path : `/storage/${displayImages[0].image_path}`)
+                : displayImages[0].src}
+              alt={typeof displayImages[0] === 'object' && 'alt_text' in displayImages[0] 
+                ? (displayImages[0].alt_text || "Gallery image 1")
+                : displayImages[0].alt}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -38,8 +85,12 @@ const GallerySection: React.FC = () => {
           {/* Image 2 (Middle Left) */}
           <div className="absolute top-[40%] sm:top-20 md:top-24 left-3 sm:left-12 md:left-16 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-20">
             <img
-              src="/assets/images/gallery2.webp"
-              alt="Gallery image 2"
+              src={typeof displayImages[1] === 'object' && 'image_path' in displayImages[1] 
+                ? (displayImages[1].image_path.startsWith('/storage/') ? displayImages[1].image_path : `/storage/${displayImages[1].image_path}`)
+                : displayImages[1].src}
+              alt={typeof displayImages[1] === 'object' && 'alt_text' in displayImages[1] 
+                ? (displayImages[1].alt_text || "Gallery image 2")
+                : displayImages[1].alt}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -48,8 +99,12 @@ const GallerySection: React.FC = () => {
           {/* Image 3 (Bottom Right) */}
           <div className="absolute top-[80%] right-3 sm:right-16 md:right-20 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-10">
             <img
-              src="/assets/images/gallery3.webp"
-              alt="Gallery image 3"
+              src={typeof displayImages[2] === 'object' && 'image_path' in displayImages[2] 
+                ? (displayImages[2].image_path.startsWith('/storage/') ? displayImages[2].image_path : `/storage/${displayImages[2].image_path}`)
+                : displayImages[2].src}
+              alt={typeof displayImages[2] === 'object' && 'alt_text' in displayImages[2] 
+                ? (displayImages[2].alt_text || "Gallery image 3")
+                : displayImages[2].alt}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -97,8 +152,12 @@ const GallerySection: React.FC = () => {
               {/* Image 1 (Top Center) - Gallery image 1 */}
               <div className="absolute top-0 left-1/4 transform -translate-x-1/2 w-100 h-100 overflow-hidden rounded-none shadow-lg z-30">
                 <img
-                  src="/assets/images/gallery1.webp"
-                  alt="Gallery image 1"
+                  src={typeof displayImages[0] === 'object' && 'image_path' in displayImages[0] 
+                    ? (displayImages[0].image_path.startsWith('/storage/') ? displayImages[0].image_path : `/storage/${displayImages[0].image_path}`)
+                    : displayImages[0].src}
+                  alt={typeof displayImages[0] === 'object' && 'alt_text' in displayImages[0] 
+                    ? (displayImages[0].alt_text || "Gallery image 1")
+                    : displayImages[0].alt}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -107,8 +166,12 @@ const GallerySection: React.FC = () => {
               {/* Image 2 (Middle Left) - Gallery image 2 */}
               <div className="absolute top-80 right-115 w-100 h-100 overflow-hidden rounded-none shadow-lg z-20">
                 <img
-                  src="/assets/images/gallery2.webp"
-                  alt="Gallery image 2"
+                  src={typeof displayImages[1] === 'object' && 'image_path' in displayImages[1] 
+                    ? (displayImages[1].image_path.startsWith('/storage/') ? displayImages[1].image_path : `/storage/${displayImages[1].image_path}`)
+                    : displayImages[1].src}
+                  alt={typeof displayImages[1] === 'object' && 'alt_text' in displayImages[1] 
+                    ? (displayImages[1].alt_text || "Gallery image 2")
+                    : displayImages[1].alt}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -117,8 +180,12 @@ const GallerySection: React.FC = () => {
               {/* Image 3 (Bottom Right) - Gallery image 3 */}
               <div className="absolute bottom-0 left-1/4 transform -translate-x-1/2 w-100 h-100 overflow-hidden rounded-none shadow-lg z-10">
                 <img
-                  src="/assets/images/gallery3.webp"
-                  alt="Gallery image 3"
+                  src={typeof displayImages[2] === 'object' && 'image_path' in displayImages[2] 
+                    ? (displayImages[2].image_path.startsWith('/storage/') ? displayImages[2].image_path : `/storage/${displayImages[2].image_path}`)
+                    : displayImages[2].src}
+                  alt={typeof displayImages[2] === 'object' && 'alt_text' in displayImages[2] 
+                    ? (displayImages[2].alt_text || "Gallery image 3")
+                    : displayImages[2].alt}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />

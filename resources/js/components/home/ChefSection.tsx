@@ -64,7 +64,7 @@ const ChefSection: React.FC = () => {
               {/* Elegant CTA */}
               <div className="relative">
                 <a
-                  href="/about"
+                  href="/chef"
                   className="inline-flex items-center gap-2 font-lexend font-semibold tracking-[0.25em] text-beige uppercase text-xs sm:text-sm md:text-base"
                 >
                   Chef Marc's Story
@@ -122,7 +122,7 @@ const ChefSection: React.FC = () => {
               {/* CTA Button */}
               <div>
                 <a
-                  href="/about"
+                  href="/chef"
                   className="inline-flex items-center gap-2 font-lexend font-semibold tracking-[0.2em] text-beige uppercase text-xs lg:text-sm xl:text-base 2xl:text-lg"
                 >
                   Chef Marc's Story 

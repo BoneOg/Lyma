@@ -73,6 +73,11 @@ class AdminController extends Controller
         return Inertia::render('admin/adminjournal_edit');
     }
 
+    public function gallery()
+    {
+        return Inertia::render('admin/admingallery');
+    }
+
     public function updateRestaurantName(Request $request)
     {
         $request->validate([

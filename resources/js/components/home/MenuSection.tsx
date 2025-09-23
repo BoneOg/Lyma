@@ -80,7 +80,7 @@ const MenuSection: React.FC = () => {
                 href="/menu"
                 className="inline-flex items-center gap-2 font-lexend font-semibold tracking-[0.25em] text-olive uppercase text-[9px] sm:text-xs md:text-sm lg:text-base"
               >
-                Experience the Flavors
+                Check the Menu
                 <Arrow color="olive" size="sm" />
               </a>
             </div>

@@ -14,7 +14,6 @@ const ContactSection: React.FC = () => {
            {/* Main Heading with underline */}
            <h2 className="font-lexend text-beige tracking-[0.15em] uppercase text-3xl sm:text-2xl md:text-5xl font-medium mb-14 relative inline-block">
              Contact Us
-             <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-32 lg:w-54 h-px bg-beige"></div>
            </h2>
           
           {/* Sub-Heading */}

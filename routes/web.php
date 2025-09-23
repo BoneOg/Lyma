@@ -11,16 +11,25 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\JournalController;
+use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\MenuController;
 
 
 // Home
 Route::get('/', [App\Http\Controllers\PageController::class, 'home'])->name('home');
 Route::get('/menu', [App\Http\Controllers\PageController::class, 'menu'])->name('menu');
 Route::get('/about', [App\Http\Controllers\PageController::class, 'about'])->name('about');
+Route::get('/chef', [App\Http\Controllers\PageController::class, 'chef'])->name('chef');
 Route::get('/contact', [App\Http\Controllers\PageController::class, 'contact'])->name('contact');
 Route::get('/gallery', [App\Http\Controllers\PageController::class, 'gallery'])->name('gallery');
 Route::get('/journal', [App\Http\Controllers\PageController::class, 'journal'])->name('journal');
 Route::get('/journal/{journalEntry}', [App\Http\Controllers\PageController::class, 'journalEntry'])->name('journal.entry');
+
+// Public menu PDF download
+Route::post('/api/download-menu-pdf', [MenuController::class, 'downloadMenuPDF']);
+
+// Public API routes
+Route::get('/api/gallery-images', [GalleryController::class, 'index']);
 
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
@@ -135,6 +144,16 @@ Route::post('/admin/api/clear-date', [AdminController::class, 'clearSpecialOrClo
         Route::put('/admin/api/journal-entries/{id}', [JournalController::class, 'update']);
         Route::delete('/admin/api/journal-entries/{id}', [JournalController::class, 'destroy']);
         Route::post('/admin/api/journal-entries/upload-image', [JournalController::class, 'uploadImage']);
+
+        // --- Gallery API ---
+        Route::get('/admin/gallery', [AdminController::class, 'gallery'])->name('admin.gallery');
+        Route::get('/admin/api/gallery-images', [GalleryController::class, 'adminIndex']);
+        Route::post('/admin/api/gallery-images/upload', [GalleryController::class, 'upload']);
+        Route::get('/admin/api/gallery-images/{galleryImage}', [GalleryController::class, 'show']);
+        Route::put('/admin/api/gallery-images/{galleryImage}', [GalleryController::class, 'update']);
+        Route::patch('/admin/api/gallery-images/{galleryImage}/toggle-featured', [GalleryController::class, 'toggleFeatured']);
+        Route::delete('/admin/api/gallery-images/{galleryImage}', [GalleryController::class, 'destroy']);
+        Route::post('/admin/api/gallery-images/reorder', [GalleryController::class, 'reorder']);
     });
 
     Route::middleware('can:staff')->group(function () {

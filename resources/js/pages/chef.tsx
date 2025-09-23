@@ -1,0 +1,174 @@
+import React from 'react';
+import Layout from '../components/layout';
+import { usePage } from '@inertiajs/react';
+import SEO from '../components/SEO';
+import PatternBackground from '../components/PatternBackground';
+
+interface Props {
+  footerData?: {
+    restaurant_address: string;
+    restaurant_email: string;
+    restaurant_phone: string;
+    restaurant_name: string;
+  };
+  [key: string]: any;
+}
+
+const Chef: React.FC = () => {
+  const { footerData } = usePage<Props>().props;
+
+  return (
+    <>
+      <SEO
+        title="Chef Marc Silvestre - Lyma Siargao"
+        description="Meet Chef Marc Silvestre Carbó, bringing Spanish cuisine and European finesse to Siargao, Philippines."
+        keywords="chef marc silvestre, lyma siargao, spanish cuisine, fine dining, siargao restaurant"
+        url="/chef"
+      />
+      <Layout footerData={footerData}>
+        <div className="bg-olive min-h-screen relative overflow-hidden">
+          <PatternBackground />
+          
+          {/* Hero Section */}
+          <div className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-32 2xl:pt-32 pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-24 2xl:pb-24 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-12">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-28">
+                <h1 className="font-lexend font-thin text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl text-beige mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8 2xl:mb-7 tracking-wider">
+                  CHEF MARC
+                </h1>
+                <div className="w-16 sm:w-20 md:w-24 lg:w-28 xl:w-32 2xl:w-32 h-px bg-beige mx-auto opacity-60"></div>
+              </div>
+
+              {/* Introduction Section */}
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 2xl:gap-20 items-center mb-20 sm:mb-24 md:mb-28 lg:mb-32 xl:mb-36 2xl:mb-32">
+                <div className="relative">
+                  <img 
+                    src="/assets/images/chef2.webp" 
+                    alt="Chef Marc Silvestre Portrait"
+                    className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover object-top rounded-sm shadow-2xl"
+                  />
+                  <div className="absolute -bottom-3 sm:-bottom-4 md:-bottom-5 lg:-bottom-6 xl:-bottom-7 2xl:-bottom-7 -right-3 sm:-right-4 md:-right-5 lg:-right-6 xl:-right-7 2xl:-right-7 w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36 2xl:w-36 h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 2xl:h-36 bg-beige opacity-20 rounded-sm"></div>
+                </div>
+                <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-7 xl:space-y-8 2xl:space-y-8">
+                  <h2 className="font-lexend font-medium text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl 2xl:text-4xl text-beige mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8 2xl:mb-7">
+                    Marc Silvestre Carbó
+                  </h2>
+                  <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                    Born in L'Escala, Catalonia, Spain, Chef Marc Silvestre Carbó brings the flavors of Spanish cuisine and the finesse of European fine dining to the Philippines.
+                  </p>
+                  <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                    Since moving to Siargao in 2017, Marc has become known as one of the leading international chefs in the Philippines, blending French techniques, Spanish heritage, and Asian influences with the richness of local Filipino ingredients.
+                  </p>
+                </div>
+              </div>
+
+              {/* Philosophy Section */}
+              <div className="mb-20 sm:mb-24 md:mb-28 lg:mb-32 xl:mb-36 2xl:mb-32">
+                <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-28">
+                  <h2 className="font-lexend font-medium text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-5xl text-beige mb-3 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-7 2xl:mb-7">
+                    Culinary Philosophy
+                  </h2>
+                  <div className="w-16 sm:w-20 md:w-24 lg:w-28 xl:w-32 2xl:w-32 h-px bg-beige mx-auto opacity-60"></div>
+                </div>
+
+                <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 2xl:gap-20 mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-28">
+                  <div className="relative">
+                    <img 
+                      src="/assets/images/chef1.webp" 
+                      alt="Chef Marc in Kitchen"
+                      className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover object-top rounded-sm shadow-xl"
+                    />
+                    <div className="absolute -top-3 sm:-top-4 md:-top-5 lg:-top-6 xl:-top-7 2xl:-top-7 -left-3 sm:-left-4 md:-left-5 lg:-left-6 xl:-left-7 2xl:-left-7 w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36 2xl:w-36 h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 2xl:h-36 bg-beige opacity-20 rounded-sm"></div>
+                  </div>
+                  <div className="lg:col-span-2 flex flex-col justify-center space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-7 xl:space-y-8 2xl:space-y-8">
+                    <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                      As the culinary mind behind Lyma Siargao, Marc has established a reputation for exceptional dining experiences in General Luna that celebrate community, sustainability, and creativity.
+                    </p>
+                    <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                      His philosophy is rooted in fermentation-forward cooking, zero-waste principles, and farm-to-table sourcing, ensuring that every dish reflects craftsmanship, respect for nature, and the island he now calls home.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Passion Section */}
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 2xl:gap-20 items-center mb-20 sm:mb-24 md:mb-28 lg:mb-32 xl:mb-36 2xl:mb-32">
+                <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-7 xl:space-y-8 2xl:space-y-8 order-2 lg:order-1">
+                  <h2 className="font-lexend font-medium text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl text-beige">
+                    Local Ingredients, Global Vision
+                  </h2>
+                  <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                    Marc's passion lies in elevating local ingredients — from the daily catch of Siargao fishermen to the produce of Mindanao and the Cordilleras — and reimagining them through thoughtful European and Asian techniques.
+                  </p>
+                  <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                    The result is a menu of international cuisine in Siargao that is both inventive and deeply meaningful, showcasing the island's bounty through a refined culinary lens.
+                  </p>
+                </div>
+                <div className="relative order-1 lg:order-2">
+                  <img 
+                    src="/assets/images/chef3.webp" 
+                    alt="Chef Marc with Local Ingredients"
+                    className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover object-[50%_80%] rounded-sm shadow-2xl"
+                  />
+                  <div className="absolute -bottom-3 sm:-bottom-4 md:-bottom-5 lg:-bottom-6 xl:-bottom-7 2xl:-bottom-7 -right-3 sm:-right-4 md:-right-5 lg:-right-6 xl:-right-7 2xl:-right-7 w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36 2xl:w-36 h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 2xl:h-36 bg-beige opacity-20 rounded-sm"></div>
+                </div>
+              </div>
+
+              {/* Vision Section */}
+              <div className="mb-20 sm:mb-24 md:mb-28 lg:mb-32 xl:mb-36 2xl:mb-32">
+                <div className="flex justify-center mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-28">
+                  <div className="relative">
+                    <img 
+                      src="/assets/images/chef4.webp" 
+                      alt="Chef Marc at Lyma"
+                      className="w-64 sm:w-80 md:w-96 lg:w-[400px] xl:w-[500px] 2xl:w-[500px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover rounded-sm shadow-2xl"
+                    />
+                    <div className="absolute -top-3 sm:-top-4 md:-top-5 lg:-top-6 xl:-top-7 2xl:-top-7 -left-3 sm:-left-4 md:-left-5 lg:-left-6 xl:-left-7 2xl:-left-7 w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36 2xl:w-36 h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 2xl:h-36 bg-beige opacity-20 rounded-sm"></div>
+                  </div>
+                </div>
+
+                <div className="text-center max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-6xl mx-auto">
+                  <h2 className="font-lexend font-medium text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl text-beige mb-4 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-12">
+                    More Than Cooking
+                  </h2>
+                  <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-xl text-beige leading-relaxed opacity-90 mb-4 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-12">
+                    For Chef Marc, food is more than cooking — it is about connection: to the land, to culture, and to the people who gather around the table.
+                  </p>
+                  <div className="w-16 sm:w-20 md:w-24 lg:w-28 xl:w-32 2xl:w-32 h-px bg-beige mx-auto opacity-60 mb-4 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-12"></div>
+                  <p className="font-lexend font-medium text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-xl text-beige italic leading-relaxed">
+                    "His vision for Lyma is to create one of the best restaurants in Siargao, where guests can experience Spanish flavors, French finesse, Asian creativity, and Filipino soul in every plate."
+                  </p>
+                </div>
+              </div>
+
+              {/* Journey Section */}
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 2xl:gap-20 items-center mb-16 sm:mb-20 md:mb-24 lg:mb-28 xl:mb-32 2xl:mb-32">
+                <div className="relative">
+                  <img 
+                    src="/assets/images/chef5.webp" 
+                    alt="Chef Marc's Culinary Journey"
+                    className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover rounded-sm shadow-2xl"
+                  />
+                  <div className="absolute -top-3 sm:-top-4 md:-top-5 lg:-top-6 xl:-top-7 2xl:-top-7 -right-3 sm:-right-4 md:-right-5 lg:-right-6 xl:-right-7 2xl:-right-7 w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36 2xl:w-36 h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 2xl:h-36 bg-beige opacity-20 rounded-sm"></div>
+                </div>
+                <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-7 xl:space-y-8 2xl:space-y-8">
+                  <h2 className="font-lexend font-medium text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl text-beige">
+                    From Catalonia to Siargao
+                  </h2>
+                  <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                    Chef Marc's journey from the coastal town of L'Escala to the tropical paradise of Siargao represents more than just a change of scenery — it's a culinary evolution that bridges continents and cultures.
+                  </p>
+                  <p className="font-lexend font-light text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-xl text-beige leading-relaxed opacity-90">
+                    At Lyma, this journey comes full circle, creating an extraordinary dining destination where Mediterranean tradition meets Filipino innovation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    </>
+  );
+};
+
+export default Chef;
