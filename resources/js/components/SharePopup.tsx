@@ -14,9 +14,10 @@ interface SharePopupProps {
   url: string;
   title: string;
   description?: string;
+  invert?: boolean; // when true, use light button with dark text
 }
 
-const SharePopup: React.FC<SharePopupProps> = ({ url, title, description }) => {
+const SharePopup: React.FC<SharePopupProps> = ({ url, title, description, invert = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -84,7 +85,9 @@ const SharePopup: React.FC<SharePopupProps> = ({ url, title, description }) => {
     <div className="relative">
       <button
         onClick={handleNativeShare}
-        className="p-2 rounded-full bg-olive text-beige hover:bg-olive-dark transition-colors"
+        className={`p-2 rounded-full transition-colors ${
+          invert ? 'bg-beige text-olive hover:bg-beige/90' : 'bg-olive text-beige hover:bg-olive-dark'
+        }`}
         aria-label="Share this story"
       >
         <Share2 className="w-4 h-4" />

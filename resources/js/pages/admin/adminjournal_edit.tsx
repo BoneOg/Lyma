@@ -6,6 +6,7 @@ import JournalContentPreview from '@/components/admin/JournalContentPreview';
 import { useJournalPost, useAutoSave } from '@/hooks/useJournalPost';
 import { useNotification } from '@/contexts/NotificationContext';
 import { JournalPostFormData } from '@/types/journal';
+import PatternBackground from '@/components/PatternBackground';
 
 const JournalEditPage: React.FC = () => {
   const { props } = usePage();
@@ -364,7 +365,20 @@ const JournalEditPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-olive relative">
+      {/* Pattern Background */}
+      <div className="fixed inset-0 z-0">
+        <PatternBackground 
+          overrides={{
+            carabao: 'absolute top-1/4 -translate-y-1/2 left-2 lg:left-4 w-32 lg:w-52 rotate-[-10deg] opacity-20',
+            sugarcane: 'absolute bottom-[20%] left-[20%] w-22 lg:w-36 rotate-[-1deg] -translate-x-4 opacity-20',
+            scallop: 'hidden lg:block absolute top-16 left-[20%] w-14 rotate-[6deg] opacity-20',
+            fish: 'absolute top-[35%] right-2 lg:right-8 w-20 lg:w-64 rotate-[5deg] translate-x-0 lg:translate-x-32 opacity-20',
+            logo: 'absolute bottom-5 right-2 lg:right-0 w-24 lg:w-52 rotate-[-6deg] translate-x-0 lg:translate-x-3 translate-y-0 lg:translate-y-3 opacity-20',
+            grapes: 'absolute bottom-0 left-2 lg:left-6 w-20 lg:w-36 rotate-[-1deg] -translate-x-0 lg:-translate-x-4 opacity-20'
+          }}
+        />
+      </div>
       {/* Sticky Header + Toolbar */}
       <div className="sticky top-0 z-30 bg-white border-b border-gray-200">
         <div className="px-6 py-4 flex items-center justify-between font-lexend">
@@ -386,15 +400,15 @@ const JournalEditPage: React.FC = () => {
           
           <div className="flex items-center space-x-4">
             {/* Status indicators */}
-            <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex items-center space-x-4 text-sm text-olive">
               {lastSaved && (
                 <span>Last saved: {formatLastSaved(lastSaved)}</span>
               )}
-              <span className={hasUnsavedChanges ? 'text-destructive' : 'text-gray-400'}>
+              <span className={hasUnsavedChanges ? 'text-red-300' : 'text-olive'}>
                 {hasUnsavedChanges ? '• Unsaved changes' : '• All changes saved'}
               </span>
               {saving && (
-                <span className="text-blue-500">• Saving...</span>
+                <span className="text-olive">• Saving...</span>
               )}
             </div>
             
@@ -403,7 +417,7 @@ const JournalEditPage: React.FC = () => {
               type="button"
               onClick={(e) => { e.preventDefault(); handleSave(); }}
               disabled={saving}
-              className="px-4 py-2 bg-olive text-beige rounded-lg hover:bg-olive-dark disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 bg-olive text-beige rounded-lg hover:bg-olive-light disabled:bg-white/50 disabled:text-olive/50 disabled:cursor-not-allowed transition-colors"
             >
               {saving ? 'Saving...' : 'Save'}
             </button>
@@ -486,7 +500,7 @@ const JournalEditPage: React.FC = () => {
       </div>
 
       {/* Main Content - exact public layout replica */}
-      <div className="flex-1 bg-background">
+      <div className="relative z-10 flex-1">
         {/* Hero Section (display only; separate upload button) */}
         <div className="relative h-96 sm:h-[500px] lg:h-[600px]">
           <div className="absolute inset-0">
@@ -545,7 +559,7 @@ const JournalEditPage: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* Back to Journal (text-only visual) */}
           <div className="mb-8">
-            <div className="inline-flex items-center text-olive transition-colors font-lexend text-sm tracking-wide uppercase">
+            <div className="inline-flex items-center text-beige transition-colors font-lexend text-sm tracking-wide uppercase">
               <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
               Back to Journal
             </div>
@@ -564,9 +578,9 @@ const JournalEditPage: React.FC = () => {
           <div className="mt-16 pt-8 border-t border-border">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <span className="text-sm font-lexend text-muted-foreground tracking-wide uppercase">Share this story</span>
+                <span className="text-sm font-lexend text-beige tracking-wide uppercase">Share this story</span>
               </div>
-              <div className="inline-flex items-center text-olive transition-colors font-lexend text-sm tracking-wide uppercase">
+              <div className="inline-flex items-center text-beige transition-colors font-lexend text-sm tracking-wide uppercase">
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
                 Back to Journal
               </div>
