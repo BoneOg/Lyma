@@ -172,16 +172,6 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
     }
   };
 
-  if (images.length === 0) {
-    return (
-      <div className="text-center py-20">
-        <p className="font-lexend text-gray-500 text-lg">
-          No gallery images yet. Upload some images to get started.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-8">
       {/* Featured Images Section */}
@@ -268,59 +258,85 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
           <Eye size={20} className="mr-2" />
           Gallery Images
         </h3>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={onDragEnd}
-        >
-          <SortableContext
-            items={images.filter(img => !img.is_featured).map(img => img.id)}
-            strategy={verticalListSortingStrategy}
+        
+        {images.filter(img => !img.is_featured).length > 0 ? (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={onDragEnd}
           >
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-              {images.filter(img => !img.is_featured).map((image, index) => (
-                <div key={image.id} className="relative">
-                  {/* Box Number */}
+            <SortableContext
+              items={images.filter(img => !img.is_featured).map(img => img.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+                {images.filter(img => !img.is_featured).map((image, index) => (
+                  <div key={image.id} className="relative">
+                    {/* Box Number */}
+                    <div className="absolute -top-2 -left-2 z-10">
+                      <div className="w-6 h-6 bg-olive text-beige rounded-full flex items-center justify-center text-xs font-lexend font-medium">
+                        {index + 1}
+                      </div>
+                    </div>
+                    <SortableItem
+                      image={image}
+                      index={index}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
+                      onToggleFeatured={onToggleFeatured}
+                      variants={variants}
+                      isFeatured={false}
+                    />
+                  </div>
+                ))}
+                
+                {/* Upload Button in Empty Slot */}
+                <div className="relative">
+                  {/* Box Number for Upload Slot */}
                   <div className="absolute -top-2 -left-2 z-10">
-                    <div className="w-6 h-6 bg-olive text-beige rounded-full flex items-center justify-center text-xs font-lexend font-medium">
-                      {index + 1}
+                    <div className="w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-lexend font-medium">
+                      {images.filter(img => !img.is_featured).length + 1}
                     </div>
                   </div>
-                  <SortableItem
-                    image={image}
-                    index={index}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    onToggleFeatured={onToggleFeatured}
-                    variants={variants}
-                    isFeatured={false}
-                  />
+                  <button
+                    onClick={onUpload}
+                    className="w-full aspect-square bg-gray-100 border-2 border-dashed border-gray-300 hover:border-olive hover:bg-olive/5 transition-all duration-200 flex flex-col items-center justify-center group"
+                  >
+                    <div className="text-gray-400 group-hover:text-olive transition-colors duration-200">
+                      <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                      </svg>
+                      <p className="text-sm font-lexend font-light">Upload Image</p>
+                    </div>
+                  </button>
                 </div>
-              ))}
-              
-              {/* Upload Button in Empty Slot */}
-              <div className="relative">
-                {/* Box Number for Upload Slot */}
-                <div className="absolute -top-2 -left-2 z-10">
-                  <div className="w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-lexend font-medium">
-                    {images.filter(img => !img.is_featured).length + 1}
-                  </div>
-                </div>
-                <button
-                  onClick={onUpload}
-                  className="w-full aspect-square bg-gray-100 border-2 border-dashed border-gray-300 hover:border-olive hover:bg-olive/5 transition-all duration-200 flex flex-col items-center justify-center group"
-                >
-                  <div className="text-gray-400 group-hover:text-olive transition-colors duration-200">
-                    <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <p className="text-sm font-lexend font-light">Upload Image</p>
-                  </div>
-                </button>
               </div>
+            </SortableContext>
+          </DndContext>
+        ) : (
+          /* Empty state with upload button */
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+            <div className="relative">
+              {/* Box Number for Upload Slot */}
+              <div className="absolute -top-2 -left-2 z-10">
+                <div className="w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-lexend font-medium">
+                  1
+                </div>
+              </div>
+              <button
+                onClick={onUpload}
+                className="w-full aspect-square bg-gray-100 border-2 border-dashed border-gray-300 hover:border-olive hover:bg-olive/5 transition-all duration-200 flex flex-col items-center justify-center group"
+              >
+                <div className="text-gray-400 group-hover:text-olive transition-colors duration-200">
+                  <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                  </svg>
+                  <p className="text-sm font-lexend font-light">Upload Image</p>
+                </div>
+              </button>
             </div>
-          </SortableContext>
-        </DndContext>
+          </div>
+        )}
       </div>
 
       {/* Stats */}
