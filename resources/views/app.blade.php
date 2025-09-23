@@ -52,7 +52,7 @@
         <link rel="canonical" href="https://www.lymasiargao.com">
         
         <!-- Dynamic title that will be overridden by Inertia -->
-        <title>Lyma By Chef Marc - Siargao Island Fine Dining</title>
+        <title>Lyma</title>
         
         @routes
         @viteReactRefresh
