@@ -5,6 +5,7 @@ import Layout from '@/components/layout';
 import { Calendar } from 'lucide-react';
 import Arrow from '@/components/Arrow';
 import PatternBackground from '@/components/PatternBackground';
+import SEO from '@/components/SEO';
 
 interface JournalEntry {
   id: number;
@@ -34,7 +35,14 @@ const Journal: React.FC<Props> = ({ journalEntries, footerData }) => {
 
   return (
     <Layout footerData={footerData}>
-      <Head title="Journal" />
+      <SEO
+        title="Journal | Culinary Stories & Insights - Lyma Restaurant Siargao"
+        description="Discover culinary stories, insights, and behind-the-scenes moments from Lyma Restaurant in Siargao. Explore our journey through flavors, sustainable practices, and the artistry of Chef Marc's innovative techniques combining French, Spanish, and Asian influences with Filipino ingredients."
+        keywords="Lyma journal, culinary stories, Siargao restaurant blog, Chef Marc insights, sustainable dining stories, French techniques, Spanish influences, Asian creativity, Filipino ingredients, culinary journey, restaurant behind the scenes, fine dining stories, General Luna, tropical cuisine, island dining"
+        image="/assets/images/journal.webp"
+        type="blog"
+        url="https://www.lymasiargao.com/journal"
+      />
       
       <div className="min-h-screen bg-olive">
         {/* Pattern Background */}

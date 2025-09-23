@@ -20,10 +20,11 @@ const Chef: React.FC = () => {
   return (
     <>
       <SEO
-        title="Chef Marc Silvestre - Lyma Siargao"
-        description="Meet Chef Marc Silvestre Carbó, bringing Spanish cuisine and European finesse to Siargao, Philippines."
-        keywords="chef marc silvestre, lyma siargao, spanish cuisine, fine dining, siargao restaurant"
-        url="/chef"
+        title="Chef Marc Silvestre | Master of Culinary Excellence - Lyma Siargao"
+        description="Meet Chef Marc Silvestre Carbó, bringing Spanish cuisine and European finesse to Siargao, Philippines. Experience innovative techniques, sustainable practices, and a journey through flavors that honors local Filipino ingredients with international culinary expertise."
+        keywords="Chef Marc Silvestre, Chef Marc Carbó, Lyma Siargao chef, Spanish cuisine, European finesse, Siargao Philippines, culinary expertise, innovative techniques, sustainable practices, Filipino ingredients, international cuisine, fine dining chef, culinary journey, General Luna chef, restaurant chef"
+        image="/assets/images/chef.webp"
+        url="https://www.lymasiargao.com/chef"
       />
       <Layout footerData={footerData}>
         <div className="bg-olive min-h-screen relative overflow-hidden">

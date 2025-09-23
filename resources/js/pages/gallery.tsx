@@ -51,9 +51,9 @@ const Gallery: React.FC<GalleryPageProps> = ({ footerData, galleryImages = [] })
   return (
     <>
       <SEO
-        title="A Glimpse Into Lyma's World | Gallery - Siargao Fine Dining Experience"
-        description="Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish. A glimpse into Lyma's world where sustainability meets culinary excellence, featuring our journey through flavors and five values, one vision philosophy in General Luna, Siargao."
-        keywords="Lyma gallery, glimpse into Lyma's world, restaurant photos, Siargao dining photos, fine dining gallery, food photography, flavors textures details, sustainable dining, journey through flavors, five values one vision, French techniques, Spanish influences, Asian creativity, Filipino ingredients, Siargao restaurant images, culinary excellence, visual experience, General Luna"
+        title="Gallery | A Glimpse Into Lyma's World - Siargao Fine Dining Experience"
+        description="Discover Lyma through moments on the plate — a showcase of flavors, textures, and details captured in every dish. Experience our journey through flavors where sustainability meets culinary excellence, featuring French techniques, Spanish influences, and Asian creativity with Filipino ingredients in General Luna, Siargao."
+        keywords="Lyma gallery, glimpse into Lyma's world, restaurant photos, Siargao dining photos, fine dining gallery, food photography, flavors textures details, sustainable dining, journey through flavors, five values one vision, French techniques, Spanish influences, Asian creativity, Filipino ingredients, Siargao restaurant images, culinary excellence, visual experience, General Luna, tropical dining, island cuisine"
         image="/assets/images/gallery1.webp"
         type="restaurant.gallery"
         url="https://www.lymasiargao.com/gallery"

@@ -87,11 +87,12 @@ export default function Reservation() {
   return (
     <>
       <SEO 
-        title="Reservation - Book Your Table at Lyma Restaurant"
-        description="Reserve your table at Lyma Restaurant in General Luna, Siargao. Experience exceptional fine dining with Chef Marc's culinary masterpiece. Book online for the best dining experience."
-        keywords="Lyma reservation, book table, Siargao restaurant, General Luna dining, fine dining reservation, Chef Marc restaurant, online booking"
+        title="Reservation | Book Your Table at Lyma Restaurant Siargao"
+        description="Reserve your table at Lyma Restaurant in General Luna, Siargao. Experience exceptional fine dining with Chef Marc's culinary masterpiece featuring French techniques, Spanish influences, and Asian creativity with Filipino ingredients. Book online for the best dining experience."
+        keywords="Lyma reservation, book table, Siargao restaurant, General Luna dining, fine dining reservation, Chef Marc restaurant, online booking, restaurant reservation, Siargao fine dining, tropical dining, island restaurant, sustainable dining, culinary journey"
         image="/assets/images/hero.webp"
         type="website"
+        url="https://www.lymasiargao.com/reservation"
       />
       <Layout>
         <div className="min-h-screen bg-[#3f411a] relative overflow-hidden flex justify-center text-white px-4 pt-10">

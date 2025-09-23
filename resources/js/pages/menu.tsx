@@ -17,9 +17,9 @@ const Menu: React.FC<MenuPageProps> = ({ footerData }) => {
   return (
     <>
       <SEO
-        title="A Journey Through Flavors | Lyma Restaurant Menu - Siargao Fine Dining"
-        description="Experience our à la carte menu showcasing international fine dining in General Luna while honoring local Filipino ingredients. From seafood crudos to creative vegan options, every dish reflects sustainability, craftsmanship, and innovation. A journey through flavors that celebrates French techniques, Spanish influences, and Asian creativity."
-        keywords="Lyma menu, journey through flavors, à la carte menu, international fine dining, seafood crudos, vegan options, sustainable dining, craftsmanship, innovation, French techniques, Spanish influences, Asian creativity, Filipino ingredients, General Luna menu, Siargao restaurant menu, Chef Marc, luxury restaurant menu, local ingredients, culinary excellence, Siargao Island"
+        title="Menu | A Journey Through Flavors - Lyma Restaurant Siargao Fine Dining"
+        description="Experience our à la carte menu showcasing international fine dining in General Luna, Siargao. From seafood crudos to creative vegan options, every dish reflects sustainability, craftsmanship, and innovation. Discover French techniques, Spanish influences, and Asian creativity with Filipino ingredients. Reserve your table for an unforgettable culinary journey."
+        keywords="Lyma menu, journey through flavors, à la carte menu, international fine dining, seafood crudos, vegan options, sustainable dining, craftsmanship, innovation, French techniques, Spanish influences, Asian creativity, Filipino ingredients, General Luna menu, Siargao restaurant menu, Chef Marc, luxury restaurant menu, local ingredients, culinary excellence, Siargao Island, fine dining menu, tropical cuisine, island dining"
         image="/assets/images/food1.webp"
         type="restaurant.menu"
         url="https://www.lymasiargao.com/menu"
@@ -32,8 +32,8 @@ const Menu: React.FC<MenuPageProps> = ({ footerData }) => {
             <div className="max-w-7xl mx-auto">
               {/* Hero Section */}
               <div className="text-center mb-12 sm:mb-16 md:mb-20">
-                <h1 className="font-lexend font-thin text-4xl sm:text-5xl md:text-6xl xl:text-6xl 2xl:text-8xl text-beige mb-4 sm:mb-5 md:mb-6 tracking-wider">
-                  MENU
+                <h1 className="font-lexend uppercase font-thin text-4xl sm:text-5xl md:text-6xl xl:text-6xl 2xl:text-8xl text-beige mb-4 sm:mb-5 md:mb-6 tracking-wider">
+                  Menu
                 </h1>
                 <div className="w-16 sm:w-20 md:w-24 h-px bg-beige mx-auto opacity-60"></div>
               </div>

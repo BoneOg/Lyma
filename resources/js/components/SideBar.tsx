@@ -11,7 +11,7 @@ const navItems = [
   { name: "RESERVATION", route: "/reservation" },
   { name: "ABOUT US", route: "/about" },
   { name: "CHEF", route: "/chef" },
-  { name: "MENU", route: "/menu" },
+  { name: "Menu", route: "/menu" },
   { name: "GALLERY", route: "/gallery" },
   { name: "JOURNAL", route: "/journal" },
 ];
