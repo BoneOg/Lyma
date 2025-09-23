@@ -30,6 +30,7 @@ Route::post('/api/download-menu-pdf', [MenuController::class, 'downloadMenuPDF']
 
 // Public API routes
 Route::get('/api/gallery-images', [GalleryController::class, 'index']);
+Route::get('/api/responsive-image', [App\Http\Controllers\ImageController::class, 'getResponsiveImage']);
 
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');

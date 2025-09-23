@@ -22,30 +22,42 @@ const Underline: React.FC<UnderlineProps> = ({
   useEffect(() => {
     const updateWidth = () => {
       if (textRef.current) {
-        setTextWidth(textRef.current.offsetWidth);
+        // Use requestAnimationFrame to avoid forced reflows
+        requestAnimationFrame(() => {
+          if (textRef.current) {
+            setTextWidth(textRef.current.offsetWidth);
+          }
+        });
       }
     };
 
-    // Initial measurement
-    updateWidth();
+    // Initial measurement with delay to avoid blocking initial render
+    const initialTimeout = setTimeout(updateWidth, 0);
 
     // Wait for fonts to load
     if (document.fonts) {
-      document.fonts.ready.then(updateWidth);
+      document.fonts.ready.then(() => {
+        setTimeout(updateWidth, 0);
+      });
     }
 
     // Use ResizeObserver for dynamic updates
-    const resizeObserver = new ResizeObserver(updateWidth);
+    const resizeObserver = new ResizeObserver((entries) => {
+      // Debounce resize updates to prevent excessive reflows
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateWidth, 16); // ~60fps
+    });
+    
+    let resizeTimeout: NodeJS.Timeout;
+    
     if (textRef.current) {
       resizeObserver.observe(textRef.current);
     }
 
-    // Fallback timeout for font loading
-    const timeout = setTimeout(updateWidth, 100);
-
     return () => {
       resizeObserver.disconnect();
-      clearTimeout(timeout);
+      clearTimeout(initialTimeout);
+      clearTimeout(resizeTimeout);
     };
   }, [children]);
 

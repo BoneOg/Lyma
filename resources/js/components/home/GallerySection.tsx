@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PatternBackground from '@/components/PatternBackground';
 import Arrow from '../Arrow';
+import ResponsiveImage from '../ResponsiveImage';
 
 interface GalleryImage {
   id: number;
@@ -38,9 +39,9 @@ const GallerySection: React.FC = () => {
 
   // Fallback images if no featured images are available
   const fallbackImages = [
-    { src: "/assets/images/gallery1.webp", alt: "Gallery image 1" },
-    { src: "/assets/images/gallery2.webp", alt: "Gallery image 2" },
-    { src: "/assets/images/gallery3.webp", alt: "Gallery image 3" }
+    { src: "/assets/images/gallery1.webp", alt_text: "Gallery image 1" },
+    { src: "/assets/images/gallery2.webp", alt_text: "Gallery image 2" },
+    { src: "/assets/images/gallery3.webp", alt_text: "Gallery image 3" }
   ];
 
   // Use featured images if available, otherwise use fallback
@@ -70,43 +71,43 @@ const GallerySection: React.FC = () => {
           </div>
           {/* Image 1 (Top Right) */}
           <div className="absolute top-0 right-3 sm:right-12 md:right-16 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-30">
-            <img
+            <ResponsiveImage
               src={typeof displayImages[0] === 'object' && 'image_path' in displayImages[0] 
                 ? (displayImages[0].image_path.startsWith('/storage/') ? displayImages[0].image_path : `/storage/${displayImages[0].image_path}`)
                 : displayImages[0].src}
-              alt={typeof displayImages[0] === 'object' && 'alt_text' in displayImages[0] 
-                ? (displayImages[0].alt_text || "Gallery image 1")
-                : displayImages[0].alt}
-              className="w-full h-full object-cover"
+              alt={displayImages[0].alt_text || "Gallery image 1"}
+              className="w-full h-full"
               loading="lazy"
+              isGalleryImage={typeof displayImages[0] === 'object' && 'image_path' in displayImages[0]}
+              sizes="(max-width: 640px) 100vw, 50vw"
             />
           </div>
           
           {/* Image 2 (Middle Left) */}
           <div className="absolute top-[40%] sm:top-20 md:top-24 left-3 sm:left-12 md:left-16 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-20">
-            <img
+            <ResponsiveImage
               src={typeof displayImages[1] === 'object' && 'image_path' in displayImages[1] 
                 ? (displayImages[1].image_path.startsWith('/storage/') ? displayImages[1].image_path : `/storage/${displayImages[1].image_path}`)
                 : displayImages[1].src}
-              alt={typeof displayImages[1] === 'object' && 'alt_text' in displayImages[1] 
-                ? (displayImages[1].alt_text || "Gallery image 2")
-                : displayImages[1].alt}
-              className="w-full h-full object-cover"
+              alt={displayImages[1].alt_text || "Gallery image 2"}
+              className="w-full h-full"
               loading="lazy"
+              isGalleryImage={typeof displayImages[1] === 'object' && 'image_path' in displayImages[1]}
+              sizes="(max-width: 640px) 100vw, 50vw"
             />
           </div>
           
           {/* Image 3 (Bottom Right) */}
           <div className="absolute top-[80%] right-3 sm:right-16 md:right-20 w-44 sm:w-40 md:w-48 h-44 sm:h-40 md:h-48 overflow-hidden shadow-lg z-10">
-            <img
+            <ResponsiveImage
               src={typeof displayImages[2] === 'object' && 'image_path' in displayImages[2] 
                 ? (displayImages[2].image_path.startsWith('/storage/') ? displayImages[2].image_path : `/storage/${displayImages[2].image_path}`)
                 : displayImages[2].src}
-              alt={typeof displayImages[2] === 'object' && 'alt_text' in displayImages[2] 
-                ? (displayImages[2].alt_text || "Gallery image 3")
-                : displayImages[2].alt}
-              className="w-full h-full object-cover"
+              alt={displayImages[2].alt_text || "Gallery image 3"}
+              className="w-full h-full"
               loading="lazy"
+              isGalleryImage={typeof displayImages[2] === 'object' && 'image_path' in displayImages[2]}
+              sizes="(max-width: 640px) 100vw, 50vw"
             />
           </div>
 
@@ -151,43 +152,43 @@ const GallerySection: React.FC = () => {
             <div className="relative w-[400px] h-[500px] lg:w-[480px] lg:h-[1000px]">
               {/* Image 1 (Top Center) - Gallery image 1 */}
               <div className="absolute top-0 left-1/4 transform -translate-x-1/2 w-100 h-100 overflow-hidden rounded-none shadow-lg z-30">
-                <img
+                <ResponsiveImage
                   src={typeof displayImages[0] === 'object' && 'image_path' in displayImages[0] 
                     ? (displayImages[0].image_path.startsWith('/storage/') ? displayImages[0].image_path : `/storage/${displayImages[0].image_path}`)
                     : displayImages[0].src}
-                  alt={typeof displayImages[0] === 'object' && 'alt_text' in displayImages[0] 
-                    ? (displayImages[0].alt_text || "Gallery image 1")
-                    : displayImages[0].alt}
-                  className="w-full h-full object-cover"
+                  alt={displayImages[0].alt_text || "Gallery image 1"}
+                  className="w-full h-full"
                   loading="lazy"
+                  isGalleryImage={typeof displayImages[0] === 'object' && 'image_path' in displayImages[0]}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
               
               {/* Image 2 (Middle Left) - Gallery image 2 */}
               <div className="absolute top-80 right-115 w-100 h-100 overflow-hidden rounded-none shadow-lg z-20">
-                <img
+                <ResponsiveImage
                   src={typeof displayImages[1] === 'object' && 'image_path' in displayImages[1] 
                     ? (displayImages[1].image_path.startsWith('/storage/') ? displayImages[1].image_path : `/storage/${displayImages[1].image_path}`)
                     : displayImages[1].src}
-                  alt={typeof displayImages[1] === 'object' && 'alt_text' in displayImages[1] 
-                    ? (displayImages[1].alt_text || "Gallery image 2")
-                    : displayImages[1].alt}
-                  className="w-full h-full object-cover"
+                  alt={displayImages[1].alt_text || "Gallery image 2"}
+                  className="w-full h-full"
                   loading="lazy"
+                  isGalleryImage={typeof displayImages[1] === 'object' && 'image_path' in displayImages[1]}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
               
               {/* Image 3 (Bottom Right) - Gallery image 3 */}
               <div className="absolute bottom-0 left-1/4 transform -translate-x-1/2 w-100 h-100 overflow-hidden rounded-none shadow-lg z-10">
-                <img
+                <ResponsiveImage
                   src={typeof displayImages[2] === 'object' && 'image_path' in displayImages[2] 
                     ? (displayImages[2].image_path.startsWith('/storage/') ? displayImages[2].image_path : `/storage/${displayImages[2].image_path}`)
                     : displayImages[2].src}
-                  alt={typeof displayImages[2] === 'object' && 'alt_text' in displayImages[2] 
-                    ? (displayImages[2].alt_text || "Gallery image 3")
-                    : displayImages[2].alt}
-                  className="w-full h-full object-cover"
+                  alt={displayImages[2].alt_text || "Gallery image 3"}
+                  className="w-full h-full"
                   loading="lazy"
+                  isGalleryImage={typeof displayImages[2] === 'object' && 'image_path' in displayImages[2]}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
             </div>

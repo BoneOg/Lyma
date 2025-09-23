@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layout';
 import SEO from '@/components/SEO';
 import PatternBackground from '@/components/PatternBackground';
+import ResponsiveImage from '@/components/ResponsiveImage';
 
 interface GalleryImage {
   id: number;
@@ -87,11 +88,13 @@ const Gallery: React.FC<GalleryPageProps> = ({ footerData, galleryImages = [] })
               <div className="grid grid-cols-3 gap-1 sm:gap-2 md:gap-3 lg:gap-4 max-w-6xl mx-auto">
                 {galleryImagesList.map((image, index) => (
                   <div key={image.id} className="aspect-square overflow-hidden rounded-none shadow-lg group cursor-pointer">
-                    <img
+                    <ResponsiveImage
                       src={image.image_path.startsWith('/storage/') ? image.image_path : `/storage/${image.image_path}`}
                       alt={image.alt_text || `Gallery image ${index + 1}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full group-hover:scale-105 transition-transform duration-300"
                       loading="lazy"
+                      isGalleryImage={true}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   </div>
                 ))}

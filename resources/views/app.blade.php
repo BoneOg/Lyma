@@ -48,8 +48,14 @@
         <meta name="twitter:description" content="Nestled in the pristine shores of Siargao Island, Lyma By Chef Marc represents the essence of sustainable fine dining. Where French techniques, Spanish influences, Asian creativity, and Filipino ingredients unite in a journey through flavors that honors sustainability at the heart of every dish. Five values, one vision - crafting international fine dining with local soul.">
         <meta name="twitter:image" content="https://www.lymasiargao.com/assets/images/hero.webp">
         
-        <!-- Canonical URL -->
-        <link rel="canonical" href="https://www.lymasiargao.com">
+        <!-- Performance Optimizations -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="dns-prefetch" href="//lymasiargao.com">
+        
+        <!-- Preload critical resources -->
+        <link rel="preload" href="/assets/images/hero.webp" as="image" type="image/webp">
+        <link rel="preload" href="/assets/font/LexendGiga-Regular.ttf" as="font" type="font/ttf" crossorigin>
         
         <!-- Dynamic title that will be overridden by Inertia -->
         <title>Lyma</title>
