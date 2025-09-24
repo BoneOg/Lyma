@@ -47,12 +47,7 @@ class JournalController extends Controller
             }
 
             $imageFile = $request->file('image');
-            // Generate a clean, URL-safe filename
-            $originalName = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $imageFile->getClientOriginalExtension();
-            $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
-            $filename = time() . '_' . $cleanName . '_' . uniqid() . '.' . $extension;
-            $imagePath = $imageFile->storeAs('journal', $filename, 'public');
+            $imagePath = $imageFile->store('journal', 'public');
             
             // Resize and optimize the image
             $this->resizeImage($imagePath);
@@ -178,12 +173,7 @@ class JournalController extends Controller
             }
             
             $imageFile = $request->file('image');
-            // Generate a clean, URL-safe filename
-            $originalName = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $imageFile->getClientOriginalExtension();
-            $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
-            $filename = time() . '_' . $cleanName . '_' . uniqid() . '.' . $extension;
-            $imagePath = $imageFile->storeAs('journal', $filename, 'public');
+            $imagePath = $imageFile->store('journal', 'public');
             
             // Resize and optimize the image
             $this->resizeImage($imagePath);
@@ -238,12 +228,8 @@ class JournalController extends Controller
             ]);
 
             $file = $request->file('file');
-            // Generate a clean, URL-safe filename
-            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $file->getClientOriginalExtension();
-            $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
-            $filename = time() . '_' . $cleanName . '_' . uniqid() . '.' . $extension;
-            $path = $file->storeAs('journal/content', $filename, 'public');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->store('journal/content', 'public');
             
             // Resize and optimize the image
             $this->resizeImage($path);
