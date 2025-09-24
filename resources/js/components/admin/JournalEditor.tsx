@@ -220,6 +220,7 @@ const JournalEditor: React.FC<JournalEditorProps> = ({
               font-size: 14px; 
               line-height: 1.6;
               overflow: visible !important;
+              background-color: #3D401E !important;
             }
             .mce-content-body {
               overflow: visible !important;

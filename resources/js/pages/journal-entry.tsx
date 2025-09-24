@@ -28,12 +28,9 @@ interface Props {
 const JournalEntry: React.FC<Props> = ({ journalEntry, relatedEntries, footerData }) => {
   return (
     <Layout footerData={footerData}>
-      <Head 
-        title={journalEntry.meta_title || journalEntry.title}
-        meta={[
-          { name: 'description', content: journalEntry.meta_description || journalEntry.excerpt }
-        ]}
-      />
+      <Head title={journalEntry.meta_title || journalEntry.title}>
+        <meta name="description" content={journalEntry.meta_description || journalEntry.excerpt} />
+      </Head>
       
       <div className="min-h-screen bg-olive">
         {/* Pattern Background */}
@@ -57,20 +54,20 @@ const JournalEntry: React.FC<Props> = ({ journalEntry, relatedEntries, footerDat
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 text-white">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center text-sm font-lexend mb-4">
-                <Calendar className="w-4 h-4 mr-2" />
+              <div className="flex items-center text-xs sm:text-sm font-lexend mb-2 sm:mb-4">
+                <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                 {new Date(journalEntry.published_at).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
                 })}
               </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light font-lexend tracking-wide uppercase mb-4">
+              <h1 className="text-xl sm:text-3xl lg:text-5xl font-light font-lexend tracking-wide uppercase mb-2 sm:mb-4 leading-tight">
                 {journalEntry.title}
               </h1>
-              <p className="text-lg font-lexend opacity-90 max-w-2xl">
+              <p className="text-xs sm:text-lg font-lexend opacity-90 max-w-2xl">
                 {journalEntry.excerpt}
               </p>
             </div>
@@ -103,19 +100,10 @@ const JournalEntry: React.FC<Props> = ({ journalEntry, relatedEntries, footerDat
           <div className="mt-16 pt-8 border-t border-border">
             {/* Mobile Layout */}
             <div className="block sm:hidden">
-              <div className="space-y-4">
-                {/* Back to Journal - Full width button */}
-                <Link 
-                  href="/journal"
-                  className="w-full flex items-center justify-center py-3 px-4 bg-olive text-beige hover:bg-olive-dark transition-colors font-lexend text-sm tracking-wide uppercase rounded-lg"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Journal
-                </Link>
-                
+              <div className="flex items-center justify-between">
                 {/* Share Section */}
-                <div className="flex items-center justify-center space-x-3">
-                  <span className="text-sm font-lexend text-beige tracking-wide uppercase">
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] font-lexend text-beige tracking-wide uppercase">
                     Share this story
                   </span>
                   <SharePopup 
@@ -125,6 +113,15 @@ const JournalEntry: React.FC<Props> = ({ journalEntry, relatedEntries, footerDat
                     invert
                   />
                 </div>
+                
+                {/* Back to Journal */}
+                <Link 
+                  href="/journal"
+                  className="flex items-center text-beige hover:text-beige/90 transition-colors font-lexend text-[10px] tracking-wide uppercase"
+                >
+                  <ArrowLeft className="w-3 h-3 mr-1" />
+                  Back to Journal
+                </Link>
               </div>
             </div>
 

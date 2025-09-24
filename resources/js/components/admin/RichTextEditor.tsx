@@ -122,6 +122,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             body { 
               font-family: "LexendGiga", sans-serif; 
               font-size: 14px; 
+              background-color: #3D401E !important;
             }
           `,
           placeholder: placeholder,

@@ -76,7 +76,7 @@ const GallerySection: React.FC = () => {
                 : displayImages[0].src}
               alt={typeof displayImages[0] === 'object' && 'alt_text' in displayImages[0] 
                 ? (displayImages[0].alt_text || "Gallery image 1")
-                : displayImages[0].alt}
+                : (displayImages[0] as any).alt}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -90,7 +90,7 @@ const GallerySection: React.FC = () => {
                 : displayImages[1].src}
               alt={typeof displayImages[1] === 'object' && 'alt_text' in displayImages[1] 
                 ? (displayImages[1].alt_text || "Gallery image 2")
-                : displayImages[1].alt}
+                : (displayImages[1] as any).alt}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -104,7 +104,7 @@ const GallerySection: React.FC = () => {
                 : displayImages[2].src}
               alt={typeof displayImages[2] === 'object' && 'alt_text' in displayImages[2] 
                 ? (displayImages[2].alt_text || "Gallery image 3")
-                : displayImages[2].alt}
+                : (displayImages[2] as any).alt}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -157,7 +157,7 @@ const GallerySection: React.FC = () => {
                     : displayImages[0].src}
                   alt={typeof displayImages[0] === 'object' && 'alt_text' in displayImages[0] 
                     ? (displayImages[0].alt_text || "Gallery image 1")
-                    : displayImages[0].alt}
+                    : (displayImages[0] as any).alt}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -171,7 +171,7 @@ const GallerySection: React.FC = () => {
                     : displayImages[1].src}
                   alt={typeof displayImages[1] === 'object' && 'alt_text' in displayImages[1] 
                     ? (displayImages[1].alt_text || "Gallery image 2")
-                    : displayImages[1].alt}
+                    : (displayImages[1] as any).alt}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -185,7 +185,7 @@ const GallerySection: React.FC = () => {
                     : displayImages[2].src}
                   alt={typeof displayImages[2] === 'object' && 'alt_text' in displayImages[2] 
                     ? (displayImages[2].alt_text || "Gallery image 3")
-                    : displayImages[2].alt}
+                    : (displayImages[2] as any).alt}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
