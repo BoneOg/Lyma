@@ -25,45 +25,33 @@ const RectangleDraw: React.FC<RectangleDrawProps> = ({
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
-        // Use requestAnimationFrame to avoid forced reflows
-        requestAnimationFrame(() => {
-          if (containerRef.current) {
-            setDimensions({
-              width: containerRef.current.offsetWidth,
-              height: containerRef.current.offsetHeight
-            });
-          }
+        setDimensions({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight
         });
       }
     };
 
-    // Initial measurement with delay to avoid blocking initial render
-    const initialTimeout = setTimeout(updateDimensions, 0);
+    // Initial measurement
+    updateDimensions();
 
     // Wait for fonts to load
     if (document.fonts) {
-      document.fonts.ready.then(() => {
-        setTimeout(updateDimensions, 0);
-      });
+      document.fonts.ready.then(updateDimensions);
     }
 
     // Use ResizeObserver for dynamic updates
-    const resizeObserver = new ResizeObserver((entries) => {
-      // Debounce resize updates to prevent excessive reflows
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(updateDimensions, 16); // ~60fps
-    });
-    
-    let resizeTimeout: NodeJS.Timeout;
-    
+    const resizeObserver = new ResizeObserver(updateDimensions);
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
     }
 
+    // Fallback timeout for font loading
+    const timeout = setTimeout(updateDimensions, 100);
+
     return () => {
       resizeObserver.disconnect();
-      clearTimeout(initialTimeout);
-      clearTimeout(resizeTimeout);
+      clearTimeout(timeout);
     };
   }, [children]);
 
