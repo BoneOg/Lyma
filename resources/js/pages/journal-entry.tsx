@@ -153,7 +153,7 @@ const JournalEntry: React.FC<Props> = ({ journalEntry, relatedEntries, footerDat
         {relatedEntries.length > 0 && (
           <div className="bg-muted/30 py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-light font-lexend text-olive mb-8 tracking-wide uppercase text-center">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-light font-lexend text-beige mb-8 tracking-wide uppercase text-center">
                 Related Stories
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
