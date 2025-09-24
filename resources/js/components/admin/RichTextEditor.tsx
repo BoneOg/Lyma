@@ -22,6 +22,12 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
     return new Promise((resolve, reject) => {
+      console.log('RichTextEditor: Starting image upload', {
+        filename: blobInfo.filename(),
+        size: blobInfo.blob().size,
+        type: blobInfo.blob().type
+      });
+
       const formData = new FormData();
       formData.append('file', blobInfo.blob(), blobInfo.filename());
       formData.append('_token', document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '');
@@ -30,15 +36,32 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         method: 'POST',
         body: formData,
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log('RichTextEditor: Upload response status', response.status);
+        return response.json();
+      })
       .then(result => {
+        console.log('RichTextEditor: Upload result', result);
         if (result.success) {
-          resolve(result.url);
+          // Normalize to relative storage path to avoid APP_URL domain mismatch in local dev
+          let finalUrl: string = result.url as string;
+          try {
+            if (typeof finalUrl === 'string' && /^https?:\/\//i.test(finalUrl)) {
+              const u = new URL(finalUrl);
+              finalUrl = u.pathname + (u.search || '');
+            }
+          } catch (_) {
+            // keep as-is if URL parsing fails
+          }
+          console.log('RichTextEditor: Final URL', finalUrl);
+          resolve(finalUrl);
         } else {
+          console.error('RichTextEditor: Upload failed', result.error);
           reject(result.error || 'Upload failed');
         }
       })
       .catch(error => {
+        console.error('RichTextEditor: Upload error', error);
         reject(error);
       });
     });
@@ -130,6 +153,15 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           file_picker_types: 'image',
           image_advtab: true,
           image_uploadtab: true,
+          image_caption: true,
+          image_title: true,
+          image_description: true,
+          image_dimensions: false,
+          image_class_list: [
+            {title: 'Responsive', value: 'img-responsive'},
+            {title: 'Rounded', value: 'img-rounded'},
+            {title: 'Circle', value: 'img-circle'}
+          ],
           branding: false,
           statusbar: false,
           resize: false,

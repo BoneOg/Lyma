@@ -81,8 +81,14 @@ class GalleryController extends Controller
                         'mime' => $image->getMimeType()
                     ]);
                     
-                    // Store the image first (same as journal approach)
-                    $imagePath = $image->store('gallery', 'public');
+                    // Generate a clean, URL-safe filename
+                    $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                    $extension = $image->getClientOriginalExtension();
+                    $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
+                    $filename = time() . '_' . $cleanName . '_' . uniqid() . '.' . $extension;
+                    
+                    // Store the image with the clean filename
+                    $imagePath = $image->storeAs('gallery', $filename, 'public');
                     
                     \Log::info('Image stored at: ' . $imagePath);
                     
@@ -197,9 +203,15 @@ class GalleryController extends Controller
                 // Delete old image
                 Storage::disk('public')->delete($galleryImage->image_path);
                 
-                // Store new image
+                // Generate a clean, URL-safe filename for the new image
                 $imageFile = $request->file('image');
-                $imagePath = $imageFile->store('gallery', 'public');
+                $originalName = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $imageFile->getClientOriginalExtension();
+                $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
+                $filename = time() . '_' . $cleanName . '_' . uniqid() . '.' . $extension;
+                
+                // Store new image with clean filename
+                $imagePath = $imageFile->storeAs('gallery', $filename, 'public');
                 
                 // Resize and optimize the new image
                 $this->resizeImage($imagePath);
