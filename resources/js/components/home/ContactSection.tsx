@@ -1,10 +1,25 @@
 import React from "react";
 import Arrow from "../Arrow";
 import { Phone, Instagram } from "lucide-react";
+import PatternBackground from "../PatternBackground";
 
 const ContactSection: React.FC = () => {
   return (
     <section className="w-full bg-olive text-beige relative overflow-hidden">
+      {/* Pattern Background */}
+      <div className="absolute inset-0 z-0">
+        <PatternBackground 
+          overrides={{
+            carabao: 'absolute top-1/4 -translate-y-1/2 left-2 lg:left-4 w-32 lg:w-52 rotate-[-10deg] opacity-15',
+            sugarcane: 'absolute bottom-[20%] left-[20%] w-22 lg:w-36 rotate-[-1deg] -translate-x-4 opacity-15',
+            scallop: 'hidden lg:block absolute top-16 left-[20%] w-14 rotate-[6deg] opacity-15',
+            fish: 'absolute top-[35%] right-2 lg:right-8 w-20 lg:w-64 rotate-[5deg] translate-x-0 lg:translate-x-32 opacity-15',
+            logo: 'absolute bottom-5 right-2 lg:right-0 w-24 lg:w-52 rotate-[-6deg] translate-x-0 lg:translate-x-3 translate-y-0 lg:translate-y-3 opacity-15',
+            grapes: 'absolute bottom-0 left-2 lg:left-6 w-20 lg:w-36 rotate-[-1deg] -translate-x-0 lg:-translate-x-4 opacity-15'
+          }}
+        />
+      </div>
+      
       {/* Subtle Divider - Top */}
       <div className="w-full h-px"></div>
       

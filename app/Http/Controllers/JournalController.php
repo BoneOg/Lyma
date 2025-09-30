@@ -13,7 +13,7 @@ class JournalController extends Controller
 {
     public function index()
     {
-        $entries = JournalEntry::ordered()->get();
+        $entries = JournalEntry::active()->ordered()->get();
         return response()->json($entries);
     }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "@inertiajs/react";
+import PatternBackground from "../PatternBackground";
 
 interface JournalEntry {
   id: number;
@@ -9,6 +10,7 @@ interface JournalEntry {
   slug: string;
   image: string;
   published_at: string;
+  featured: boolean;
 }
 
 const JournalSection: React.FC = () => {
@@ -36,10 +38,13 @@ const JournalSection: React.FC = () => {
       try {
         const response = await fetch('/admin/api/journal-entries');
         const data = await response.json();
-        setJournalEntries(data);
+        
+        // Filter for featured entries only
+        const featuredEntries = data.filter((entry: JournalEntry) => entry.featured);
+        setJournalEntries(featuredEntries);
         
         // Preload all images
-        const imagePromises = data.map((entry: JournalEntry) => {
+        const imagePromises = featuredEntries.map((entry: JournalEntry) => {
           const imageSrc = entry.image.startsWith('http') 
             ? entry.image 
             : (entry.image.startsWith('/storage/') 
@@ -130,7 +135,33 @@ const JournalSection: React.FC = () => {
     }
   };
 
-  if (journalEntries.length === 0) return null;
+  if (journalEntries.length === 0) {
+    return (
+      <section className="relative w-full h-screen overflow-hidden bg-olive flex items-center justify-center">
+        {/* Pattern Background */}
+        <div className="absolute inset-0 z-0">
+          <PatternBackground 
+            overrides={{
+              carabao: 'absolute top-1/4 -translate-y-1/2 left-2 lg:left-4 w-32 lg:w-52 rotate-[-10deg] opacity-20',
+              sugarcane: 'absolute bottom-[20%] left-[20%] w-22 lg:w-36 rotate-[-1deg] -translate-x-4 opacity-20',
+              scallop: 'hidden lg:block absolute top-16 left-[20%] w-14 rotate-[6deg] opacity-20',
+              fish: 'absolute top-[35%] right-2 lg:right-8 w-20 lg:w-64 rotate-[5deg] translate-x-0 lg:translate-x-32 opacity-20',
+              logo: 'absolute bottom-5 right-2 lg:right-0 w-24 lg:w-52 rotate-[-6deg] translate-x-0 lg:translate-x-3 translate-y-0 lg:translate-y-3 opacity-20',
+              grapes: 'absolute bottom-0 left-2 lg:left-6 w-20 lg:w-36 rotate-[-1deg] -translate-x-0 lg:-translate-x-4 opacity-20'
+            }}
+          />
+        </div>
+        <div className="relative z-10 text-center text-beige">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-lexend tracking-wide uppercase mb-4">
+            Journal Coming Soon
+          </h2>
+          <p className="text-sm sm:text-base font-lexend opacity-90">
+            Stay tuned for our latest culinary stories and insights
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   const currentEntry = journalEntries[currentSlide];
   const currentImageSrc = currentEntry.image.startsWith('http') 
