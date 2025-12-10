@@ -23,7 +23,7 @@ const SEO: React.FC<SEOProps> = ({
   // For browser tab - keep it simple
   const tabTitle = title.includes('Lyma') ? 'Lyma' : `Lyma - ${title}`;
   const fullDescription = description.includes('Lyma') ? description : `${description} | Lyma Restaurant in Siargao`;
-  
+
   // Enhanced structured data for better search engine understanding and sitelinks
   const structuredData = {
     "@context": "https://schema.org",
@@ -77,7 +77,7 @@ const SEO: React.FC<SEOProps> = ({
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Table Reservations",
+            "name": "Reservations",
             "url": "https://www.lymasiargao.com/reservation"
           }
         },
@@ -85,23 +85,23 @@ const SEO: React.FC<SEOProps> = ({
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Craft Cocktails & Wine Cellar",
-            "url": "https://www.lymasiargao.com/menu"
+            "name": "Journal",
+            "url": "https://www.lymasiargao.com/journal"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Chef's Table Experience",
-            "url": "https://www.lymasiargao.com/menu"
+            "name": "Chef Marc",
+            "url": "https://www.lymasiargao.com/chef"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Restaurant Gallery",
+            "name": "Gallery",
             "url": "https://www.lymasiargao.com/gallery"
           }
         },
@@ -109,7 +109,7 @@ const SEO: React.FC<SEOProps> = ({
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "About LYMA",
+            "name": "About Us",
             "url": "https://www.lymasiargao.com/about"
           }
         },
@@ -117,21 +117,21 @@ const SEO: React.FC<SEOProps> = ({
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Contact Information",
+            "name": "Contact Us",
             "url": "https://www.lymasiargao.com/contact"
           }
         }
       ]
     }
   };
-  
+
   return (
     <Head>
       <title>{tabTitle}</title>
       <meta name="title" content={searchTitle} />
       <meta name="description" content={fullDescription} />
       <meta name="keywords" content={keywords} />
-      
+
       {/* Enhanced Open Graph for better social sharing */}
       <meta property="og:title" content={searchTitle} />
       <meta property="og:description" content={fullDescription} />
@@ -140,16 +140,16 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content="Lyma By Chef Marc - Siargao Island" />
       <meta property="og:locale" content="en_US" />
-      
+
       {/* Enhanced Twitter Meta Tags */}
       <meta name="twitter:title" content={searchTitle} />
       <meta name="twitter:description" content={fullDescription} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@lymasiargao" />
-      
+
       {/* Canonical URL */}
       <link rel="canonical" href={url} />
-      
+
       {/* Enhanced Structured Data */}
       <script
         type="application/ld+json"
@@ -157,7 +157,7 @@ const SEO: React.FC<SEOProps> = ({
           __html: JSON.stringify(structuredData)
         }}
       />
-      
+
       {/* Additional SEO meta tags for better search results */}
       <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       <meta name="author" content="Chef Marc" />
@@ -165,7 +165,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="geo.placename" content="General Luna, Siargao" />
       <meta name="geo.position" content="9.8500;126.0500" />
       <meta name="ICBM" content="9.8500, 126.0500" />
-      
+
       {/* Additional meta tags for better search appearance */}
       <meta name="application-name" content="LYMA Restaurant" />
       <meta name="msapplication-TileColor" content="#3D401E" />

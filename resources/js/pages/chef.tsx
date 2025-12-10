@@ -29,13 +29,13 @@ const Chef: React.FC = () => {
       <Layout footerData={footerData}>
         <div className="bg-olive min-h-screen relative overflow-hidden">
           <PatternBackground />
-          
+
           {/* Hero Section */}
           <div className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-32 2xl:pt-32 pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-24 2xl:pb-24 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-12">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-28">
-                <h1 className="font-lexend font-thin text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl text-beige mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8 2xl:mb-7 tracking-wider">
-                  CHEF MARC
+                <h1 className="font-lexend font-thin text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl text-beige mb-4 sm:mb-5 md:mb-6 lg:mb-7 xl:mb-8 2xl:mb-7 tracking-wider uppercase">
+                  Chef Marc
                 </h1>
                 <div className="w-16 sm:w-20 md:w-24 lg:w-28 xl:w-32 2xl:w-32 h-px bg-beige mx-auto opacity-60"></div>
               </div>
@@ -43,8 +43,8 @@ const Chef: React.FC = () => {
               {/* Introduction Section */}
               <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 2xl:gap-20 items-center mb-20 sm:mb-24 md:mb-28 lg:mb-32 xl:mb-36 2xl:mb-32">
                 <div className="relative">
-                  <img 
-                    src="/assets/images/chef2.webp" 
+                  <img
+                    src="/assets/images/chef2.webp"
                     alt="Chef Marc Silvestre Portrait"
                     className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover object-top rounded-sm shadow-2xl"
                   />
@@ -74,8 +74,8 @@ const Chef: React.FC = () => {
 
                 <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 2xl:gap-20 mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-28">
                   <div className="relative">
-                    <img 
-                      src="/assets/images/chef1.webp" 
+                    <img
+                      src="/assets/images/chef1.webp"
                       alt="Chef Marc in Kitchen"
                       className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover object-top rounded-sm shadow-xl"
                     />
@@ -106,8 +106,8 @@ const Chef: React.FC = () => {
                   </p>
                 </div>
                 <div className="relative order-1 lg:order-2">
-                  <img 
-                    src="/assets/images/chef3.webp" 
+                  <img
+                    src="/assets/images/chef3.webp"
                     alt="Chef Marc with Local Ingredients"
                     className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover object-[50%_80%] rounded-sm shadow-2xl"
                   />
@@ -119,8 +119,8 @@ const Chef: React.FC = () => {
               <div className="mb-20 sm:mb-24 md:mb-28 lg:mb-32 xl:mb-36 2xl:mb-32">
                 <div className="flex justify-center mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-28">
                   <div className="relative">
-                    <img 
-                      src="/assets/images/chef4.webp" 
+                    <img
+                      src="/assets/images/chef4.webp"
                       alt="Chef Marc at Lyma"
                       className="w-64 sm:w-80 md:w-96 lg:w-[400px] xl:w-[500px] 2xl:w-[500px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover rounded-sm shadow-2xl"
                     />
@@ -145,8 +145,8 @@ const Chef: React.FC = () => {
               {/* Journey Section */}
               <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 2xl:gap-20 items-center mb-16 sm:mb-20 md:mb-24 lg:mb-28 xl:mb-32 2xl:mb-32">
                 <div className="relative">
-                  <img 
-                    src="/assets/images/chef5.webp" 
+                  <img
+                    src="/assets/images/chef5.webp"
                     alt="Chef Marc's Culinary Journey"
                     className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[600px] object-cover rounded-sm shadow-2xl"
                   />
